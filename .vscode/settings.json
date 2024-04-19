@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/0a7bb9ed-c4ff-41f4-98ed-9910d89c9a07/resourceGroups/appsvc_windows_centralus/providers/Microsoft.Web/sites/emotionsandcareproject",
+    "appService.deploySubpath": "emotionsandcareproject\\bin\\Publish"
+}
