@@ -89,6 +89,7 @@ namespace Data.Implementations
 
                 if (historialCuestionario == null)
                 {
+                    Console.WriteLine("Historial no encontrado");
                     historialCuestionario = new HistoryTestModel
                     {
                         IdCuestionario = idCuestionario,
@@ -103,9 +104,11 @@ namespace Data.Implementations
                             }
                         }
                     };
+                    Console.WriteLine("Historial Creado");
                 }
                 else
                 {
+                    Console.WriteLine("Historial encontrado");
                     historialCuestionario.testInfoModels.Add(new TestInfoModel
                     {
                         Result = getBDI2result(respuestas.Select(x => x.posicionRespuesta).ToList()),
