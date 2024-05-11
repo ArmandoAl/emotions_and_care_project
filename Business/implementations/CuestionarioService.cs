@@ -44,7 +44,7 @@ namespace Business.Implementations
             {
                 var idHistoralCuestionario = _cuestionarioService.AgregarHistorialCuestionario(idCuestionario, respuestas, idPaciente);
 
-                if (idHistoralCuestionario <= 0)
+                if (idHistoralCuestionario >= 0)
                 {
                     bool relate = _cuestionarioService.relacionarHistorialCuestionarioConPaciente(idHistoralCuestionario, idPaciente);
 
@@ -53,6 +53,7 @@ namespace Business.Implementations
                         return null;
                     }
                 }
+
                 return _cuestionarioService.GetTestInfoModel(idHistoralCuestionario);
             }
 

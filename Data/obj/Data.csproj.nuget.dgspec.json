@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Armando\\Documents\\projects\\emotions_and_care_project\\Data\\Data.csproj": {}
+    "C:\\Users\\alvar\\OneDrive\\Documents\\projects\\emotions_and_care_project\\Data\\Data.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Armando\\Documents\\projects\\emotions_and_care_project\\Data\\Data.csproj": {
+    "C:\\Users\\alvar\\OneDrive\\Documents\\projects\\emotions_and_care_project\\Data\\Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Armando\\Documents\\projects\\emotions_and_care_project\\Data\\Data.csproj",
+        "projectUniqueName": "C:\\Users\\alvar\\OneDrive\\Documents\\projects\\emotions_and_care_project\\Data\\Data.csproj",
         "projectName": "Data",
-        "projectPath": "C:\\Users\\Armando\\Documents\\projects\\emotions_and_care_project\\Data\\Data.csproj",
-        "packagesPath": "C:\\Users\\Armando\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Armando\\Documents\\projects\\emotions_and_care_project\\Data\\obj\\",
+        "projectPath": "C:\\Users\\alvar\\OneDrive\\Documents\\projects\\emotions_and_care_project\\Data\\Data.csproj",
+        "packagesPath": "C:\\Users\\alvar\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\alvar\\OneDrive\\Documents\\projects\\emotions_and_care_project\\Data\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Armando\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\alvar\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
@@ -26,8 +26,8 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\Users\\Armando\\Documents\\projects\\emotions_and_care_project\\Domain\\Domain.csproj": {
-                "projectPath": "C:\\Users\\Armando\\Documents\\projects\\emotions_and_care_project\\Domain\\Domain.csproj"
+              "C:\\Users\\alvar\\OneDrive\\Documents\\projects\\emotions_and_care_project\\Domain\\Domain.csproj": {
+                "projectPath": "C:\\Users\\alvar\\OneDrive\\Documents\\projects\\emotions_and_care_project\\Domain\\Domain.csproj"
               }
             }
           }
@@ -47,6 +47,12 @@
               "version": "[2.4.0, )"
             },
             "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.25, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
               "target": "Package",
               "version": "[6.0.25, )"
             },
@@ -75,17 +81,17 @@
         }
       }
     },
-    "C:\\Users\\Armando\\Documents\\projects\\emotions_and_care_project\\Domain\\Domain.csproj": {
+    "C:\\Users\\alvar\\OneDrive\\Documents\\projects\\emotions_and_care_project\\Domain\\Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Armando\\Documents\\projects\\emotions_and_care_project\\Domain\\Domain.csproj",
+        "projectUniqueName": "C:\\Users\\alvar\\OneDrive\\Documents\\projects\\emotions_and_care_project\\Domain\\Domain.csproj",
         "projectName": "Domain",
-        "projectPath": "C:\\Users\\Armando\\Documents\\projects\\emotions_and_care_project\\Domain\\Domain.csproj",
-        "packagesPath": "C:\\Users\\Armando\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Armando\\Documents\\projects\\emotions_and_care_project\\Domain\\obj\\",
+        "projectPath": "C:\\Users\\alvar\\OneDrive\\Documents\\projects\\emotions_and_care_project\\Domain\\Domain.csproj",
+        "packagesPath": "C:\\Users\\alvar\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\alvar\\OneDrive\\Documents\\projects\\emotions_and_care_project\\Domain\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Armando\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\alvar\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
@@ -114,6 +120,12 @@
               "version": "[2.4.0, )"
             },
             "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.25, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
               "target": "Package",
               "version": "[6.0.25, )"
             },

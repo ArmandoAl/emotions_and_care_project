@@ -89,7 +89,7 @@ namespace Data.Implementations
 
                 if (historialCuestionario == null)
                 {
-                    Console.WriteLine("Historial no encontrado");
+               
                     historialCuestionario = new HistoryTestModel
                     {
                         IdCuestionario = idCuestionario,
@@ -104,11 +104,15 @@ namespace Data.Implementations
                             }
                         }
                     };
-                    Console.WriteLine("Historial Creado");
+                    db.HistorialesCuestionariosCompletados.Add(historialCuestionario);
+                    db.SaveChanges();
+                    Console.WriteLine(historialCuestionario.Id);
+                    return historialCuestionario.Id;
+
                 }
                 else
                 {
-                    Console.WriteLine("Historial encontrado");
+         
                     historialCuestionario.testInfoModels.Add(new TestInfoModel
                     {
                         Result = getBDI2result(respuestas.Select(x => x.posicionRespuesta).ToList()),
@@ -119,9 +123,8 @@ namespace Data.Implementations
                     return historialCuestionario.Id;
                 }
 
-                db.HistorialesCuestionariosCompletados.Add(historialCuestionario);
-                db.SaveChanges();
-                return historialCuestionario.Id;
+               
+              
             }
         }
 
@@ -233,6 +236,7 @@ namespace Data.Implementations
              .Options;
             using (var db = new DBContext(options: connectionOptions))
             {
+                Console.WriteLine("Relacionando historial con paciente");
                 var historialCuestionario = db.HistorialesCuestionariosCompletados.FirstOrDefault(x => x.Id == idCuestionario);
                 if (historialCuestionario == null) return false;
 
