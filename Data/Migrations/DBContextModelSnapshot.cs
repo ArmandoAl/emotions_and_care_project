@@ -283,14 +283,27 @@ namespace Data.Migrations
                     b.Property<int>("Edad")
                         .HasColumnType("int");
 
+                    b.Property<string>("Enfoque")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("FechaCreacion")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("FechaModificacion")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("FechaNacimiento")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Institucion")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Nombre")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Presentacion")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Sexo")
@@ -312,11 +325,63 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Ubicaion")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("IdUsuario");
 
                     b.HasIndex("TerminosycondicionesIdTerminosYCondiciones");
 
                     b.ToTable("Especialistas");
+                });
+
+            modelBuilder.Entity("Domain.Flor", b =>
+                {
+                    b.Property<int>("IdFlor")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdFlor"), 1L, 1);
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("IdFlor");
+
+                    b.ToTable("Flores");
+                });
+
+            modelBuilder.Entity("Domain.FloresDelUsuarioModel", b =>
+                {
+                    b.Property<int>("StickerIdSticker")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StickerIdSticker"), 1L, 1);
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Etapa")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FlorIdFlor")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PacienteIdUsuario")
+                        .HasColumnType("int");
+
+                    b.Property<int>("idUsuario")
+                        .HasColumnType("int");
+
+                    b.HasKey("StickerIdSticker");
+
+                    b.HasIndex("FlorIdFlor");
+
+                    b.HasIndex("PacienteIdUsuario");
+
+                    b.ToTable("FloresDelUsuario");
                 });
 
             modelBuilder.Entity("Domain.HistoryTestModel", b =>
@@ -344,6 +409,28 @@ namespace Data.Migrations
                     b.ToTable("HistorialesCuestionariosCompletados");
                 });
 
+            modelBuilder.Entity("Domain.ImageModel", b =>
+                {
+                    b.Property<int>("IdImage")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdImage"), 1L, 1);
+
+                    b.Property<int?>("FlorIdFlor")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("IdImage");
+
+                    b.HasIndex("FlorIdFlor");
+
+                    b.ToTable("ImageModel");
+                });
+
             modelBuilder.Entity("Domain.Logro", b =>
                 {
                     b.Property<int>("IdLogro")
@@ -360,10 +447,10 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PacienteIdUsuario")
+                    b.Property<int>("Tipo")
                         .HasColumnType("int");
 
-                    b.Property<int>("Tipo")
+                    b.Property<int?>("idFlor")
                         .HasColumnType("int");
 
                     b.Property<int?>("idSticker")
@@ -371,9 +458,7 @@ namespace Data.Migrations
 
                     b.HasKey("IdLogro");
 
-                    b.HasIndex("PacienteIdUsuario");
-
-                    b.ToTable("Logro");
+                    b.ToTable("Logros");
                 });
 
             modelBuilder.Entity("Domain.Nota", b =>
@@ -497,6 +582,9 @@ namespace Data.Migrations
                     b.Property<DateTime>("FechaModificacion")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("FechaNacimiento")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -519,6 +607,9 @@ namespace Data.Migrations
                     b.Property<string>("TokenRelacional")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("registerSet")
+                        .HasColumnType("bit");
 
                     b.HasKey("IdUsuario");
 
@@ -613,6 +704,9 @@ namespace Data.Migrations
                     b.Property<string>("Referencia")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SubTitulo")
+                        .HasColumnType("int");
 
                     b.Property<int>("Tipo")
                         .HasColumnType("int");
@@ -785,6 +879,35 @@ namespace Data.Migrations
                     b.ToTable("Sticker");
                 });
 
+            modelBuilder.Entity("Domain.StickerDeUsuarioModel", b =>
+                {
+                    b.Property<int>("IdStickerDeUsuarioModel")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdStickerDeUsuarioModel"), 1L, 1);
+
+                    b.Property<int?>("PacienteIdUsuario")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Posicion")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StickerIdSticker")
+                        .HasColumnType("int");
+
+                    b.Property<int>("idUsuario")
+                        .HasColumnType("int");
+
+                    b.HasKey("IdStickerDeUsuarioModel");
+
+                    b.HasIndex("PacienteIdUsuario");
+
+                    b.HasIndex("StickerIdSticker");
+
+                    b.ToTable("StickersDeUsuario");
+                });
+
             modelBuilder.Entity("Domain.TerminosYCondiciones", b =>
                 {
                     b.Property<int>("IdTerminosYCondiciones")
@@ -820,6 +943,9 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("Visible")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.HasIndex("HistoryTestModelId");
@@ -853,19 +979,19 @@ namespace Data.Migrations
                     b.ToTable("TestQuestionWithAnswer");
                 });
 
-            modelBuilder.Entity("PacienteSticker", b =>
+            modelBuilder.Entity("LogroPaciente", b =>
                 {
-                    b.Property<int>("PacintesIdUsuario")
+                    b.Property<int>("PacientesIdUsuario")
                         .HasColumnType("int");
 
-                    b.Property<int>("StickersIdSticker")
+                    b.Property<int>("logrosIdLogro")
                         .HasColumnType("int");
 
-                    b.HasKey("PacintesIdUsuario", "StickersIdSticker");
+                    b.HasKey("PacientesIdUsuario", "logrosIdLogro");
 
-                    b.HasIndex("StickersIdSticker");
+                    b.HasIndex("logrosIdLogro");
 
-                    b.ToTable("PacienteSticker");
+                    b.ToTable("LogroPaciente");
                 });
 
             modelBuilder.Entity("CuestionarioPaciente", b =>
@@ -934,6 +1060,21 @@ namespace Data.Migrations
                     b.Navigation("Terminosycondiciones");
                 });
 
+            modelBuilder.Entity("Domain.FloresDelUsuarioModel", b =>
+                {
+                    b.HasOne("Domain.Flor", "Flor")
+                        .WithMany()
+                        .HasForeignKey("FlorIdFlor")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Paciente", null)
+                        .WithMany("FloresDelUsuario")
+                        .HasForeignKey("PacienteIdUsuario");
+
+                    b.Navigation("Flor");
+                });
+
             modelBuilder.Entity("Domain.HistoryTestModel", b =>
                 {
                     b.HasOne("Domain.Paciente", null)
@@ -941,11 +1082,11 @@ namespace Data.Migrations
                         .HasForeignKey("PacienteIdUsuario");
                 });
 
-            modelBuilder.Entity("Domain.Logro", b =>
+            modelBuilder.Entity("Domain.ImageModel", b =>
                 {
-                    b.HasOne("Domain.Paciente", null)
-                        .WithMany("Logros")
-                        .HasForeignKey("PacienteIdUsuario");
+                    b.HasOne("Domain.Flor", null)
+                        .WithMany("Imagenes")
+                        .HasForeignKey("FlorIdFlor");
                 });
 
             modelBuilder.Entity("Domain.Nota", b =>
@@ -1051,6 +1192,21 @@ namespace Data.Migrations
                     b.Navigation("Paciente");
                 });
 
+            modelBuilder.Entity("Domain.StickerDeUsuarioModel", b =>
+                {
+                    b.HasOne("Domain.Paciente", null)
+                        .WithMany("Stickersds")
+                        .HasForeignKey("PacienteIdUsuario");
+
+                    b.HasOne("Domain.Sticker", "Sticker")
+                        .WithMany()
+                        .HasForeignKey("StickerIdSticker")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Sticker");
+                });
+
             modelBuilder.Entity("Domain.TestInfoModel", b =>
                 {
                     b.HasOne("Domain.HistoryTestModel", null)
@@ -1065,17 +1221,17 @@ namespace Data.Migrations
                         .HasForeignKey("TestInfoModelId");
                 });
 
-            modelBuilder.Entity("PacienteSticker", b =>
+            modelBuilder.Entity("LogroPaciente", b =>
                 {
                     b.HasOne("Domain.Paciente", null)
                         .WithMany()
-                        .HasForeignKey("PacintesIdUsuario")
+                        .HasForeignKey("PacientesIdUsuario")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Sticker", null)
+                    b.HasOne("Domain.Logro", null)
                         .WithMany()
-                        .HasForeignKey("StickersIdSticker")
+                        .HasForeignKey("logrosIdLogro")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -1108,6 +1264,11 @@ namespace Data.Migrations
                     b.Navigation("solicitudPacientes");
                 });
 
+            modelBuilder.Entity("Domain.Flor", b =>
+                {
+                    b.Navigation("Imagenes");
+                });
+
             modelBuilder.Entity("Domain.HistoryTestModel", b =>
                 {
                     b.Navigation("testInfoModels");
@@ -1119,13 +1280,15 @@ namespace Data.Migrations
 
                     b.Navigation("Citas");
 
-                    b.Navigation("HistorialCuestionarios");
+                    b.Navigation("FloresDelUsuario");
 
-                    b.Navigation("Logros");
+                    b.Navigation("HistorialCuestionarios");
 
                     b.Navigation("Notas");
 
                     b.Navigation("Notificaciones");
+
+                    b.Navigation("Stickersds");
 
                     b.Navigation("cuestionarioCompletados");
                 });

@@ -35,9 +35,31 @@ namespace Domain
         //Configuracion
         public ConfiguracionP Configuracion { get; set; } = new ConfiguracionP();
 
+        public List<Logro> logros { get; set; } = new List<Logro>();
+        public List<StickerDeUsuarioModel> Stickersds { get; set; } = new List<StickerDeUsuarioModel>();
+        public List<FloresDelUsuarioModel> FloresDelUsuario { get; set; } = new List<FloresDelUsuarioModel>();
 
-        //Inventario
-        public List<Logro> Logros { get; set; } = new List<Logro>();
-        public List<Sticker> Stickers { get; set; } = new List<Sticker>();
+        public bool registerSet { get; set; } = false;
     }
+    
+    public class FloresDelUsuarioModel
+    {
+        [Key]
+        public int StickerIdSticker { get; set; }
+        public Flor Flor { get; set; } = new Flor();
+        public bool Active { get; set; }
+        public EtapaFlor Etapa { get; set; } = EtapaFlor.initialFlowet;
+        public int idUsuario { get; set; }
+    }
+
+    public class StickerDeUsuarioModel
+    {
+        [Key]
+        public int IdStickerDeUsuarioModel { get; set; }
+        public Sticker Sticker { get; set; } = new Sticker();
+        public int? Posicion { get; set; }
+
+         public int idUsuario { get; set; }
+    }
+
 }

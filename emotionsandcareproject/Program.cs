@@ -1,6 +1,11 @@
+using Business;
+using Business.contracts;
 using Business.Contracts;
+using Business.implementations;
 using Business.Implementations;
+using Data.contracts;
 using Data.Contracts;
+using Data.implementations;
 using Data.Implementations;
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
@@ -39,6 +44,10 @@ builder.Services.AddScoped<IPublicacionRepository, PublicacionRepository>();
 builder.Services.AddScoped<IPublicacionService, PublicacionService>();
 builder.Services.AddScoped<IRecomendacionRepository, RecomendacionRepository>();
 builder.Services.AddScoped<IRecomendacionService, RecomendacionService>();
+builder.Services.AddScoped<IItemsRepository, ItemsRepository>();
+builder.Services.AddScoped<IItemsService, ItemsSerice>();
+builder.Services.AddScoped<ILogroRepository, LogroRepository>();
+builder.Services.AddScoped<ILogroService, LogroService>();
 
 
 var app = builder.Build();

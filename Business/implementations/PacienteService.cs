@@ -21,7 +21,31 @@ namespace Business.Implementations
         public int Add(AgregarPaciente paciente)
         {
             if(paciente == null) { return 0; }
-            return _service.Add(paciente);
+            int id = _service.Add(paciente);
+
+             if(id > 0)
+            {
+            //     // int result = _service.AgregarFlorInicial(id);
+            //     // if(result > 0) {
+                    
+                
+               
+            //         int idSticker1 = _service.agregarStickerDeUsuarioModel(
+            //             null, id
+            //         );
+
+            //         int response = _service.agregarStickerDeUsuarioModel(idSticker1, id);
+
+            //         if (response > 0)
+            //         {
+                        return id;
+                //    }
+                    
+            }
+    
+            
+
+            return 0;
         }
 
         public bool Delete(int id)
@@ -59,6 +83,19 @@ namespace Business.Implementations
         {
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password)) { return 0; }
             return _service.login(email, password);
+        }
+
+        public bool MoficarConfiguracionNotificaciones(int id, bool notificacionesActivas, bool dirioActivado, bool progresoActivado)
+        {
+            if (id < 1) { return false; }
+            return _service.MoficarConfiguracionNotificaciones(id, notificacionesActivas, dirioActivado, progresoActivado);
+        }
+
+        public bool registerSet(int id)
+        {
+            if (id < 1) { return false; }
+            return _service.registerSet(id);
+
         }
     }
 }

@@ -21,6 +21,10 @@ namespace Data.Implementations
             {
                 var thisEmailExist = db.Especialistas.FirstOrDefault(x => x.Correo == especialista.Correo);
 
+                var thisNumberExist = db.Especialistas.FirstOrDefault(x => x.Telefono == especialista.Telefono);
+
+                if (thisNumberExist != null) return -2;
+
                 if (thisEmailExist == null)
                 {
                     var isAPatientEmail = db.Pacientes.FirstOrDefault(x => x.Correo == especialista.Correo);
@@ -227,6 +231,23 @@ namespace Data.Implementations
                                     .ToList();
 
                 return pacientes;
+            }
+        }
+
+        public List<Especialista> ListarEspecialistas(int offset, int limit)
+        {
+            if (offset < 0 || limit < 1) return new List<Especialista>();
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                return db.Especialistas
+                    .Include(x => x.Terminosycondiciones)
+                    .Skip(offset)
+                    .Take(limit)
+                    .ToList();
             }
         }
 

@@ -27,5 +27,6 @@ namespace Business.Contracts
         bool rechazarCita(int id, int idCita);
         List<Paciente>? GetPacientes(int id);
         List<SolicitudCita>? GetSolicitudesCitas(int id);
+        List<Especialista> ListarEspecialistas(int offset, int limit);
     }
 }

@@ -62,6 +62,24 @@ namespace API.Controllers
             if (!result) return Task.FromResult<ActionResult>(BadRequest());
             return Task.FromResult<ActionResult>(Ok(result));
         }   
+
+        [HttpPut("{id}/MoficarConfiguracionNotificaciones/{notificacionesActivas}/{dirioActivado}/{progresoActivado}")]
+        public Task<ActionResult> ActivarNotificaciones([FromRoute] int id, [FromRoute] bool notificacionesActivas, [FromRoute] bool dirioActivado, [FromRoute] bool progresoActivado)
+        {
+            if (id < 1) return Task.FromResult<ActionResult>(BadRequest());
+            var result = _service.MoficarConfiguracionNotificaciones(id, notificacionesActivas, dirioActivado, progresoActivado);
+            if (!result) return Task.FromResult<ActionResult>(BadRequest());
+            return Task.FromResult<ActionResult>(Ok(result));
+        }
+
+        [HttpPut("{id}/registerSet")]
+        public Task<ActionResult> registerSet(int id)
+        {
+            if (id < 1) return Task.FromResult<ActionResult>(BadRequest());
+            var result = _service.registerSet(id);
+            if (!result) return Task.FromResult<ActionResult>(BadRequest());
+            return Task.FromResult<ActionResult>(Ok(result));
+        }
     }       
 }
 

@@ -52,11 +52,16 @@ namespace API.Controllers
             return Ok(result);
         }
 
-        [HttpPost("{idPaciente}/completarCuestionario/{idCuestionario}")]
-        public ActionResult completarCuestionario(int idPaciente, int idCuestionario, [FromBody] ListResponseModel respuestas)
+        [HttpPost("{idPaciente}/completarCuestionario/{idCuestionario}/{isFirstTime}")]
+        public ActionResult completarCuestionario(int idPaciente, int idCuestionario,  bool isFirstTime,
+         [FromBody] ListResponseModel respuestas)
         {
             if (idPaciente < 1 || idCuestionario < 1) return BadRequest();
-            var result = _service.completarCuestionario(idCuestionario, idPaciente, respuestas.preguntas);
+
+            var result = _service.completarCuestionario(idCuestionario, idPaciente,
+               
+             respuestas.preguntas,  isFirstTime);
+
             if (result == null) return BadRequest();
             return Ok(result);
         }
@@ -67,6 +72,15 @@ namespace API.Controllers
             if (idPaciente < 1) return BadRequest();
             var result = _service.GetCuestionariosInfo(idPaciente);
             if (result == null) return NotFound();
+            return Ok(result);
+        }
+
+        [HttpPut("{idCuestionario}/changeVisibility/{idTestInfoModel}/{visible}")]
+        public ActionResult changeVisibility(int idCuestionario, int idTestInfoModel, bool visible)
+        {
+            if (idCuestionario < 1 || idTestInfoModel < 1) return BadRequest();
+            var result = _service.changeVisibility(idCuestionario, idTestInfoModel, visible);
+            if (!result) return BadRequest();
             return Ok(result);
         }
     }

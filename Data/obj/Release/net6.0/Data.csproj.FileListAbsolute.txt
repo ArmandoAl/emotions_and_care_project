@@ -28,3 +28,5 @@ C:\Users\alvar\OneDrive\Documents\projects\emotions_and_care_project\Data\obj\Re
 C:\Users\alvar\OneDrive\Documents\projects\emotions_and_care_project\Data\obj\Release\net6.0\refint\Data.dll
 C:\Users\alvar\OneDrive\Documents\projects\emotions_and_care_project\Data\obj\Release\net6.0\Data.pdb
 C:\Users\alvar\OneDrive\Documents\projects\emotions_and_care_project\Data\obj\Release\net6.0\ref\Data.dll
+C:\Users\alvar\OneDrive\Documents\projects\emotions_and_care_project\Data\bin\Release\net6.0\Data.runtimeconfig.json
+C:\Users\alvar\OneDrive\Documents\projects\emotions_and_care_project\Data\obj\Release\net6.0\Data.genruntimeconfig.cache

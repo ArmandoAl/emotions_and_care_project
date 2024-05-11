@@ -73,7 +73,12 @@ namespace Data.Implementations
             List<Nota> notas = new List<Nota>();
             using (var db = new DBContext(options: connectionOptions))
             {
-                notas = db.Pacientes.Where(x => x.IdUsuario == idPaciente).SelectMany(x => x.Notas).Include(x => x.Emocion).ToList();
+                notas = db.Pacientes.Where(x => x.IdUsuario == idPaciente).SelectMany(x => x.Notas).
+                Include(x => x.Emocion).ToList();
+
+                //ordenar de mas reciente a mas antigua
+                notas = notas.OrderByDescending(x => x.FechaCreacion).ToList();
+
                 return notas;
             }
         }

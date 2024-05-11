@@ -1,4 +1,5 @@
-﻿using Business.Contracts;
+﻿using Business.contracts;
+using Business.Contracts;
 using Data.Contracts;
 using Domain;
 using System;
@@ -14,12 +15,14 @@ namespace Business.Implementations
         private readonly ICuestionarioRepository _cuestionarioService;
         private readonly INotificacionService _notificacionService;
 
-        public CuestionarioService(ICuestionarioRepository cuestionarioService, INotificacionService notificacionService)
+        private readonly ILogroService _logroService;
+
+        public CuestionarioService(ICuestionarioRepository cuestionarioService, INotificacionService notificacionService, ILogroService logroService)
         {
             _cuestionarioService = cuestionarioService;
             _notificacionService = notificacionService;
+            _logroService = logroService;
         }
-
         public int AddCuestionario(Cuestionario cuestionario)
         {
             if (cuestionario == null) return 0;
@@ -35,7 +38,7 @@ namespace Business.Implementations
             return 0;
         }
 
-        public TestInfoModel? completarCuestionario(int idCuestionario, int idPaciente, List<TestQuestionForComplete> respuestas)
+        public LogroWithTestInfoModel? completarCuestionario(int idCuestionario, int idPaciente, List<TestQuestionForComplete> respuestas, bool isFirstTime)
         {
            if (idCuestionario <= 0 || idPaciente <= 0) return null;
 
@@ -52,9 +55,29 @@ namespace Business.Implementations
                     {
                         return null;
                     }
-                }
 
-                return _cuestionarioService.GetTestInfoModel(idHistoralCuestionario);
+                    if(isFirstTime) {
+                        var idLogro = _logroService.AgregarLogroAPaciente(idPaciente, 1);
+
+                        if (idLogro <= 0) return null;
+
+                        return new LogroWithTestInfoModel
+                        {
+                        TestInfoModel = _cuestionarioService.GetTestInfoModel(idHistoralCuestionario)!,
+
+                        Logro = _logroService.GetLogro(idLogro)
+                        };
+                    } else {
+
+                        return new LogroWithTestInfoModel
+                        {
+                            TestInfoModel = _cuestionarioService.GetTestInfoModel(idHistoralCuestionario)!,
+
+                            Logro = null
+                        };
+
+                    }   
+                }
             }
 
             return null;
@@ -106,6 +129,13 @@ namespace Business.Implementations
 
             return _cuestionarioService.UpdateCuestionario(cuestionario);
         }
-        
+
+        public bool changeVisibility(int idCuestionario, int idTestInfoModel, bool visible)
+        {
+            if (idCuestionario <= 0 || idTestInfoModel <= 0) return false;
+
+            return _cuestionarioService.changeVisibility(idCuestionario, idTestInfoModel, visible);
+
+        }
     }
 }

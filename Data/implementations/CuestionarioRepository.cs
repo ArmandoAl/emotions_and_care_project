@@ -269,6 +269,9 @@ namespace Data.Implementations
                 var historialCuestionarios  = paciente.HistorialCuestionarios.ToList();
 
 
+                historialCuestionarios.ForEach(x => x.testInfoModels = x.testInfoModels.OrderByDescending(x => x.Id).ToList());
+
+
                 return new CuestionariosInfo
                 {
                     Cuestionarios = cuestionarios,
@@ -327,6 +330,28 @@ namespace Data.Implementations
             {
                 return db.HistorialesCuestionariosCompletados!.Include(x => x.testInfoModels)!.ThenInclude(x => x.TestQuestionWithAnswers)!.
                     FirstOrDefault(x => x.Id == idHistoralCuestionario)!.testInfoModels.LastOrDefault();
+            }
+        }
+
+
+        public bool changeVisibility(int idCuestionario, int idTestInfoModel, bool visible)
+        {
+            if (idCuestionario <= 0 || idTestInfoModel <= 0) return false;
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+             .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+             .Options;
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var historialCuestionario = db.HistorialesCuestionariosCompletados.FirstOrDefault(x => x.Id == idCuestionario);
+                if (historialCuestionario == null) return false;
+
+                var testInfoModel = historialCuestionario.testInfoModels.FirstOrDefault(x => x.Id == idTestInfoModel);
+                if (testInfoModel == null) return false;
+
+                testInfoModel.Visible = visible;
+                db.SaveChanges();
+                return true;
             }
         }
     }

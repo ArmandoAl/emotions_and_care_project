@@ -15,13 +15,25 @@ namespace Domain
         ActividadFísica,
         VidaSocial
     }
+
+    public enum SubTitulo
+    {
+        Sueño,
+        Alimentacion,
+        TecnicasDeRelajacion,
+        ActividadFísica,
+        VidaSocial
+    }
     public class Recomendacion
     {
         [Key]
         public int IdRecomendacion { get; set; }
+        
         public string Titulo { get; set; } = "";
         public string Contenido { get; set; } = "";
         public TipoRecomendacion Tipo { get; set; }
+
+        public SubTitulo SubTitulo { get; set; }
         public string Referencia { get; set; } = "";
         public string? Url { get; set; } = "";
 

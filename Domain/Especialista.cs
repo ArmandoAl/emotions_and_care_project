@@ -11,6 +11,14 @@ namespace Domain
     {
         public string CedulaProfesional { get; set; } = "";
 
+        public string Enfoque { get; set; } = "";
+
+        public string? Institucion { get; set; } = "";
+
+        public string? Presentacion { get; set; } = "";
+
+        public string? Ubicaion { get; set; } = "";
+
         public List<Carta> CartasDeComunidad { get; set; } = new List<Carta>();
 
         public List<Cita> Citas { get; set; } = new List<Cita>();

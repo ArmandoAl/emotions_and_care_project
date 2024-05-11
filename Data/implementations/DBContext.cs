@@ -33,12 +33,20 @@ namespace Data.Implementations
             public DbSet<Cita> Citas { get; set; } = null!;            
 
             public DbSet<TerminosYCondiciones> TerminosYCondiciones { get; set; } = null!;
+
+            public DbSet<Logro> Logros { get; set; } = null!;
             
             public DbSet<Sticker> Sticker { get; set; } = null!;
+
+            public DbSet<Flor> Flores { get; set; } = null!;
 
             public DbSet<Publicacion> Publicaciones { get; set; } = null!;
 
             public DbSet<Recomendacion> Recomendaciones { get; set; } = null!;
+
+            public DbSet<StickerDeUsuarioModel> StickersDeUsuario { get; set; } = null!;
+
+            public DbSet<FloresDelUsuarioModel> FloresDelUsuario { get; set; } = null!;
 
             public DBContext(DbContextOptions<DBContext> options) : base(options) { }
         }

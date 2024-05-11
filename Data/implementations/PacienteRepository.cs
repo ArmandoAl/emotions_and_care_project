@@ -21,6 +21,10 @@ namespace Data.Implementations
             {
                 var thisEmailExist = db.Pacientes.FirstOrDefault(x => x.Correo == paciente.Correo);
 
+                var thisNumberExist = db.Pacientes.FirstOrDefault(x => x.Telefono == paciente.Telefono);    
+
+                if (thisNumberExist != null) return -2;
+
                 if (thisEmailExist == null)
                 {
                     var isaEspacialistaEmail = db.Especialistas.FirstOrDefault(x => x.Correo == paciente.Correo);
@@ -33,7 +37,8 @@ namespace Data.Implementations
                         Correo = paciente.Correo,
                         Contraseña = paciente.Contraseña,
                         Telefono = paciente.Telefono,
-                        Edad = paciente.Edad,
+                        FechaNacimiento = paciente.FechaNacimiento,
+                        Edad = getEdadFromBirthDate(paciente.FechaNacimiento),
                         Sexo = paciente.Sexo,
                         Token = paciente.Token,
                         TokenRelacional = getTheFirstSixDigits(paciente.Token),
@@ -51,6 +56,18 @@ namespace Data.Implementations
                     return -1;
                 }
             }
+        }
+
+        
+        private int getEdadFromBirthDate(DateTime birthDate)
+        {
+            DateTime now = DateTime.Now;
+            int age = now.Year - birthDate.Year;
+            if (now.Month < birthDate.Month || (now.Month == birthDate.Month && now.Day < birthDate.Day))
+            {
+                age--;
+            }
+            return age;
         }
 
         private string getTheFirstSixDigits(string token)
@@ -94,6 +111,7 @@ namespace Data.Implementations
                     Correo = x.Correo,
                     Contraseña = x.Contraseña,
                     Telefono = x.Telefono,
+                    FechaNacimiento = x.FechaNacimiento,
                     Edad = x.Edad,
                     Sexo = x.Sexo,
                     Token = x.Token,
@@ -117,7 +135,8 @@ namespace Data.Implementations
                         FechaCreacion = x.Especialista.FechaCreacion,
                         FechaModificacion = x.Especialista.FechaModificacion
                         
-                    }
+                    },
+                    registerSet = x.registerSet
                 })
                    
                     .FirstOrDefault();
@@ -235,5 +254,125 @@ namespace Data.Implementations
                 return 0;
             }
         }
+
+        public bool MoficarConfiguracionNotificaciones(int id, bool notificacionesActivas, bool dirioActivado, bool progresoActivado)
+        {
+            if (id <= 0) return false;
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+              .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+              .Options;
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var thisPaciente = db.Pacientes.FirstOrDefault(x => x.IdUsuario == id);
+                if (thisPaciente == null) return false;
+
+                thisPaciente.Configuracion.NotificacionesActivas = notificacionesActivas;
+                thisPaciente.Configuracion.DirioActivado = dirioActivado;
+                thisPaciente.Configuracion.ProgresoActivado = progresoActivado;
+                thisPaciente.FechaModificacion = DateTime.Now;
+
+                db.Pacientes.Update(thisPaciente);
+                db.SaveChanges();
+                return true;
+            }
+        }
+
+        public int AgregarFlorInicial(int id)
+        {
+            if (id <= 0) return 0;
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+              .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+              .Options;
+            using (var db = new DBContext(options: connectionOptions))
+            {
+               
+
+                var thisFlor = db.Flores.FirstOrDefault(x => x.IdFlor == 1);
+                if (thisFlor == null) return 0;
+
+              db.FloresDelUsuario.Add(
+                    new FloresDelUsuarioModel
+                    {
+                        Flor = thisFlor,
+                        Active = true,
+                        Etapa = EtapaFlor.initialFlowet,
+                        idUsuario = id
+                    }
+
+                );
+                db.SaveChanges();
+                return  thisFlor.IdFlor;
+            }
+        }
+
+        public int agregarStickerDeUsuarioModel(int? index, int idUsuario) {
+              var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+              .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+              .Options;
+            using (var db = new DBContext(options: connectionOptions))
+            {
+              List<Sticker> stickers = db.Sticker.ToList();
+
+                StickerDeUsuarioModel stickerDeUsuario; 
+
+              if(index == null) {
+
+               stickerDeUsuario = getStickerFromIndex(stickers, 1, 2, idUsuario);
+
+              } else {
+                stickerDeUsuario = stickers.Where(x => x.IdSticker != index && x.IdSticker < 10)
+                    .Select(x => new StickerDeUsuarioModel
+                    {
+                        Sticker = x,
+                        Posicion = null
+                    }).FirstOrDefault()!;
+              }
+
+              db.StickersDeUsuario.Add(
+                    stickerDeUsuario
+              );
+                db.SaveChanges();
+                return stickerDeUsuario.IdStickerDeUsuarioModel;
+            }
+        }
+
+
+        private StickerDeUsuarioModel getStickerFromIndex(List<Sticker> stickers, int index, int maxIndex, int idUsuario)
+        {
+          //get a random sticker from the list of stickers and return it
+            Random random = new Random();
+            int randomIndex = random.Next(index, maxIndex);
+            return new StickerDeUsuarioModel
+            {
+                Sticker = stickers[randomIndex],
+                Posicion = null,
+                idUsuario = idUsuario
+            };       
+        }
+
+        public bool registerSet(int id)
+        {
+            if (id <= 0) return false;
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+              .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+              .Options;
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var thisPaciente = db.Pacientes.FirstOrDefault(x => x.IdUsuario == id);
+                if (thisPaciente == null) return false;
+
+                thisPaciente.registerSet = true;
+                thisPaciente.FechaModificacion = DateTime.Now;
+
+                db.Pacientes.Update(thisPaciente);
+                db.SaveChanges();
+                return true;
+            }
+        }
     }
 }
+
+

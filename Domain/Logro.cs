@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Domain
@@ -26,5 +27,9 @@ namespace Domain
         public TipoLogro Tipo { get; set; }
 
         public int? idSticker { get; set; }
+        public int? idFlor { get; set; }
+
+        [JsonIgnore]
+        public List<Paciente> Pacientes { get; set; } = new List<Paciente>();
     }
 }

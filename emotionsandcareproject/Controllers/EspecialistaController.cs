@@ -96,5 +96,14 @@ namespace API.Controllers
             if (result == null) return Task.FromResult<ActionResult>(NotFound());
             return Task.FromResult<ActionResult>(Ok(result));
         }
+
+        [HttpGet("listarEspecialistas/{offset}/{limit}")]
+        public Task<ActionResult> ListarEspecialistas([FromRoute] int offset, [FromRoute] int limit)
+        {
+            if (offset < 0 || limit < 1) return Task.FromResult<ActionResult>(BadRequest());
+            var result = _service.ListarEspecialistas(offset, limit);
+            if (result == null) return Task.FromResult<ActionResult>(NotFound());
+            return Task.FromResult<ActionResult>(Ok(result));
+        }
     }
 }

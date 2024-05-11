@@ -32,3 +32,5 @@ C:\Users\alvar\OneDrive\Documents\projects\emotions_and_care_project\Business\ob
 C:\Users\alvar\OneDrive\Documents\projects\emotions_and_care_project\Business\obj\Debug\net6.0\refint\Business.dll
 C:\Users\alvar\OneDrive\Documents\projects\emotions_and_care_project\Business\obj\Debug\net6.0\Business.pdb
 C:\Users\alvar\OneDrive\Documents\projects\emotions_and_care_project\Business\obj\Debug\net6.0\ref\Business.dll
+C:\Users\alvar\OneDrive\Documents\projects\emotions_and_care_project\Business\bin\Debug\net6.0\Business.runtimeconfig.json
+C:\Users\alvar\OneDrive\Documents\projects\emotions_and_care_project\Business\obj\Debug\net6.0\Business.genruntimeconfig.cache

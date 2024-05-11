@@ -20,6 +20,8 @@ namespace Domain
 
         public string Telefono { get; set; } = "";
 
+        public DateTime FechaNacimiento { get; set; }
+
         public int Edad { get; set; }
 
         public string Sexo { get; set; } = "";

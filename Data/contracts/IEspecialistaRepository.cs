@@ -23,5 +23,6 @@ namespace Data.Contracts
 
         bool vincularPaciente(int idSpecialist, string tokenPaciente);
         List<Paciente>? GetPacientes(int id);
+        List<Especialista> ListarEspecialistas(int offset, int limit);
     }
 }

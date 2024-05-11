@@ -1,5 +1,5 @@
 C:\Users\alvar\OneDrive\Documents\projects\emotions_and_care_project\emotionsandcareproject\bin\Publish\Data.dll
-C:\Users\alvar\OneDrive\Documents\projects\emotions_and_care_project\emotionsandcareproject\bin\Publish\Data.deps.json
+C:\Users\alvar\OneDrive\Documents\projects\emotions_and_care_project\emotionsandcareproject\bin\Publish\Data.runtimeconfig.json
 C:\Users\alvar\OneDrive\Documents\projects\emotions_and_care_project\emotionsandcareproject\bin\Publish\Data.pdb
 C:\Users\alvar\OneDrive\Documents\projects\emotions_and_care_project\emotionsandcareproject\bin\Publish\FirebaseAdmin.dll
 C:\Users\alvar\OneDrive\Documents\projects\emotions_and_care_project\emotionsandcareproject\bin\Publish\Google.Api.Gax.dll
@@ -53,3 +53,4 @@ C:\Users\alvar\OneDrive\Documents\projects\emotions_and_care_project\emotionsand
 C:\Users\alvar\OneDrive\Documents\projects\emotions_and_care_project\emotionsandcareproject\bin\Publish\runtimes\win\lib\netcoreapp3.0\System.Windows.Extensions.dll
 C:\Users\alvar\OneDrive\Documents\projects\emotions_and_care_project\emotionsandcareproject\bin\Publish\Domain.dll
 C:\Users\alvar\OneDrive\Documents\projects\emotions_and_care_project\emotionsandcareproject\bin\Publish\Domain.pdb
+C:\Users\alvar\OneDrive\Documents\projects\emotions_and_care_project\emotionsandcareproject\bin\Publish\Data.deps.json

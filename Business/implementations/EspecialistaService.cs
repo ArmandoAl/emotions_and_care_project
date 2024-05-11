@@ -104,5 +104,11 @@ namespace Business.Implementations
             if(id < 1) { return null; }
             return _citaRepository.GetSolicitudesCitas(id);
         }
+
+        public List<Especialista> ListarEspecialistas(int offset, int limit)
+        {
+            if (offset < 0 || limit < 1) { return new List<Especialista>(); }
+            return _service.ListarEspecialistas(offset, limit);
+        }
     }
 }

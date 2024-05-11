@@ -28,5 +28,7 @@ namespace Data.Contracts
         CuestionariosInfo? GetCuestionariosInfo(int pacienteId);
         bool CanMakeTest(int pacienteId);
         TestInfoModel? GetTestInfoModel(int idHistoralCuestionario);
+
+        bool changeVisibility(int idCuestionario, int idTestInfoModel, bool visible);
     }
 }

@@ -17,10 +17,12 @@ namespace Business.Contracts
 
         Cuestionario? GetCuestionario(int idCuestionario);
 
-        TestInfoModel? completarCuestionario(int idCuestionario, int idPaciente, 
-                List<TestQuestionForComplete> respuestas
-            );
+        LogroWithTestInfoModel? completarCuestionario(int idCuestionario, int idPaciente,
+                List<TestQuestionForComplete> respuestas, bool isFirstTime);
+            
 
         CuestionariosInfo? GetCuestionariosInfo(int pacienteId);
+
+        bool changeVisibility(int idCuestionario, int idTestInfoModel, bool visible);
     }
 }

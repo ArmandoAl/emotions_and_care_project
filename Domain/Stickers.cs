@@ -13,8 +13,5 @@ namespace Domain
         [Key]
         public int IdSticker { get; set; }
         public string Imagen { get; set; } = "";
-
-        [JsonIgnore]
-        public List<Paciente> Pacintes { get; set; } = new List<Paciente>();
     }
 }

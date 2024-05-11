@@ -13,7 +13,9 @@ namespace Domain
         public int Id { get; set; }
 
         public int IdCuestionario { get; set; }
+        
         public string Name { get; set; } = "";
+
         public List<TestInfoModel> testInfoModels { get; set; } = new List<TestInfoModel>();
     }
 }

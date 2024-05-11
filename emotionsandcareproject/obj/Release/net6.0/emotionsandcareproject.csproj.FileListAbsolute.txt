@@ -150,3 +150,5 @@ C:\Users\alvar\OneDrive\Documents\projects\emotions_and_care_project\emotionsand
 C:\Users\alvar\OneDrive\Documents\projects\emotions_and_care_project\emotionsandcareproject\obj\Release\net6.0\emotionsandcareproject.pdb
 C:\Users\alvar\OneDrive\Documents\projects\emotions_and_care_project\emotionsandcareproject\obj\Release\net6.0\emotionsandcareproject.genruntimeconfig.cache
 C:\Users\alvar\OneDrive\Documents\projects\emotions_and_care_project\emotionsandcareproject\obj\Release\net6.0\ref\emotionsandcareproject.dll
+C:\Users\alvar\OneDrive\Documents\projects\emotions_and_care_project\emotionsandcareproject\bin\Release\net6.0\Humanizer.dll
+C:\Users\alvar\OneDrive\Documents\projects\emotions_and_care_project\emotionsandcareproject\bin\Release\net6.0\Microsoft.EntityFrameworkCore.Design.dll

@@ -10,7 +10,7 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<DBContext>
     {
       
         var optionsBuilder = new DbContextOptionsBuilder<DBContext>();
-        optionsBuilder.UseSqlServer("Data Source=tcp:emotionsandcaredbdbserver.database.windows.net,1433;Initial Catalog=dbemotionscare;Persist Security Info=False;User ID=ArmandoAl;Password=UntilYourLastBreath_;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+        optionsBuilder.UseSqlServer("Data Source=tcp:azuredbapiemotionsandcare.database.windows.net,1433;Initial Catalog=dbemotionsandare;Persist Security Info=False;User ID=ArmandoAl;Password=UntilYourLastBreath_;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;");
 
         return new DBContext(optionsBuilder.Options);
     }

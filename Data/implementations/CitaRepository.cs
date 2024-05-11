@@ -116,6 +116,10 @@ namespace Data.Implementations
 
                     }).ToList();
 
+
+                //ordenar citas por fecha de mas reciente a mas antigua
+                citas = citas.OrderByDescending(x => x.Fecha).ToList();
+
                 return citas;
             }
         }

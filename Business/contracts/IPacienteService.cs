@@ -23,5 +23,8 @@ namespace Business.Contracts
         string? GetByToken(int idPaciente);
 
         int login(string email, string password);
+        bool MoficarConfiguracionNotificaciones(int id, bool notificacionesActivas, bool dirioActivado, bool progresoActivado);
+
+        bool registerSet(int id);
     }
 }

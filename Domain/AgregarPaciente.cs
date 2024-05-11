@@ -16,7 +16,7 @@ namespace Domain
 
         public string Telefono { get; set; } = "";
 
-        public int Edad { get; set; } 
+        public DateTime FechaNacimiento { get; set; } = DateTime.Now;
 
         public string Sexo { get; set; } = "";
 

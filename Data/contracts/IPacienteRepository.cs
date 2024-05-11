@@ -21,5 +21,10 @@ namespace Data.Contracts
         string? GetByToken(int idPaciente);
 
         int login (string email, string password);
+        bool MoficarConfiguracionNotificaciones(int id, bool notificacionesActivas, bool dirioActivado, bool progresoActivado);
+        int AgregarFlorInicial(int id);
+        int agregarStickerDeUsuarioModel(int? index, int idUsuario);
+
+        bool registerSet(int id);
     }
 }
