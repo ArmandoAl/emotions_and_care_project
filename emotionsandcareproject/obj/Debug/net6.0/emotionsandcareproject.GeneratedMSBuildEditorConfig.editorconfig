@@ -8,37 +8,37 @@ build_property.PlatformNeutralAssembly =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = emotionsandcareproject
 build_property.RootNamespace = emotionsandcareproject
-build_property.ProjectDir = C:\Users\alvar\OneDrive\Documents\projects\emotions_and_care_project\emotionsandcareproject\
+build_property.ProjectDir = /home/arma/Documents/projects/emotions_and_care_project/emotionsandcareproject/
 build_property.RazorLangVersion = 6.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\alvar\OneDrive\Documents\projects\emotions_and_care_project\emotionsandcareproject
+build_property.MSBuildProjectDirectory = /home/arma/Documents/projects/emotions_and_care_project/emotionsandcareproject
 build_property._RazorSourceGeneratorDebug = 
 
-[C:/Users/alvar/OneDrive/Documents/projects/emotions_and_care_project/emotionsandcareproject/Views/Home/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
+[/home/arma/Documents/projects/emotions_and_care_project/emotionsandcareproject/Views/Home/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9JbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/alvar/OneDrive/Documents/projects/emotions_and_care_project/emotionsandcareproject/Views/Home/Privacy.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
+[/home/arma/Documents/projects/emotions_and_care_project/emotionsandcareproject/Views/Home/Privacy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9Qcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/alvar/OneDrive/Documents/projects/emotions_and_care_project/emotionsandcareproject/Views/Shared/Error.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
+[/home/arma/Documents/projects/emotions_and_care_project/emotionsandcareproject/Views/Shared/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL0Vycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/alvar/OneDrive/Documents/projects/emotions_and_care_project/emotionsandcareproject/Views/Shared/_ValidationScriptsPartial.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+[/home/arma/Documents/projects/emotions_and_care_project/emotionsandcareproject/Views/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/alvar/OneDrive/Documents/projects/emotions_and_care_project/emotionsandcareproject/Views/_ViewImports.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+[/home/arma/Documents/projects/emotions_and_care_project/emotionsandcareproject/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/alvar/OneDrive/Documents/projects/emotions_and_care_project/emotionsandcareproject/Views/_ViewStart.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
+[/home/arma/Documents/projects/emotions_and_care_project/emotionsandcareproject/Views/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/alvar/OneDrive/Documents/projects/emotions_and_care_project/emotionsandcareproject/Views/Shared/_Layout.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = b-bq3zxk82mn
+[/home/arma/Documents/projects/emotions_and_care_project/emotionsandcareproject/Views/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-dkxmkd7yns

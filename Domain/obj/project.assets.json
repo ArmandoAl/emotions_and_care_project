@@ -2282,19 +2282,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\alvar\\.nuget\\packages\\": {}
+    "/home/arma/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\alvar\\OneDrive\\Documents\\projects\\emotions_and_care_project\\Domain\\Domain.csproj",
+      "projectUniqueName": "/home/arma/Documents/projects/emotions_and_care_project/Domain/Domain.csproj",
       "projectName": "Domain",
-      "projectPath": "C:\\Users\\alvar\\OneDrive\\Documents\\projects\\emotions_and_care_project\\Domain\\Domain.csproj",
-      "packagesPath": "C:\\Users\\alvar\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\alvar\\OneDrive\\Documents\\projects\\emotions_and_care_project\\Domain\\obj\\",
+      "projectPath": "/home/arma/Documents/projects/emotions_and_care_project/Domain/Domain.csproj",
+      "packagesPath": "/home/arma/.nuget/packages/",
+      "outputPath": "/home/arma/Documents/projects/emotions_and_care_project/Domain/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\alvar\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "/home/arma/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net6.0"
@@ -2353,7 +2353,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.421\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/home/arma/.dotnet/sdk/6.0.421/RuntimeIdentifierGraph.json"
       }
     }
   }

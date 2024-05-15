@@ -2303,19 +2303,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\alvar\\.nuget\\packages\\": {}
+    "/home/arma/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\alvar\\OneDrive\\Documents\\projects\\emotions_and_care_project\\Data\\Data.csproj",
+      "projectUniqueName": "/home/arma/Documents/projects/emotions_and_care_project/Data/Data.csproj",
       "projectName": "Data",
-      "projectPath": "C:\\Users\\alvar\\OneDrive\\Documents\\projects\\emotions_and_care_project\\Data\\Data.csproj",
-      "packagesPath": "C:\\Users\\alvar\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\alvar\\OneDrive\\Documents\\projects\\emotions_and_care_project\\Data\\obj\\",
+      "projectPath": "/home/arma/Documents/projects/emotions_and_care_project/Data/Data.csproj",
+      "packagesPath": "/home/arma/.nuget/packages/",
+      "outputPath": "/home/arma/Documents/projects/emotions_and_care_project/Data/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\alvar\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "/home/arma/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net6.0"
@@ -2327,8 +2327,8 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "C:\\Users\\alvar\\OneDrive\\Documents\\projects\\emotions_and_care_project\\Domain\\Domain.csproj": {
-              "projectPath": "C:\\Users\\alvar\\OneDrive\\Documents\\projects\\emotions_and_care_project\\Domain\\Domain.csproj"
+            "/home/arma/Documents/projects/emotions_and_care_project/Domain/Domain.csproj": {
+              "projectPath": "/home/arma/Documents/projects/emotions_and_care_project/Domain/Domain.csproj"
             }
           }
         }
@@ -2378,7 +2378,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.421\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/home/arma/.dotnet/sdk/6.0.421/RuntimeIdentifierGraph.json"
       }
     }
   }
