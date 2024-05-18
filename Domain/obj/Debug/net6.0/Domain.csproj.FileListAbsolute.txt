@@ -38,3 +38,17 @@ C:/Users/alvar/OneDrive/Documents/projects/emotions_and_care_project/Domain/obj/
 /home/arma/Documents/projects/emotions_and_care_project/Domain/obj/Debug/net6.0/Domain.pdb
 /home/arma/Documents/projects/emotions_and_care_project/Domain/obj/Debug/net6.0/Domain.genruntimeconfig.cache
 /home/arma/Documents/projects/emotions_and_care_project/Domain/obj/Debug/net6.0/ref/Domain.dll
+/Users/armandoalvarado/Desktop/Projects/emotions_and_care_project/Domain/bin/Debug/net6.0/Domain.deps.json
+/Users/armandoalvarado/Desktop/Projects/emotions_and_care_project/Domain/bin/Debug/net6.0/Domain.runtimeconfig.json
+/Users/armandoalvarado/Desktop/Projects/emotions_and_care_project/Domain/bin/Debug/net6.0/Domain.dll
+/Users/armandoalvarado/Desktop/Projects/emotions_and_care_project/Domain/bin/Debug/net6.0/Domain.pdb
+/Users/armandoalvarado/Desktop/Projects/emotions_and_care_project/Domain/obj/Debug/net6.0/Domain.csproj.AssemblyReference.cache
+/Users/armandoalvarado/Desktop/Projects/emotions_and_care_project/Domain/obj/Debug/net6.0/Domain.GeneratedMSBuildEditorConfig.editorconfig
+/Users/armandoalvarado/Desktop/Projects/emotions_and_care_project/Domain/obj/Debug/net6.0/Domain.AssemblyInfoInputs.cache
+/Users/armandoalvarado/Desktop/Projects/emotions_and_care_project/Domain/obj/Debug/net6.0/Domain.AssemblyInfo.cs
+/Users/armandoalvarado/Desktop/Projects/emotions_and_care_project/Domain/obj/Debug/net6.0/Domain.csproj.CoreCompileInputs.cache
+/Users/armandoalvarado/Desktop/Projects/emotions_and_care_project/Domain/obj/Debug/net6.0/Domain.dll
+/Users/armandoalvarado/Desktop/Projects/emotions_and_care_project/Domain/obj/Debug/net6.0/refint/Domain.dll
+/Users/armandoalvarado/Desktop/Projects/emotions_and_care_project/Domain/obj/Debug/net6.0/Domain.pdb
+/Users/armandoalvarado/Desktop/Projects/emotions_and_care_project/Domain/obj/Debug/net6.0/Domain.genruntimeconfig.cache
+/Users/armandoalvarado/Desktop/Projects/emotions_and_care_project/Domain/obj/Debug/net6.0/ref/Domain.dll

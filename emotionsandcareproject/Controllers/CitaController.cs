@@ -31,7 +31,7 @@ namespace API.Controllers
 
         {
             if (cita == null) return BadRequest();
-            var result = _service.AddCita(cita, idPaciente, 1);
+            var result = _service.AddCita(cita, idPaciente, idEspecialista);
             if (result == 0) return BadRequest();
             return Ok(result);
         }
