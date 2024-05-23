@@ -16,12 +16,13 @@ namespace API.Controllers
             _service = service;
         }
 
-        [HttpPost("{idPaciente}/AgregarNota")]
-        public Task<ActionResult> Add([FromRoute] int idPaciente, [FromBody] Nota nota)
+        [HttpPost("{idPaciente}/AgregarNota/{isFirstTime}")]
+        public Task<ActionResult> Add([FromRoute] int idPaciente, [FromRoute] bool isFirstTime,
+         [FromBody] Nota nota)
         {
             if (nota == null) return Task.FromResult<ActionResult>(BadRequest());
-            var result = _service.AddNota(nota, idPaciente);
-            if (result == 0) return Task.FromResult<ActionResult>(BadRequest());
+            var result = _service.AddNota(nota, idPaciente, isFirstTime);
+            if (result == null) return Task.FromResult<ActionResult>(BadRequest());
             return Task.FromResult<ActionResult>(Ok(result));
         }
 

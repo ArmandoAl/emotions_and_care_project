@@ -26,4 +26,10 @@ namespace Domain
 
         public DateTime FechaModificacion { get; set; }
     }
+
+    public class LogroWithRespuestaCarta
+    {
+        public Logro? Logro { get; set; } = new Logro();
+        public int IdRespuestaCarta { get; set; }
+    }
 }

@@ -9,7 +9,7 @@ namespace Business.Contracts
 {
     public interface ICartaService
     {
-        int Add(Carta carta, int idUsuario, bool isPatient);
+        LogroWithCarta? Add(Carta carta, int idUsuario, bool isPatient, bool isFirtTime);
 
         Carta? Get(int idCarta);
 
@@ -19,7 +19,7 @@ namespace Business.Contracts
 
         bool Delete(int idCarta);
 
-        bool AddRespuesta(RespuestaCarta respuesta, int idCarta);
+        LogroWithRespuestaCarta? AddRespuesta(RespuestaCarta respuesta, int idCarta, bool isFirtTime);
 
         List<Carta>? initCarts(int idUsuario);
     }

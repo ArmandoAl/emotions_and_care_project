@@ -1,4 +1,5 @@
 ﻿using Business.Contracts;
+using Data.contracts;
 using Data.Contracts;
 using Domain;
 using System;
@@ -12,15 +13,17 @@ namespace Business.Implementations
     public class CitaService : ICitaService
     {
       private readonly ICitaRepository _citaRepository;
+      private readonly ILogroRepository _logroRepository;
 
-        public CitaService(ICitaRepository citaRepository)
+        public CitaService(ICitaRepository citaRepository, ILogroRepository logroRepositor)
         {
             _citaRepository = citaRepository;
+            _logroRepository = logroRepositor;
         }
 
-        public int AddCita(Cita cita, int idPaciente, int idEspecialista)
+        public LogroWithCita? AddCita(Cita cita, int idPaciente, int idEspecialista, bool isFirtTime)
         {
-            if (cita == null) return 0;
+            if (cita == null) return null;
 
             int idCita = _citaRepository.AddCita(cita, idPaciente);
 
@@ -30,7 +33,7 @@ namespace Business.Implementations
                 if (!vinculacion)
                 {
                     _citaRepository.DeleteCita(idCita);
-                    return 0;
+                    return null;
                 }
                 else
                 {
@@ -40,14 +43,35 @@ namespace Business.Implementations
                     if(idSolicitudCita == 0)
                     {
                         _citaRepository.DeleteCita(idCita);
-                        return 0;
-                    }   
+                        return null;
+                    }
 
-                    return idCita;
+                    if(isFirtTime)
+                    {
+                        var idLogro = _logroRepository.AgregarLogroAPaciente(idPaciente, 6);
+                        if (idLogro <= 0)
+                        {
+                            _citaRepository.DeleteCita(idCita);
+                            return null;
+                        }
+
+                        return new LogroWithCita
+                        {
+                            Logro = _logroRepository.GetLogro(idLogro),
+                            IdCita = idCita
+                        };
+
+                    } else {
+                        return new LogroWithCita
+                        {
+                            Logro = null,
+                            IdCita = idCita
+                        };
+                    }   
                 }
             }
 
-            return 0;
+            return null;
 
         }
 

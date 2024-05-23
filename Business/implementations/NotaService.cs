@@ -1,4 +1,5 @@
 ﻿using Business.Contracts;
+using Data.contracts;
 using Data.Contracts;
 using Domain;
 using System;
@@ -12,15 +13,17 @@ namespace Business.Implementations
     public class NotaService : INotaService
     {
       private readonly INotaRepository _notaRepository;
+      private readonly ILogroRepository _logroRepository;
 
-      public NotaService(INotaRepository notaRepository)
+      public NotaService(INotaRepository notaRepository, ILogroRepository logroRepository)
         {
-        _notaRepository = notaRepository;
-      }
-
-        public int AddNota(Nota nota, int idPaciente)
+            _notaRepository = notaRepository;
+            _logroRepository = logroRepository;
+        }
+       
+        public LogroWithNota? AddNota(Nota nota, int idPaciente, bool isFirtTime)
         {
-            if (nota == null) return 0;
+            if (nota == null) return null;
     
             var idNota = _notaRepository.AddNota(nota);
 
@@ -30,13 +33,34 @@ namespace Business.Implementations
                 if (!vinculacion)
                 {
                     _notaRepository.DeleteNota(idNota);
-                    return 0;
+                    return null;
                 }
 
-                return idNota;
+                if (isFirtTime)
+                {
+                    var idLogro = _logroRepository.AgregarLogroAPaciente(idPaciente, 2);
+                    if (idLogro <= 0)
+                    {
+                        _notaRepository.DeleteNota(idNota);
+                        return null;
+                    }
+
+                    return new LogroWithNota
+                    {
+                        Logro = _logroRepository.GetLogro(idLogro),
+                        IdNota = idNota
+                    };
+
+                } else {
+                    return new LogroWithNota
+                    {
+                        Logro = null,
+                        IdNota = idNota
+                    };
+                }
             }
 
-            return 0;
+            return null;
         }
 
         public bool DeleteNota(int idNota)

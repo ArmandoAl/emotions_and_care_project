@@ -9,7 +9,7 @@ namespace Business.Contracts
 {
     public interface ICitaService
     {
-        int AddCita(Cita cita, int idPaciente, int idEspacialista);
+        LogroWithCita? AddCita(Cita cita, int idPaciente, int idEspacialista, bool isFirtTime);
 
         bool UpdateCita(Cita cita);
 

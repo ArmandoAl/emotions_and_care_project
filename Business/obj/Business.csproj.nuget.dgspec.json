@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/home/arma/Documents/projects/emotions_and_care_project/Business/Business.csproj": {}
+    "/Users/armandoalvarado/Desktop/Projects/emotions_and_care_project/Business/Business.csproj": {}
   },
   "projects": {
-    "/home/arma/Documents/projects/emotions_and_care_project/Business/Business.csproj": {
+    "/Users/armandoalvarado/Desktop/Projects/emotions_and_care_project/Business/Business.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/arma/Documents/projects/emotions_and_care_project/Business/Business.csproj",
+        "projectUniqueName": "/Users/armandoalvarado/Desktop/Projects/emotions_and_care_project/Business/Business.csproj",
         "projectName": "Business",
-        "projectPath": "/home/arma/Documents/projects/emotions_and_care_project/Business/Business.csproj",
-        "packagesPath": "/home/arma/.nuget/packages/",
-        "outputPath": "/home/arma/Documents/projects/emotions_and_care_project/Business/obj/",
+        "projectPath": "/Users/armandoalvarado/Desktop/Projects/emotions_and_care_project/Business/Business.csproj",
+        "packagesPath": "/Users/armandoalvarado/.nuget/packages/",
+        "outputPath": "/Users/armandoalvarado/Desktop/Projects/emotions_and_care_project/Business/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/arma/.nuget/NuGet/NuGet.Config"
+          "/Users/armandoalvarado/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
@@ -26,11 +26,11 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "/home/arma/Documents/projects/emotions_and_care_project/Data/Data.csproj": {
-                "projectPath": "/home/arma/Documents/projects/emotions_and_care_project/Data/Data.csproj"
+              "/Users/armandoalvarado/Desktop/Projects/emotions_and_care_project/Data/Data.csproj": {
+                "projectPath": "/Users/armandoalvarado/Desktop/Projects/emotions_and_care_project/Data/Data.csproj"
               },
-              "/home/arma/Documents/projects/emotions_and_care_project/Domain/Domain.csproj": {
-                "projectPath": "/home/arma/Documents/projects/emotions_and_care_project/Domain/Domain.csproj"
+              "/Users/armandoalvarado/Desktop/Projects/emotions_and_care_project/Domain/Domain.csproj": {
+                "projectPath": "/Users/armandoalvarado/Desktop/Projects/emotions_and_care_project/Domain/Domain.csproj"
               }
             }
           }
@@ -47,7 +47,7 @@
           "dependencies": {
             "FirebaseAdmin": {
               "target": "Package",
-              "version": "[2.4.0, )"
+              "version": "[3.0.0, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
@@ -80,21 +80,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/home/arma/.dotnet/sdk/6.0.421/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.421/RuntimeIdentifierGraph.json"
         }
       }
     },
-    "/home/arma/Documents/projects/emotions_and_care_project/Data/Data.csproj": {
+    "/Users/armandoalvarado/Desktop/Projects/emotions_and_care_project/Data/Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/arma/Documents/projects/emotions_and_care_project/Data/Data.csproj",
+        "projectUniqueName": "/Users/armandoalvarado/Desktop/Projects/emotions_and_care_project/Data/Data.csproj",
         "projectName": "Data",
-        "projectPath": "/home/arma/Documents/projects/emotions_and_care_project/Data/Data.csproj",
-        "packagesPath": "/home/arma/.nuget/packages/",
-        "outputPath": "/home/arma/Documents/projects/emotions_and_care_project/Data/obj/",
+        "projectPath": "/Users/armandoalvarado/Desktop/Projects/emotions_and_care_project/Data/Data.csproj",
+        "packagesPath": "/Users/armandoalvarado/.nuget/packages/",
+        "outputPath": "/Users/armandoalvarado/Desktop/Projects/emotions_and_care_project/Data/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/arma/.nuget/NuGet/NuGet.Config"
+          "/Users/armandoalvarado/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
@@ -106,8 +106,8 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "/home/arma/Documents/projects/emotions_and_care_project/Domain/Domain.csproj": {
-                "projectPath": "/home/arma/Documents/projects/emotions_and_care_project/Domain/Domain.csproj"
+              "/Users/armandoalvarado/Desktop/Projects/emotions_and_care_project/Domain/Domain.csproj": {
+                "projectPath": "/Users/armandoalvarado/Desktop/Projects/emotions_and_care_project/Domain/Domain.csproj"
               }
             }
           }
@@ -124,7 +124,7 @@
           "dependencies": {
             "FirebaseAdmin": {
               "target": "Package",
-              "version": "[2.4.0, )"
+              "version": "[3.0.0, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
@@ -157,21 +157,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/home/arma/.dotnet/sdk/6.0.421/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.421/RuntimeIdentifierGraph.json"
         }
       }
     },
-    "/home/arma/Documents/projects/emotions_and_care_project/Domain/Domain.csproj": {
+    "/Users/armandoalvarado/Desktop/Projects/emotions_and_care_project/Domain/Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/arma/Documents/projects/emotions_and_care_project/Domain/Domain.csproj",
+        "projectUniqueName": "/Users/armandoalvarado/Desktop/Projects/emotions_and_care_project/Domain/Domain.csproj",
         "projectName": "Domain",
-        "projectPath": "/home/arma/Documents/projects/emotions_and_care_project/Domain/Domain.csproj",
-        "packagesPath": "/home/arma/.nuget/packages/",
-        "outputPath": "/home/arma/Documents/projects/emotions_and_care_project/Domain/obj/",
+        "projectPath": "/Users/armandoalvarado/Desktop/Projects/emotions_and_care_project/Domain/Domain.csproj",
+        "packagesPath": "/Users/armandoalvarado/.nuget/packages/",
+        "outputPath": "/Users/armandoalvarado/Desktop/Projects/emotions_and_care_project/Domain/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/arma/.nuget/NuGet/NuGet.Config"
+          "/Users/armandoalvarado/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
@@ -197,7 +197,7 @@
           "dependencies": {
             "FirebaseAdmin": {
               "target": "Package",
-              "version": "[2.4.0, )"
+              "version": "[3.0.0, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
@@ -230,7 +230,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/home/arma/.dotnet/sdk/6.0.421/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.421/RuntimeIdentifierGraph.json"
         }
       }
     }

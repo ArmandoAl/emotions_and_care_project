@@ -103,7 +103,8 @@ namespace Data.Implementations
               .Options;
             using (var db = new DBContext(options: connectionOptions))
             {
-                return db.Pacientes.Where(x => x.IdUsuario == id).Include(x => x.Especialista).Include(x => x.Terminosycondiciones).Select
+                return db.Pacientes.Where(x => x.IdUsuario == id).Include(x => x.Especialista).Include(x => x.logros).
+                Include(x => x.Terminosycondiciones).Select
                     (x => new Paciente
                     {
                     IdUsuario = x.IdUsuario,
@@ -116,6 +117,7 @@ namespace Data.Implementations
                     Sexo = x.Sexo,
                     Token = x.Token,
                     TokenRelacional = x.TokenRelacional,
+                    logros = x.logros,
                     FechaCreacion = x.FechaCreacion,
                     FechaModificacion = x.FechaModificacion,
                     Terminosycondiciones = x.Terminosycondiciones,

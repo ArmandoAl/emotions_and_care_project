@@ -14,7 +14,7 @@ namespace Domain
         SeguimientoCuestionario,
         SeguimientoConespecialista,
         Recomendaciones,
-        Comunidad
+        Comunidad,
     }   
     
 

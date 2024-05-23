@@ -18,21 +18,21 @@ namespace API.Controllers
             _cartaService = cartaService;
         }
 
-        [HttpPost("{idUsuario}/AgregarCarta/{isPatient}")]
-        public ActionResult Add([FromBody] Carta carta, [FromRoute] int idUsuario, [FromRoute] bool isPatient)
+        [HttpPost("{idUsuario}/AgregarCarta/{isPatient}/{isFirtTime}")]
+        public ActionResult Add([FromBody] Carta carta, [FromRoute] int idUsuario, [FromRoute] bool isPatient, [FromRoute] bool isFirtTime)
         {
-            int idCarta = _cartaService.Add(carta, idUsuario, isPatient);
+            var idCarta = _cartaService.Add(carta, idUsuario, isPatient, isFirtTime);
 
-            if (idCarta == 0) return BadRequest();
+            if (idCarta == null) return BadRequest();
             return Ok(idCarta);
         }
 
-        [HttpPost("{idCarta}/AgregarRespuesta")]
-        public ActionResult AddRespuesta([FromBody] RespuestaCarta respuesta, [FromRoute] int idCarta)
+        [HttpPost("{idCarta}/AgregarRespuesta/{isFirtTime}")]
+        public ActionResult AddRespuesta([FromBody] RespuestaCarta respuesta, [FromRoute] int idCarta, [FromRoute] bool isFirtTime)
         {
             if (respuesta == null) return BadRequest();
-            bool result = _cartaService.AddRespuesta(respuesta, idCarta);
-            if (result == false) return BadRequest();
+            var result = _cartaService.AddRespuesta(respuesta, idCarta, isFirtTime);
+            if (result == null) return BadRequest();
             return Ok(result);
         }
 

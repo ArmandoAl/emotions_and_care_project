@@ -26,13 +26,13 @@ namespace API.Controllers
             _notificacionService = notificacionService;
         }
 
-        [HttpPost("{idPaciente}/AgregarCita/{idEspecialista}")]
-        public ActionResult Add([FromRoute] int idPaciente, [FromBody] Cita cita, [FromRoute] int idEspecialista)
+        [HttpPost("{idPaciente}/AgregarCita/{idEspecialista}/{isFirtTime}")]
+        public ActionResult Add([FromRoute] int idPaciente, [FromBody] Cita cita, [FromRoute] int idEspecialista, [FromRoute] bool isFirtTime)
 
         {
             if (cita == null) return BadRequest();
-            var result = _service.AddCita(cita, idPaciente, idEspecialista);
-            if (result == 0) return BadRequest();
+            var result = _service.AddCita(cita, idPaciente, idEspecialista, isFirtTime);
+            if (result == null) return BadRequest();
             return Ok(result);
         }
 

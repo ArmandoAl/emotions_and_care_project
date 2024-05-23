@@ -24,4 +24,9 @@ namespace Domain
 
         public bool Visible { get; set; } = true;
     }
+
+    public class LogroWithNota {
+        public Logro? Logro { get; set; } = new Logro();
+        public int IdNota { get; set; }
+    }
 }

@@ -9,7 +9,7 @@ namespace Business.Contracts
 {
     public interface INotaService
     {
-        int AddNota(Nota nota, int idPaciente);
+        LogroWithNota? AddNota(Nota nota, int idPaciente, bool isFirtTime);
 
         bool UpdateNota(Nota nota);
 

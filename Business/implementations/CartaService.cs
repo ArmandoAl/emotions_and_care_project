@@ -1,4 +1,5 @@
 ﻿using Business.Contracts;
+using Data.contracts;
 using Data.Contracts;
 using Domain;
 using System;
@@ -12,15 +13,17 @@ namespace Business.Implementations
     public class CartaService : ICartaService
     {
         private readonly ICartaRepository _cartaRepository;
+        private readonly ILogroRepository _logroRepository;
 
-        public CartaService(ICartaRepository cartaRepository)
+        public CartaService(ICartaRepository cartaRepository, ILogroRepository logroRepository)
         {
             _cartaRepository = cartaRepository;
+            _logroRepository = logroRepository;
         }
 
-        public int Add(Carta carta, int idUsuario, bool isPatient)
+        public LogroWithCarta? Add(Carta carta, int idUsuario, bool isPatient, bool isFirtTime)
         {
-            if(carta == null || idUsuario <= 0) return 0;
+            if(carta == null || idUsuario <= 0) return null;
 
             int idCarta = _cartaRepository.Add(carta);
 
@@ -32,17 +35,61 @@ namespace Business.Implementations
                 if (vinculacion == false)
                 {
                      _cartaRepository.Delete(idCarta);
-                     return 0;
+                     return null;
                 }
-                return idCarta;
+
+                if(isFirtTime)
+                {
+                    var idLogro = _logroRepository.AgregarLogroAPaciente(idUsuario, 5);
+                    
+                    return new LogroWithCarta
+                    {
+                        Logro = _logroRepository.GetLogro(idLogro),
+                        IdCarta = idCarta
+                    };
+                } else {
+                    
+                    return new LogroWithCarta
+                    {
+                        Logro = null,
+                        IdCarta = idCarta
+                    };
+                }
             }
-            return 0;
+            return null;
         }
 
-        public bool AddRespuesta(RespuestaCarta respuesta, int idCarta)
+        public LogroWithRespuestaCarta? AddRespuesta(RespuestaCarta respuesta, int idCarta, bool isFirtTime)
         {
-            if (respuesta == null || idCarta <= 0) return false;
-            return _cartaRepository.AddRespuesta(respuesta, idCarta);
+            if (respuesta == null || idCarta <= 0) return null;
+            bool res = _cartaRepository.AddRespuesta(respuesta, idCarta);
+
+            if (res)
+            {
+
+                if(isFirtTime) {
+                var idLogro = _logroRepository.AgregarLogroAPaciente(respuesta.IdReceptor, 6);
+
+                if (idLogro <= 0)
+                {
+                    return null;
+                }
+
+                return new LogroWithRespuestaCarta
+                {
+                    Logro = _logroRepository.GetLogro(idLogro),
+                    IdRespuestaCarta = respuesta.IdCarta
+                };
+
+                } else {
+                    return new LogroWithRespuestaCarta
+                    {
+                        Logro = null,
+                        IdRespuestaCarta = respuesta.IdCarta
+                    };
+                }
+            }
+            return null;
         }
 
         public bool Delete(int idCarta)

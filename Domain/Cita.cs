@@ -28,4 +28,9 @@ namespace Domain
 
         public Paciente? Paciente { get; set; }
     }
+
+    public class LogroWithCita {
+        public Logro? Logro { get; set; } = new Logro();
+        public int IdCita { get; set; }
+    }
 }
