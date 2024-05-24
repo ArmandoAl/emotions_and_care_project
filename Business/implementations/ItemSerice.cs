@@ -48,22 +48,22 @@ namespace Business.implementations
 
         List<Flor> IItemsService.GetAllFlores()
         {
-            throw new NotImplementedException();
+            return _itemsRepository.GetAllFlores();
         }
 
         List<Sticker> IItemsService.GetAllStickers()
         {
-            throw new NotImplementedException();
+            return _itemsRepository.GetAllStickers();
         }
 
         Flor IItemsService.GetFlor(int id)
         {
-            throw new NotImplementedException();
+            return _itemsRepository.GetFlor(id);
         }
 
         Sticker IItemsService.GetSticker(int id)
         {
-            throw new NotImplementedException();
+            return _itemsRepository.GetSticker(id);
         }
     }
 }

@@ -164,7 +164,6 @@ C:/Users/alvar/OneDrive/Documents/projects/emotions_and_care_project/emotionsand
 /Users/armandoalvarado/Desktop/Projects/emotions_and_care_project/emotionsandcareproject/bin/Release/net6.0/Google.Api.Gax.dll
 /Users/armandoalvarado/Desktop/Projects/emotions_and_care_project/emotionsandcareproject/bin/Release/net6.0/Google.Api.Gax.Rest.dll
 /Users/armandoalvarado/Desktop/Projects/emotions_and_care_project/emotionsandcareproject/bin/Release/net6.0/Google.Apis.dll
-/Users/armandoalvarado/Desktop/Projects/emotions_and_care_project/emotionsandcareproject/bin/Release/net6.0/Google.Apis.Auth.PlatformServices.dll
 /Users/armandoalvarado/Desktop/Projects/emotions_and_care_project/emotionsandcareproject/bin/Release/net6.0/Google.Apis.Auth.dll
 /Users/armandoalvarado/Desktop/Projects/emotions_and_care_project/emotionsandcareproject/bin/Release/net6.0/Google.Apis.Core.dll
 /Users/armandoalvarado/Desktop/Projects/emotions_and_care_project/emotionsandcareproject/bin/Release/net6.0/Humanizer.dll
@@ -308,3 +307,7 @@ C:/Users/alvar/OneDrive/Documents/projects/emotions_and_care_project/emotionsand
 /home/arma/Documents/projects/emotions_and_care_project/emotionsandcareproject/obj/Release/net6.0/emotionsandcareproject.pdb
 /home/arma/Documents/projects/emotions_and_care_project/emotionsandcareproject/obj/Release/net6.0/emotionsandcareproject.genruntimeconfig.cache
 /home/arma/Documents/projects/emotions_and_care_project/emotionsandcareproject/obj/Release/net6.0/ref/emotionsandcareproject.dll
+/Users/armandoalvarado/Desktop/Projects/emotions_and_care_project/emotionsandcareproject/bin/Release/net6.0/System.CodeDom.dll
+/Users/armandoalvarado/Desktop/Projects/emotions_and_care_project/emotionsandcareproject/bin/Release/net6.0/System.Collections.Immutable.dll
+/Users/armandoalvarado/Desktop/Projects/emotions_and_care_project/emotionsandcareproject/bin/Release/net6.0/System.Management.dll
+/Users/armandoalvarado/Desktop/Projects/emotions_and_care_project/emotionsandcareproject/bin/Release/net6.0/runtimes/win/lib/net6.0/System.Management.dll
