@@ -51,11 +51,3 @@ namespace Data.Implementations
             public DBContext(DbContextOptions<DBContext> options) : base(options) { }
         }
 }
-
-
-//Data Source=tcp:emotionsandcaredbdbserver.database.windows.net,1433;Initial Catalog=dbemotionscare;User Id=ArmandoAl@emotionsandcaredbdbserver;Password=UntilYourLastBreath_;
-
-//Server=DESKTOP-LOU93O5\\SQLEXPRESS;Database=EncuestaDb;Integrated Security=SSPI;TrustServerCertificate=true;
-
-
-// Server=tcp:emotionsandcaredbdbserver.database.windows.net,1433;Initial Catalog=dbemotionscare;Encrypt=True;

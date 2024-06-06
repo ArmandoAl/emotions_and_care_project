@@ -57,7 +57,7 @@ namespace Business.Implementations
                     }
 
                     if(isFirstTime) {
-                        var idLogro = _logroService.AgregarLogroAPaciente(idPaciente, 1);
+                        var idLogro = _logroService.AgregarLogroAPaciente(idPaciente, 6);
 
                         if (idLogro <= 0) return null;
 

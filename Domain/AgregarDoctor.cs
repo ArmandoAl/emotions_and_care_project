@@ -18,13 +18,9 @@ namespace Domain
         public string Token { get; set; } = "";
         public int TerminosycondicionesId { get; set; }
         public string CedulaProfesional { get; set; } = "";
-
         public string Enfoque { get; set; } = "";
-
         public string Institucion { get; set; } = "";
-
         public string Presentacion { get; set; } = "";
-
         public string Ubicaion { get; set; } = "";
     }
 }

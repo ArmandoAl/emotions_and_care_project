@@ -23,29 +23,11 @@ namespace Business.Implementations
             if(paciente == null) { return 0; }
             int id = _service.Add(paciente);
 
-             if(id > 0)
+             if(id == 0)
             {
-            //     // int result = _service.AgregarFlorInicial(id);
-            //     // if(result > 0) {
-                    
-                
-               
-            //         int idSticker1 = _service.agregarStickerDeUsuarioModel(
-            //             null, id
-            //         );
-
-            //         int response = _service.agregarStickerDeUsuarioModel(idSticker1, id);
-
-            //         if (response > 0)
-            //         {
-                        return id;
-                //    }
-                    
+            return 0;        
             }
-    
-            
-
-            return 0;
+            return id;
         }
 
         public bool Delete(int id)

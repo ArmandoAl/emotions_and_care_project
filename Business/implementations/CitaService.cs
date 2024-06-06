@@ -48,7 +48,7 @@ namespace Business.Implementations
 
                     if(isFirtTime)
                     {
-                        var idLogro = _logroRepository.AgregarLogroAPaciente(idPaciente, 6);
+                        var idLogro = _logroRepository.AgregarLogroAPaciente(idPaciente, 1);
                         if (idLogro <= 0)
                         {
                             _citaRepository.DeleteCita(idCita);

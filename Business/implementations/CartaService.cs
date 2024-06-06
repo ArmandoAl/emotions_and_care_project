@@ -40,7 +40,7 @@ namespace Business.Implementations
 
                 if(isFirtTime)
                 {
-                    var idLogro = _logroRepository.AgregarLogroAPaciente(idUsuario, 5);
+                    var idLogro = _logroRepository.AgregarLogroAPaciente(idUsuario, 4);
                     
                     return new LogroWithCarta
                     {
@@ -68,7 +68,7 @@ namespace Business.Implementations
             {
 
                 if(isFirtTime) {
-                var idLogro = _logroRepository.AgregarLogroAPaciente(respuesta.IdReceptor, 6);
+                var idLogro = _logroRepository.AgregarLogroAPaciente(respuesta.IdReceptor, 5);
 
                 if (idLogro <= 0)
                 {

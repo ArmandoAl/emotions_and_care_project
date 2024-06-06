@@ -113,6 +113,7 @@ namespace Data.Migrations
                     Titulo = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Contenido = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Tipo = table.Column<int>(type: "int", nullable: false),
+                    SubTitulo = table.Column<int>(type: "int", nullable: false),
                     Referencia = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Url = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FechaCreacion = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -129,8 +130,7 @@ namespace Data.Migrations
                 {
                     IdSticker = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Imagen = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Posicion = table.Column<int>(type: "int", nullable: true)
+                    Imagen = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -240,7 +240,7 @@ namespace Data.Migrations
                     IdUsuario = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CedulaProfesional = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Especialidad = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Enfoque = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Institucion = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Presentacion = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Ubicaion = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -297,6 +297,7 @@ namespace Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     EspecialistaIdUsuario = table.Column<int>(type: "int", nullable: true),
                     ConfiguracionId = table.Column<int>(type: "int", nullable: false),
+                    registerSet = table.Column<bool>(type: "bit", nullable: false),
                     Nombre = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Correo = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Contraseña = table.Column<string>(type: "nvarchar(max)", nullable: false),
