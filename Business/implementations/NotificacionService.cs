@@ -49,7 +49,7 @@ namespace Business.Implementations
                             {
                                 return notiList;
                             } else {
-                                if(noti.Titulo == "Recomendacion")
+                                if(noti.Titulo == "Recomendación")
                                 {
                                     return notiList;
                                 }
@@ -71,7 +71,7 @@ namespace Business.Implementations
                 var notificacion = new Notificacion
                 {
                     TipoNotificacion = TipoNotificacion.NotificacionRecomendacion,
-                    Titulo = "Recomendacion",
+                    Titulo = "Recomendación",
                     Descripcion = recomandaciones[index].Contenido,
                     idRecomandacion = recomandaciones[index].IdRecomendacion,
                     TipoRecomendacion = recomandaciones[index].Tipo,
