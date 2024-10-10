@@ -6,16 +6,16 @@ using Domain;
 
 namespace Business.contracts
 {
-    public interface ILogroService
+    public interface IGoalService
     {
         
 
-        int AddLogro(Logro logro);
+        int AddLogro(Goal logro);
 
-        List<Logro> GetAllLogros();
-        Logro GetLogro(int id);
+        List<Goal> GetAllLogros();
+        Goal GetLogro(int id);
 
-        bool UpdateLogro(Logro logro);
+        bool UpdateLogro(Goal logro);
 
         bool DeleteLogro(int id);
         int AgregarLogroAPaciente(int idPaciente, int id);

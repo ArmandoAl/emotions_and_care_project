@@ -7,21 +7,21 @@ using System.Threading.Tasks;
 
 namespace Business.Contracts
 {
-    public interface ICuestionarioService
+    public interface IQuestionnaireService
     {
-        int AddCuestionario(Cuestionario cuestionario);
+        int AddCuestionario(Questionnaire cuestionario);
 
-        bool UpdateCuestionario(Cuestionario cuestionario);
+        bool UpdateCuestionario(Questionnaire cuestionario);
 
         bool DeleteCuestionario(int idCuestionario);
 
-        Cuestionario? GetCuestionario(int idCuestionario);
+        Questionnaire? GetCuestionario(int idCuestionario);
 
-        LogroWithTestInfoModel? completarCuestionario(int idCuestionario, int idPaciente,
+        GoalWithTestInfoModel? completarCuestionario(int idCuestionario, int idPaciente,
                 List<TestQuestionForComplete> respuestas, bool isFirstTime);
             
 
-        CuestionariosInfo? GetCuestionariosInfo(int pacienteId);
+        QuestionnairesInfo? GetCuestionariosInfo(int pacienteId);
 
         bool changeVisibility(int idCuestionario, int idTestInfoModel, bool visible);
     }

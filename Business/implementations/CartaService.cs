@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Business.Implementations
 {
-    public class CartaService : ICartaService
+    public class CartaService : ICartService
     {
         private readonly ICartaRepository _cartaRepository;
         private readonly ILogroRepository _logroRepository;
@@ -21,7 +21,7 @@ namespace Business.Implementations
             _logroRepository = logroRepository;
         }
 
-        public LogroWithCarta? Add(Carta carta, int idUsuario, bool isPatient, bool isFirtTime)
+        public GoalWithCart? Add(Cart carta, int idUsuario, bool isPatient, bool isFirtTime)
         {
             if(carta == null || idUsuario <= 0) return null;
 

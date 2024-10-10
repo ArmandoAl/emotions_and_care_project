@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace Business.Contracts
 {
-    public interface IEmocionSerrvice
+    public interface IEmotionSerrvice
     {
-        int AddEmocion(Emocion emocion);
+        int AddEmocion(Emotion emocion);
 
-        bool UpdateEmocion(Emocion emocion);
+        bool UpdateEmocion(Emotion emocion);
 
         bool DeleteEmocion(int idEmocion);
 
-        Emocion? GetEmocion(int idEmocion);
+        Emotion? GetEmocion(int idEmocion);
 
-        List<Emocion>? GetEmociones();
+        List<Emotion>? GetEmociones();
     }
 }

@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Domain
 {
-    public class Sticker
+    public class TestQuestionWithAnswer
     {
         [Key]
-        public int stickerId { get; set; }
-        public string url { get; set; } = "";
+        public int testQuestionWithAnswerId { get; set; }
+        public string question { get; set; } = "";
+        public string answer { get; set; } = "";
+
     }
 }

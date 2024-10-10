@@ -6,47 +6,41 @@ namespace Data.Implementations
 {       
         public class DBContext : DbContext
         {
-            public DbSet<Paciente> Pacientes { get; set; } = null!;
+            public DbSet<Patient> patients { get; set; } = null!;
             
-            public DbSet<Especialista> Especialistas { get; set; } = null!;
+            public DbSet<Specialist> specialists { get; set; } = null!;
 
-            public DbSet<Nota> Notas { get; set; } = null!;
+            public DbSet<Diary> dairy { get; set; } = null!;
 
-            public DbSet<SolicitudCita> SolicitudesCita { get; set; } = null!;
+            public DbSet<DateRequest> dateRequests { get; set; } = null!;
 
-            public DbSet<SolicitudPaciente> SolicitudesPaciente { get; set; } = null!;
+            public DbSet<PatientRequest> patientRequest { get; set; } = null!;
   
-            public DbSet<Emocion> Emociones { get; set; } = null!;
+            public DbSet<Emotion> emotions { get; set; } = null!;
 
-            public DbSet<Cuestionario> Cuestionarios { get; set; } = null!;
+            public DbSet<Test> test { get; set; } = null!;
 
-            public DbSet<CuestionarioCompletado> CuestionarioCompletados { get; set; } = null!;
+
+            public DbSet<SettingsP> ConfuguracionesPaciente { get; set; } = null!;
+
+            public DbSet<Cart> carts { get; set; } = null!;
+
+            public DbSet<Notification> notifications { get; set; } = null!;
+
+            public DbSet<Schedule> schedule { get; set; } = null!;            
+
+            public DbSet<TermsAndConditions> terms { get; set; } = null!;
+
+            public DbSet<Goal> goals { get; set; } = null!;
             
-            public DbSet<HistoryTestModel> HistorialesCuestionariosCompletados { get; set; }  = null!; 
+            public DbSet<Sticker> stickers { get; set; } = null!;
 
-            public DbSet<ConfiguracionP> ConfuguracionesPaciente { get; set; } = null!;
+            public DbSet<Flower> flowers { get; set; } = null!;
 
-            public DbSet<Carta> Cartas { get; set; } = null!;
 
-            public DbSet<Notificacion> Notificaciones { get; set; } = null!;
 
-            public DbSet<Cita> Citas { get; set; } = null!;            
+            public DbSet<Recomandation> recomendation { get; set; } = null!;
 
-            public DbSet<TerminosYCondiciones> TerminosYCondiciones { get; set; } = null!;
-
-            public DbSet<Logro> Logros { get; set; } = null!;
-            
-            public DbSet<Sticker> Sticker { get; set; } = null!;
-
-            public DbSet<Flor> Flores { get; set; } = null!;
-
-            public DbSet<Publicacion> Publicaciones { get; set; } = null!;
-
-            public DbSet<Recomendacion> Recomendaciones { get; set; } = null!;
-
-            public DbSet<StickerDeUsuarioModel> StickersDeUsuario { get; set; } = null!;
-
-            public DbSet<FloresDelUsuarioModel> FloresDelUsuario { get; set; } = null!;
 
             public DBContext(DbContextOptions<DBContext> options) : base(options) { }
         }

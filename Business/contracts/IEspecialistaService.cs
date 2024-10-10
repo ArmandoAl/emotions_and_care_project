@@ -2,20 +2,21 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Business.Contracts
 {
-    public interface IEspecialistaService
+    public interface ISpecialistService
     {
-        int Add(AgregarEspecialista especialista);
+        int Add(AddSpecialist especialista);
 
-        Especialista? Get(int id);
+        Specialist? Get(int id);
 
         bool Delete(int id);
 
-        bool Update(Especialista especialista);
+        bool Update(Specialist especialista);
 
         string? GetByToken(int idPaciente);
 
@@ -25,8 +26,8 @@ namespace Business.Contracts
 
         bool aceptarCita(int idEspecialista, int idCita);
         bool rechazarCita(int id, int idCita);
-        List<Paciente>? GetPacientes(int id);
-        List<SolicitudCita>? GetSolicitudesCitas(int id);
-        List<Especialista> ListarEspecialistas(int offset, int limit);
+        List<Patient>? GetPacientes(int id);
+        List<DateRequest>? GetSolicitudesCitas(int id);
+        List<Specialist> ListarEspecialistas(int offset, int limit);
     }
 }

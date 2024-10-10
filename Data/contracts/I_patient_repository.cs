@@ -5,10 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
-namespace Business.Contracts
+namespace Data.Contracts
 {
-    public interface IPatientService
+    public interface IPatientRepository
     {
         int Add(AddPatient paciente);
 
@@ -17,14 +16,15 @@ namespace Business.Contracts
         bool Delete(int id);
 
         bool Update(Patient paciente);
-
         bool VincularEspecialista(int id, string tokenEspecialista);
 
         string? GetByToken(int idPaciente);
 
-        int login(string email, string password);
+        int login (string email, string password);
         bool MoficarConfiguracionNotificaciones(int id, bool notificacionesActivas, bool dirioActivado, bool progresoActivado);
+        int AgregarFlorInicial(int id);
+        int agregarStickerDeUsuarioModel(int? index, int idUsuario);
 
-        bool registerSet(int id);
+        string registerSet(int patientId, string state);
     }
 }

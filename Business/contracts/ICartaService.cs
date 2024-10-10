@@ -7,20 +7,20 @@ using System.Threading.Tasks;
 
 namespace Business.Contracts
 {
-    public interface ICartaService
+    public interface ICartService
     {
-        LogroWithCarta? Add(Carta carta, int idUsuario, bool isPatient, bool isFirtTime);
+        GoalWithCart? Add(Cart carta, int idUsuario, bool isPatient, bool isFirtTime);
 
-        Carta? Get(int idCarta);
+        Cart? Get(int idCarta);
 
-        List<Carta>? GetAllByUser(int idUsuario, bool isPatient);
+        List<Cart>? GetAllByUser(int idUsuario, bool isPatient);
 
-        bool Update(Carta carta);
+        bool Update(Cart carta);
 
         bool Delete(int idCarta);
 
-        LogroWithRespuestaCarta? AddRespuesta(RespuestaCarta respuesta, int idCarta, bool isFirtTime);
+        GoalWithCartAnswer? AddRespuesta(CartAnswer respuesta, int idCarta, bool isFirtTime);
 
-        List<Carta>? initCarts(int idUsuario);
+        List<Cart>? initCarts(int idUsuario);
     }
 }

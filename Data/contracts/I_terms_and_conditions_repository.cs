@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Business.Contracts
+namespace Data.Contracts
 {
-    public interface ITermsService
+    public interface ITermsAndConditionsRepository
     {
         int AddTerminosYCondiciones(TermsAndConditions terminosYCondiciones);
 

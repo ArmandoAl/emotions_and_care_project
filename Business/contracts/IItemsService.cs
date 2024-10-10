@@ -10,14 +10,14 @@ namespace Business
     {
         int AddSticker(Sticker sticker);
 
-        int AddFlor(Flor flor);
+        int AddFlor(Flower flor);
 
         Sticker GetSticker(int id);
 
-        Flor GetFlor(int id);
+        Flower GetFlor(int id);
 
         List<Sticker> GetAllStickers();
 
-        List<Flor> GetAllFlores();
+        List<Flower> GetAllFlores();
     }
 }

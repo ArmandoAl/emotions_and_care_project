@@ -7,22 +7,22 @@ using System.Threading.Tasks;
 
 namespace Data.Contracts
 {
-    public interface IEspecialistaRepository
+    public interface ISpecialistRepository
     {
-        int Add(AgregarEspecialista especialista);
+        int Add(AddSpecialist especialista);
 
-        Especialista? Get(int id);
+        Specialist? Get(int id);
 
         bool Delete(int id);
 
-        bool Update(Especialista especialista);
+        bool Update(Specialist especialista);
 
         string? GetByToken(int idPaciente);
 
         int login(string email, string password);
 
         bool vincularPaciente(int idSpecialist, string tokenPaciente);
-        List<Paciente>? GetPacientes(int id);
-        List<Especialista> ListarEspecialistas(int offset, int limit);
+        List<Patient>? GetPacientes(int id);
+        List<Specialist> ListarEspecialistas(int offset, int limit);
     }
 }

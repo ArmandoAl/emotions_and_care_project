@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace Business.Contracts
 {
-    public interface INotaService
+    public interface INoteService
     {
-        LogroWithNota? AddNota(Nota nota, int idPaciente, bool isFirtTime);
+        GoalWithNote? AddNota(Note nota, int idPaciente, bool isFirtTime);
 
-        bool UpdateNota(Nota nota);
+        bool UpdateNota(Note nota);
 
         bool DeleteNota(int idNota);
 
-        Nota? GetNota(int idNota);
+        Note? GetNota(int idNota);
 
-        List<Nota>? GetNotas(int idPaciente);
+        List<Note>? GetNotas(int idPaciente);
     }
 }

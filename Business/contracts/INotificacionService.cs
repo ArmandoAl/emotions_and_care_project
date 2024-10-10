@@ -7,22 +7,22 @@ using System.Threading.Tasks;
 
 namespace Business.Contracts
 {
-    public interface INotificacionService
+    public interface INotificationService
     {
-        int AddNotificacion(Notificacion notificacion, int idPaciente);
+        int AddNotificacion(Notification notificacion, int idPaciente);
 
-        bool UpdateNotificacion(Notificacion notificacion);
+        bool UpdateNotificacion(Notification notificacion);
 
         bool DeleteNotificacion(int idNotificacion);
 
-        Notificacion? GetNotificacion(int idNotificacion);
+        Notification? GetNotificacion(int idNotificacion);
 
-        List<Notificacion>? GetNotificacionesByPaciente(int idPaciente);
+        List<Notification>? GetNotificacionesByPaciente(int idPaciente);
 
         bool vincularNotificacionConPaciente(int idNotificacion, int idPaciente);
 
         bool updateDateEmision(int idNotificacion);
 
-        List<Notificacion> init(int idPaciente); 
+        List<Notification> init(int idPaciente); 
     }
 }

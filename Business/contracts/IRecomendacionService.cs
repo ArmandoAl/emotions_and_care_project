@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace Business.Contracts
 {
-    public interface IRecomendacionService
+    public interface IRecomendationService
     {
-        int Add(Recomendacion recomendacion);
+        int Add(Recomandation recomendacion);
 
-        Recomendacion? Get(int idRecomendacion);
+        Recomandation? Get(int idRecomendacion);
 
-        List<Recomendacion>? GetRecomentaciones();
+        List<Recomandation>? GetRecomentaciones();
 
-        bool Update(Recomendacion recomendacion);
+        bool Update(Recomandation recomendacion);
 
         bool Delete(int idRecomendacion);
 
