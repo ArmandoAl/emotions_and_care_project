@@ -8,7 +8,7 @@ namespace Domain
 {
     public class TestQuestionForComplete
     {
-        public int idPregunta { get; set; }
-        public int posicionRespuesta { get; set; }
+        public int questionId { get; set; }
+        public int answerId { get; set; }
     }
 }

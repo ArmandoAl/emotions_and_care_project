@@ -26,7 +26,7 @@ namespace Domain
     }
 
     public class GoalWithNote {
-        public Goal? Logro { get; set; } = new Goal();
+        public Goal? goal { get; set; } = new Goal();
         public int noteId { get; set; }
     }
 }

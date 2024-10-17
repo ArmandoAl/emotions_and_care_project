@@ -36,7 +36,7 @@ namespace Domain
 
     public class GoalWithCart
     {
-        public Goal? Logro { get; set; } = new Goal();
-        public int cartiD { get; set; }
+        public Goal? goal { get; set; } = new Goal();
+        public int cartId { get; set; }
     }
 }

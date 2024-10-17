@@ -21,7 +21,7 @@ namespace API.Controllers
         }
 
         [HttpPost("AddFlor")]
-        public ActionResult AddFlor([FromBody] Flor flor)
+        public ActionResult AddFlor([FromBody] Flower flor)
         {
             int idFlor = _itemsService.AddFlor(flor);
 

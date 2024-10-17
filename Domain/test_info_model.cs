@@ -16,7 +16,7 @@ namespace Domain
 
         public DateTime date { get; set; }
         
-        public List<TestQuestionWithAnswer> TestQuestionWithAnswers { get; set; } = new List<TestQuestionWithAnswer>();
+        public List<TestQuestionWithAnswer> testQuestionWithAnswers { get; set; } = new List<TestQuestionWithAnswer>();
 
         public bool visible { get; set; } = true;
     }

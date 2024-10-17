@@ -10,6 +10,7 @@ namespace Domain
     public class CartAnswer
     {
         [Key]
+        public int cartAnswerId { get; set; }
         public int cartId { get; set; }
 
         public int receiverId { get; set; }
@@ -29,7 +30,7 @@ namespace Domain
 
     public class GoalWithCartAnswer
     {
-        public Goal? Logro { get; set; } = new Goal();
-        public int IdRespuestaCarta { get; set; }
+        public Goal? goal { get; set; } = new Goal();
+        public int cartAnswerId { get; set; }
     }
 }

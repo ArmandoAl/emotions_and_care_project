@@ -22,7 +22,9 @@ namespace Data.Contracts
 
         int login (string email, string password);
         bool MoficarConfiguracionNotificaciones(int id, bool notificacionesActivas, bool dirioActivado, bool progresoActivado);
-        int AgregarFlorInicial(int id);
+        int AgregarFlorInicial(int id, 
+            int patientId
+        );
         int agregarStickerDeUsuarioModel(int? index, int idUsuario);
 
         string registerSet(int patientId, string state);

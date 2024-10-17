@@ -24,7 +24,7 @@ namespace Domain
         ActividadFísica,
         VidaSocial
     }
-    public class Recomandation
+    public class Recomendation
     {
         [Key]
         public int recomendationId { get; set; }

@@ -21,33 +21,35 @@ builder.Services.AddDbContext<DBContext>(options =>
 
 builder.Services.AddCors();
 builder.Services.AddControllers();
-builder.Services.AddScoped<IPacienteService, PacienteService>();
-builder.Services.AddScoped<IPacienteRepository, PacienteRepository>();
-builder.Services.AddScoped<IPacienteRepository, PacienteRepository>();
-builder.Services.AddScoped<IEspecialistaService, EspecialistaService>();
-builder.Services.AddScoped<IEspecialistaRepository, EspecialistaRepository>();
-builder.Services.AddScoped<ICitaService, CitaService>();
-builder.Services.AddScoped<ICitaRepository, CitaRepository>();
-builder.Services.AddScoped<ICuestionarioService, CuestionarioService>();
-builder.Services.AddScoped<ICuestionarioRepository, CuestionarioRepository>();
-builder.Services.AddScoped<ITerminosYCondicionesService, TerminosYCondicionesService>();
-builder.Services.AddScoped<ITerminosYCondicionesRepository, TerminosYCondicionesRepository>();
-builder.Services.AddScoped<INotaService, NotaService>();
-builder.Services.AddScoped<INotaRepository, NotaRepository>();
-builder.Services.AddScoped<IEmocionSerrvice, EmocionService>();
-builder.Services.AddScoped<IEmocionRepository, EmocionRepository>();
-builder.Services.AddScoped<INotificacionService, NotificacionService>();
-builder.Services.AddScoped<INotificacionRepository, NotificacionRepository>();
-builder.Services.AddScoped<ICartaRepository, CartaRapository>();
-builder.Services.AddScoped<ICartaService, CartaService>();
-builder.Services.AddScoped<IPublicacionRepository, PublicacionRepository>();
-builder.Services.AddScoped<IPublicacionService, PublicacionService>();
-builder.Services.AddScoped<IRecomendacionRepository, RecomendacionRepository>();
-builder.Services.AddScoped<IRecomendacionService, RecomendacionService>();
+builder.Services.AddScoped<IPatientService, PatientService>();
+builder.Services.AddScoped<IPatientRepository, PacienteRepository>();
+builder.Services.AddScoped<ISpecialistService, EspecialistaService>();
+builder.Services.AddScoped<ISpecialistRepository, SpecialistRepository>();
+builder.Services.AddScoped<IDateService, DateService>();
+builder.Services.AddScoped<IDateRepository, DateRepository>();
+builder.Services.AddScoped<IQuestionnaireService, CuestionarioService>();
+builder.Services.AddScoped<IQuestionnaireRepository, CuestionarioRepository>();
+builder.Services.AddScoped<ITermsService, TermsService>();
+builder.Services.AddScoped<ITermsAndConditionsRepository, TerminosYCondicionesRepository>();
+
+
+builder.Services.AddScoped<INoteService, NotaService>();
+builder.Services.AddScoped<INoteRepository, NoteRepository>();
+builder.Services.AddScoped<IEmotionSerrvice, EmotionService>();
+builder.Services.AddScoped<IEmotionRepository, EmotionRepository>();
+builder.Services.AddScoped<INotificationService, NotificacionService>();
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+builder.Services.AddScoped<ICartRepository, CartRepository>();
+builder.Services.AddScoped<ICartService, CartService>();
+builder.Services.AddScoped<IRecomendationRepository, RecomendationRepository>();
+builder.Services.AddScoped<IRecomendationService, RecomendacionService>();
 builder.Services.AddScoped<IItemsRepository, ItemsRepository>();
 builder.Services.AddScoped<IItemsService, ItemsSerice>();
-builder.Services.AddScoped<ILogroRepository, LogroRepository>();
-builder.Services.AddScoped<ILogroService, LogroService>();
+builder.Services.AddScoped<IGoalRepository, GoalRepository>();
+builder.Services.AddScoped<IGoalService, LogroService>();
+
+
+builder.Services.AddScoped<IDBRepository, DBReporitory>();
 
 
 var app = builder.Build();

@@ -26,11 +26,11 @@ namespace Data.Implementations
                 if (pattient == null) return 0;
 
                 
-                var schedule = pattient.schedule;
+              
 
-                if (schedule == null) return 0;
+               
 
-                schedule.dates.Add(cita);
+                db.dates.Add(cita);
 
                 db.SaveChanges();
 
@@ -40,7 +40,7 @@ namespace Data.Implementations
 
         }
 
-        public bool DeleteCita(int idCita, int scheduleId)
+        public bool DeleteCita(int idCita)
         {
             if (idCita <= 0) return false;
 
@@ -49,18 +49,15 @@ namespace Data.Implementations
              .Options;
             using (var db = new DBContext(options: connectionOptions))
             {
-                var schedule = db.schedule.FirstOrDefault(x => x.scheduleId == scheduleId);
-
-                if (schedule == null) return false;
 
 
-                var cita = schedule.dates.FirstOrDefault(x => x.dateId == idCita);
+                var cita = db.dates.FirstOrDefault(x => x.dateId == idCita);
 
 
 
                 if (cita == null) return false;
 
-                schedule.dates.Remove(cita);
+                db.dates.Remove(cita);
 
                 db.SaveChanges();
 
@@ -68,7 +65,7 @@ namespace Data.Implementations
             }
         }
 
-        public Date? GetCita(int idCita, int scheduleId)
+        public Date? GetCita(int idCita)
         {
             if (idCita <= 0) return null;
 
@@ -77,11 +74,8 @@ namespace Data.Implementations
              .Options;
             using (var db = new DBContext(options: connectionOptions))
             {
-                var schedule = db.schedule.FirstOrDefault(x => x.scheduleId == scheduleId);
 
-                if (schedule == null) return null;
-
-                return schedule.dates.FirstOrDefault(x => x.dateId == idCita);
+                return db.dates.FirstOrDefault(x => x.dateId == idCita);
 
             }
         }
@@ -102,7 +96,7 @@ namespace Data.Implementations
 
                 if (paciente == null) return null;
 
-                citas = paciente.schedule.dates.ToList();
+                citas = paciente.dates.ToList();
 
                 //ordenar citas por fecha de mas reciente a mas antigua
                 citas = citas.OrderByDescending(x => x.date).ToList();
@@ -111,7 +105,7 @@ namespace Data.Implementations
             }
         }
 
-        public bool UpdateCita(Date cita, int scheduleId)
+        public bool UpdateCita(Date cita)
         {
             if (cita == null) return false;
 
@@ -120,11 +114,10 @@ namespace Data.Implementations
              .Options;
             using (var db = new DBContext(options: connectionOptions))
             {
-                var schedule = db.schedule.FirstOrDefault(x => x.scheduleId == scheduleId);
+              
 
-                if (schedule == null) return false;
 
-                var citaToUpdate = schedule.dates.FirstOrDefault(x => x.dateId == cita.dateId);
+                var citaToUpdate = db.dates.FirstOrDefault(x => x.dateId == cita.dateId);
 
 
                 if (citaToUpdate == null) return false;
@@ -140,7 +133,7 @@ namespace Data.Implementations
             }
         }
 
-        public bool vincularCitaConPeciente(int idCita, int idPaciente, int scheduleId)
+        public bool vincularCitaConPeciente(int idCita, int idPaciente)
         {
             if (idCita <= 0 || idPaciente <= 0) return false;
 
@@ -150,25 +143,20 @@ namespace Data.Implementations
             using (var db = new DBContext(options: connectionOptions))
             {
 
-                var schedule = db.schedule.FirstOrDefault(x => x.scheduleId == scheduleId);
-
-                if (schedule == null) return false;
-
-
-                var cita = schedule.dates.FirstOrDefault(x => x.dateId == idCita);
+                var cita = db.dates.FirstOrDefault(x => x.dateId == idCita);
                 if (cita == null) return false;
 
                 var paciente = db.patients.FirstOrDefault(x => x.userId == idPaciente);
                 if (paciente == null) return false;
 
-                paciente.schedule.dates.Add(cita);
+                paciente.dates.Add(cita);
 
                 db.SaveChanges();
                 return true;
             }
         }
 
-        public bool confirmarCitaPorPaciente(int idCita, int idPaciente, int scheduleId)
+        public bool confirmarCitaPorPaciente(int idCita, int idPaciente)
         {
             if (idCita <= 0 || idPaciente <= 0) return false;
 
@@ -177,12 +165,8 @@ namespace Data.Implementations
              .Options;
             using (var db = new DBContext(options: connectionOptions))
             {
-                var schedule = db.schedule.FirstOrDefault(x => x.scheduleId == scheduleId);
 
-                if (schedule == null) return false;
-
-
-                var cita = schedule.dates.FirstOrDefault(x => x.dateId == idCita);
+                var cita = db.dates.FirstOrDefault(x => x.dateId == idCita);
                 if (cita == null) return false;
 
                 var paciente = db.patients.FirstOrDefault(x => x.userId == idPaciente);
@@ -194,7 +178,7 @@ namespace Data.Implementations
             }
         }   
 
-        public bool cancelarCitaPorPaciente(int idCita, int idPaciente, int scheduleId)
+        public bool cancelarCitaPorPaciente(int idCita, int idPaciente)
         {
             if (idCita <= 0 || idPaciente <= 0) return false;
 
@@ -203,11 +187,7 @@ namespace Data.Implementations
              .Options;
             using (var db = new DBContext(options: connectionOptions))
             {
-                var schedule = db.schedule.FirstOrDefault(x => x.scheduleId == scheduleId);
-
-                if (schedule == null) return false;
-
-                var cita = schedule.dates.FirstOrDefault(x => x.dateId == idCita);
+                var cita = db.dates.FirstOrDefault(x => x.dateId == idCita);
                 if (cita == null) return false;
 
                 var paciente = db.patients.FirstOrDefault(x => x.userId == idPaciente);
@@ -216,14 +196,14 @@ namespace Data.Implementations
                 cita.patientConfirm = false;
                 if(cita.specialistConfirm == false)
                 {
-                    schedule.dates.Remove(cita);
+                    db.dates.Remove(cita);
                 }
                 db.SaveChanges();
                 return true;
             }
         }
 
-        public bool confirmarCitaPorEspecialista(int idCita, int idEspecialista, int scheduleId)
+        public bool confirmarCitaPorEspecialista(int idCita, int idEspecialista)
         {
             if (idCita <= 0 || idEspecialista <= 0) return false;
 
@@ -232,11 +212,8 @@ namespace Data.Implementations
              .Options;
             using (var db = new DBContext(options: connectionOptions))
             {
-                var schedule = db.schedule.FirstOrDefault(x => x.scheduleId == scheduleId);
 
-                if (schedule == null) return false;
-
-                var cita = schedule.dates.FirstOrDefault(x => x.dateId == idCita);
+                var cita = db.dates.FirstOrDefault(x => x.dateId == idCita);
                 if (cita == null) return false;
 
                 var especialista = db.specialists.FirstOrDefault(x => x.userId == idEspecialista);
@@ -248,7 +225,7 @@ namespace Data.Implementations
             }
         }
 
-        public bool cancelarCitaPorEspecialista(int idCita, int idEspecialista, int scheduleId)
+        public bool cancelarCitaPorEspecialista(int idCita, int idEspecialista)
         {
             if (idCita <= 0 || idEspecialista <= 0) return false;
 
@@ -258,11 +235,8 @@ namespace Data.Implementations
             using (var db = new DBContext(options: connectionOptions))
             {
 
-                var schedule = db.schedule.FirstOrDefault(x => x.scheduleId == scheduleId);
 
-                if (schedule == null) return false;
-
-                var cita = schedule.dates.FirstOrDefault(x => x.dateId == idCita);
+                var cita = db.dates.FirstOrDefault(x => x.dateId == idCita);
                 if (cita == null) return false;
 
                 var especialista = db.specialists.FirstOrDefault(x => x.userId == idEspecialista);
@@ -272,7 +246,7 @@ namespace Data.Implementations
                 cita.specialistConfirm = false;
                 if (cita.patientConfirm == false)
                 {
-                    schedule.dates.Remove(cita);
+                    db.dates.Remove(cita);
                 }
                 db.SaveChanges();
                 return true;
@@ -339,7 +313,7 @@ namespace Data.Implementations
             }
         }
 
-        public bool vincularCitaConEspecialista(int idEspecialista, int idCita, int scheduleId)
+        public bool vincularCitaConEspecialista(int idEspecialista, int idCita)
         {
             if(idCita <= 0 || idEspecialista <= 0) return false;
 
@@ -353,12 +327,7 @@ namespace Data.Implementations
                 if (especialista == null) return false;
 
 
-                var schedule = db.schedule.FirstOrDefault(x => x.scheduleId == scheduleId);
-
-                if (schedule == null) return false;
-
-
-                var cita = schedule.dates.FirstOrDefault(x => x.dateId == idCita);
+                var cita = db.dates.FirstOrDefault(x => x.dateId == idCita);
                 if (cita == null) return false;
 
                 especialista.dates.Add(cita);
@@ -399,29 +368,29 @@ namespace Data.Implementations
 
             using (var db = new DBContext(options: connectionOptions))
             {
-                solicitudesCitas = db.Especialistas.Where(x => x.IdUsuario == id).SelectMany(x => x.SolicitudesCita).Include(x => x.Cita)
+                solicitudesCitas = db.specialists.Where(x => x.userId == id).SelectMany(x => x.dateRequests).Include(x => x.Cita)
                     .Select(x => new DateRequest
                     {
-                        dateRequestId = x.IdSolicitudCita,
+                        dateRequestId = x.dateRequestId,
                         Cita = new Date
                         {
-                            dateId = x.Cita!.IdCita,
-                            date = x.Cita.Fecha,
-                            hour = x.Cita.Hora,
-                            place = x.Cita.Lugar,
-                            description = x.Cita.Descripcion,
-                            specialistConfirm = x.Cita.ConfirmadaPorEspecialista,
-                            patient = x.Cita.ConfirmadaPorPaciente,
-                            patientConfirm = new Patient
+                            dateId = x.Cita!.dateId,
+                            date = x.Cita.date,
+                            hour = x.Cita.hour,
+                            place = x.Cita.place,
+                            description = x.Cita.description,
+                            specialistConfirm = x.Cita.specialistConfirm,
+                            patientConfirm = x.Cita.patientConfirm,
+                            patient = new Patient
                             {
-                                userId = x.Cita!.Paciente!.IdUsuario,
-                                name = x.Cita.Paciente.Nombre,
-                                mail = x.Cita.Paciente.Correo,
-                                phone = x.Cita.Paciente.Telefono,
-                                sex = x.Cita.Paciente.Sexo,
-                                age = x.Cita.Paciente.Edad,
-                                token = x.Cita.Paciente.Token,
-                                termsAndConditions = x.Cita.Paciente.Terminosycondiciones,
+                                userId = x.Cita!.patient!.userId,
+                                name = x.Cita.patient.name,
+                                mail = x.Cita.patient.mail,
+                                phone = x.Cita.patient.phone,
+                                sex = x.Cita.patient.sex,
+                                age = x.Cita.patient.age,
+                                token = x.Cita.patient.token,
+                                termsAndConditions = x.Cita.patient.termsAndConditions,
                                
                             }
                         }
@@ -443,26 +412,26 @@ namespace Data.Implementations
 
             using (var db = new DBContext(options: connectionOptions))
             {
-                citas = db.Especialistas.Where(x => x.IdUsuario == idSpecialist).SelectMany(x => x.Citas).Include(x => x.Paciente).Select(
+                citas = db.specialists.Where(x => x.userId == idSpecialist).SelectMany(x => x.dates).Include(x => x.patient).Select(
                                        x => new Date
                                       {
-                            dateId = x.Cita!.IdCita,
-                            date = x.Cita.Fecha,
-                            hour = x.Cita.Hora,
-                            place = x.Cita.Lugar,
-                            description = x.Cita.Descripcion,
-                            specialistConfirm = x.Cita.ConfirmadaPorEspecialista,
-                            patient = x.Cita.ConfirmadaPorPaciente,
-                            patientConfirm = new Patient
+                            dateId = x.dateId,
+                            date = x.date,
+                            hour = x.hour,
+                            place = x.place,
+                            description = x.description,
+                            specialistConfirm = x.specialistConfirm,
+                            patientConfirm = x.patientConfirm,
+                            patient = new Patient
                             {
-                                userId = x.Cita!.Paciente!.IdUsuario,
-                                name = x.Cita.Paciente.Nombre,
-                                mail = x.Cita.Paciente.Correo,
-                                phone = x.Cita.Paciente.Telefono,
-                                sex = x.Cita.Paciente.Sexo,
-                                age = x.Cita.Paciente.Edad,
-                                token = x.Cita.Paciente.Token,
-                                termsAndConditions = x.Cita.Paciente.Terminosycondiciones,
+                                userId = x.patient!.userId,
+                                name = x.patient.name,
+                                mail = x.patient.mail,
+                                phone = x.patient.phone,
+                                sex = x.patient.sex,
+                                age = x.patient.age,
+                                token = x.patient.token,
+                                termsAndConditions = x.patient.termsAndConditions,
                                
                             }
 

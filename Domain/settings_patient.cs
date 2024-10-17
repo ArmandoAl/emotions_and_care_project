@@ -9,6 +9,7 @@ namespace Domain
 {
     public class SettingsP
     {
+        [Key]
         public int settingsId { get; set; }
 
         public bool notificationsActive { get; set; } = true;

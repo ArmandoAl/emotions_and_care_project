@@ -89,7 +89,6 @@ namespace Data.Implementations
                     return getTheFirstSixDigits(token.Substring(1, token.Length - 1));
                 }
             }
-
         }
 
 
@@ -102,7 +101,12 @@ namespace Data.Implementations
               .Options;
             using (var db = new DBContext(options: connectionOptions))
             {
-                return db.patients.Where(x => x.userId == id).Include(x => x.specialist).Include(x => x.goals).
+                var stickers = db.stickers.ToList();
+                var flowers = db.flowers.ToList();
+
+                return db.patients.Where(x => x.userId == id).Include(x => x.specialist).Include(x => x.goals).Include(x => x.userInterface
+                ).Include(x => x.userInterface.userFlowers).Include(x => x.userInterface.userStickers).
+                Include(x => x.settings).
                 Include(x => x.termsAndConditions).Select
                     (x => new Patient
                     {
@@ -120,6 +124,35 @@ namespace Data.Implementations
                     dateCreated = DateTime.Now,
                     modifiedDate = DateTime.Now,
                     termsAndConditions = x.termsAndConditions,
+                    settings = x.settings,
+                    userInterface = new UserInterface
+                    {
+                        userInterfaceId = x.userInterface.userInterfaceId,
+                        userFlowers = x.userInterface.userFlowers.Select(y => new UserFlower {
+                            userFlowerId = y.userFlowerId,
+                            flower = new Flower
+                            {
+                                flowerId = y.flower.flowerId,
+                                name = y.flower.name,
+                                images = y.flower.images,
+
+                            }
+                        }).ToList(),
+                        userStickers = x.userInterface.userStickers.Select(y => new UserSticker
+                        {
+                            userStickerId = y.userStickerId,
+                            sticker =  new Sticker
+                            {
+                                stickerId = y.sticker.stickerId,
+                                url = y.sticker.url,
+
+                            }
+                        }).ToList(),
+                        backgroundUrl = x.userInterface.backgroundUrl,
+                        themeId = x.userInterface.themeId
+
+                      
+                    },
                     specialist = x.specialist == null ? null : new Specialist
                     {
                         userId = x.specialist.userId,

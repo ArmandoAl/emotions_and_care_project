@@ -14,7 +14,7 @@ namespace Domain
         NoteNotification,
     }
 
-    public class Notification
+    public class NotificationModel
     {
         [Key]
         public int notificationId { get; set; }

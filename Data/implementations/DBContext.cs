@@ -10,7 +10,9 @@ namespace Data.Implementations
             
             public DbSet<Specialist> specialists { get; set; } = null!;
 
-            public DbSet<Diary> dairy { get; set; } = null!;
+
+             public DbSet<Questionnaire> questionnaires { get; set; } = null!;
+
 
             public DbSet<DateRequest> dateRequests { get; set; } = null!;
 
@@ -18,16 +20,16 @@ namespace Data.Implementations
   
             public DbSet<Emotion> emotions { get; set; } = null!;
 
-            public DbSet<Test> test { get; set; } = null!;
-
-
-            public DbSet<SettingsP> ConfuguracionesPaciente { get; set; } = null!;
 
             public DbSet<Cart> carts { get; set; } = null!;
 
-            public DbSet<Notification> notifications { get; set; } = null!;
+            public DbSet<NotificationModel> notifications { get; set; } = null!;
+        
 
-            public DbSet<Schedule> schedule { get; set; } = null!;            
+            public DbSet<Date> dates { get; set; } = null!;
+
+            public DbSet<Recomendation> recomendations { get; set; } = null!;                
+
 
             public DbSet<TermsAndConditions> terms { get; set; } = null!;
 
@@ -39,7 +41,7 @@ namespace Data.Implementations
 
 
 
-            public DbSet<Recomandation> recomendation { get; set; } = null!;
+            public DbSet<Recomendation> recomendation { get; set; } = null!;
 
 
             public DBContext(DbContextOptions<DBContext> options) : base(options) { }

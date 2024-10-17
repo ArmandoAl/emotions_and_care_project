@@ -22,38 +22,13 @@ namespace Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("CuestionarioPaciente", b =>
+            modelBuilder.Entity("Domain.Answer", b =>
                 {
-                    b.Property<int>("CuestionariosIdCuestionario")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PacienteIdUsuario")
-                        .HasColumnType("int");
-
-                    b.HasKey("CuestionariosIdCuestionario", "PacienteIdUsuario");
-
-                    b.HasIndex("PacienteIdUsuario");
-
-                    b.ToTable("CuestionarioPaciente");
-                });
-
-            modelBuilder.Entity("Domain.Carta", b =>
-                {
-                    b.Property<int>("IdCarta")
+                    b.Property<int>("answerId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCarta"), 1L, 1);
-
-                    b.Property<string>("Contenido")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("EspecialistaIdUsuario")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Estado")
-                        .HasColumnType("int");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("answerId"), 1L, 1);
 
                     b.Property<DateTime>("FechaCreacion")
                         .HasColumnType("datetime2");
@@ -61,453 +36,365 @@ namespace Data.Migrations
                     b.Property<DateTime>("FechaModificacion")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("IdEmisor")
+                    b.Property<string>("answerText")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("questionId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PacienteIdUsuario")
+                    b.Property<int>("value")
                         .HasColumnType("int");
 
-                    b.Property<string>("inicialEmisor")
+                    b.HasKey("answerId");
+
+                    b.HasIndex("questionId");
+
+                    b.ToTable("Answer");
+                });
+
+            modelBuilder.Entity("Domain.Cart", b =>
+                {
+                    b.Property<int>("cartId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("cartId"), 1L, 1);
+
+                    b.Property<int?>("PatientuserId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SpecialistuserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("communityId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("dateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("modifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("state")
+                        .HasColumnType("int");
+
+                    b.Property<int>("transmitterId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("transmitterInitial")
                         .IsRequired()
                         .HasColumnType("nvarchar(1)");
 
-                    b.HasKey("IdCarta");
+                    b.Property<string>("userType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("EspecialistaIdUsuario");
+                    b.HasKey("cartId");
 
-                    b.HasIndex("PacienteIdUsuario");
+                    b.HasIndex("PatientuserId");
 
-                    b.ToTable("Cartas");
+                    b.HasIndex("SpecialistuserId");
+
+                    b.ToTable("carts");
                 });
 
-            modelBuilder.Entity("Domain.Cita", b =>
+            modelBuilder.Entity("Domain.CartAnswer", b =>
                 {
-                    b.Property<int>("IdCita")
+                    b.Property<int>("cartAnswerId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCita"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("cartAnswerId"), 1L, 1);
 
-                    b.Property<bool>("ConfirmadaPorEspecialista")
+                    b.Property<int>("cartId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("dateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("modifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("read")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("ConfirmadaPorPaciente")
+                    b.Property<int>("receiverId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("receiverInitial")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(1)");
+
+                    b.Property<int?>("stickerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("cartAnswerId");
+
+                    b.HasIndex("cartId");
+
+                    b.ToTable("CartAnswer");
+                });
+
+            modelBuilder.Entity("Domain.CompleteQuestionnaires", b =>
+                {
+                    b.Property<int>("completeQuestionnaireId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("completeQuestionnaireId"), 1L, 1);
+
+                    b.Property<DateTime>("dateCompleted")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("patientId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("questionnaireId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("testId")
+                        .HasColumnType("int");
+
+                    b.HasKey("completeQuestionnaireId");
+
+                    b.HasIndex("testId");
+
+                    b.ToTable("CompleteQuestionnaires");
+                });
+
+            modelBuilder.Entity("Domain.Date", b =>
+                {
+                    b.Property<int>("dateId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("dateId"), 1L, 1);
+
+                    b.Property<int?>("SpecialistuserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("done")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Descripcion")
+                    b.Property<string>("hour")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("EspecialistaIdUsuario")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Fecha")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Hora")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Lugar")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("PacienteIdUsuario")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Realizada")
+                    b.Property<bool>("patientConfirm")
                         .HasColumnType("bit");
 
-                    b.HasKey("IdCita");
-
-                    b.HasIndex("EspecialistaIdUsuario");
-
-                    b.HasIndex("PacienteIdUsuario");
-
-                    b.ToTable("Citas");
-                });
-
-            modelBuilder.Entity("Domain.Comentario", b =>
-                {
-                    b.Property<int>("IdComentario")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int?>("patientuserId")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdComentario"), 1L, 1);
-
-                    b.Property<string>("Contenido")
-                        .IsRequired()
+                    b.Property<string>("place")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("FechaComentario")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("IdUsuario")
-                        .HasColumnType("int");
-
-                    b.Property<string>("NombreUsuario")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("PublicacionIdPublicacion")
-                        .HasColumnType("int");
-
-                    b.HasKey("IdComentario");
-
-                    b.HasIndex("PublicacionIdPublicacion");
-
-                    b.ToTable("Comentario");
-                });
-
-            modelBuilder.Entity("Domain.ConfiguracionP", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<bool>("DirioActivado")
+                    b.Property<bool>("specialistConfirm")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("NotificacionesActivas")
-                        .HasColumnType("bit");
+                    b.HasKey("dateId");
 
-                    b.Property<bool>("ProgresoActivado")
-                        .HasColumnType("bit");
+                    b.HasIndex("SpecialistuserId");
 
-                    b.HasKey("Id");
+                    b.HasIndex("patientuserId");
 
-                    b.ToTable("ConfuguracionesPaciente");
+                    b.ToTable("dates");
                 });
 
-            modelBuilder.Entity("Domain.Cuestionario", b =>
+            modelBuilder.Entity("Domain.DateRequest", b =>
                 {
-                    b.Property<int>("IdCuestionario")
+                    b.Property<int>("dateRequestId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCuestionario"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("dateRequestId"), 1L, 1);
 
-                    b.Property<string>("Descripcion")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("CitadateId")
+                        .HasColumnType("int");
 
-                    b.Property<DateTime>("FechaCreacion")
-                        .HasColumnType("datetime2");
+                    b.Property<int?>("SpecialistuserId")
+                        .HasColumnType("int");
 
-                    b.Property<DateTime>("FechaModificacion")
-                        .HasColumnType("datetime2");
+                    b.HasKey("dateRequestId");
 
-                    b.Property<string>("Instrucciones")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.HasIndex("CitadateId");
 
-                    b.Property<string>("NombreCuestionario")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.HasIndex("SpecialistuserId");
 
-                    b.Property<string>("Objetivo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("IdCuestionario");
-
-                    b.ToTable("Cuestionarios");
+                    b.ToTable("dateRequests");
                 });
 
-            modelBuilder.Entity("Domain.CuestionarioCompletado", b =>
+            modelBuilder.Entity("Domain.Diary", b =>
                 {
-                    b.Property<int>("IdCuestionarioCompletado")
+                    b.Property<int>("diaryId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCuestionarioCompletado"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("diaryId"), 1L, 1);
 
-                    b.Property<int>("CuestionarioId")
-                        .HasColumnType("int");
+                    b.HasKey("diaryId");
 
-                    b.Property<DateTime>("FechaCompletado")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("PacienteId")
-                        .HasColumnType("int");
-
-                    b.HasKey("IdCuestionarioCompletado");
-
-                    b.HasIndex("PacienteId");
-
-                    b.ToTable("CuestionarioCompletados");
+                    b.ToTable("Diary");
                 });
 
-            modelBuilder.Entity("Domain.Emocion", b =>
+            modelBuilder.Entity("Domain.Emotion", b =>
                 {
-                    b.Property<int>("IdEmocion")
+                    b.Property<int>("emotionId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdEmocion"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("emotionId"), 1L, 1);
 
-                    b.Property<DateTime>("FechaCreacion")
+                    b.Property<DateTime>("dateCreated")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("FechaModificacion")
+                    b.Property<DateTime>("modifiedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Nombre")
+                    b.Property<string>("name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("IdEmocion");
+                    b.HasKey("emotionId");
 
-                    b.ToTable("Emociones");
+                    b.ToTable("emotions");
                 });
 
-            modelBuilder.Entity("Domain.Especialista", b =>
+            modelBuilder.Entity("Domain.Flower", b =>
                 {
-                    b.Property<int>("IdUsuario")
+                    b.Property<int>("flowerId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdUsuario"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("flowerId"), 1L, 1);
 
-                    b.Property<string>("CedulaProfesional")
+                    b.Property<string>("name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Contraseña")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.HasKey("flowerId");
 
-                    b.Property<string>("Correo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Edad")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Enfoque")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("FechaCreacion")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("FechaModificacion")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("FechaNacimiento")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Institucion")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Nombre")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Presentacion")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Sexo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Telefono")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TerminosycondicionesIdTerminosYCondiciones")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Token")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TokenRelacional")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Ubicaion")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("IdUsuario");
-
-                    b.HasIndex("TerminosycondicionesIdTerminosYCondiciones");
-
-                    b.ToTable("Especialistas");
+                    b.ToTable("flowers");
                 });
 
-            modelBuilder.Entity("Domain.Flor", b =>
+            modelBuilder.Entity("Domain.Goal", b =>
                 {
-                    b.Property<int>("IdFlor")
+                    b.Property<int>("goalId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdFlor"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("goalId"), 1L, 1);
 
-                    b.Property<string>("Nombre")
+                    b.Property<int?>("PatientuserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("desription")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("IdFlor");
-
-                    b.ToTable("Flores");
-                });
-
-            modelBuilder.Entity("Domain.FloresDelUsuarioModel", b =>
-                {
-                    b.Property<int>("StickerIdSticker")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int?>("flowerId")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StickerIdSticker"), 1L, 1);
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("Etapa")
-                        .HasColumnType("int");
-
-                    b.Property<int>("FlorIdFlor")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("PacienteIdUsuario")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idUsuario")
-                        .HasColumnType("int");
-
-                    b.HasKey("StickerIdSticker");
-
-                    b.HasIndex("FlorIdFlor");
-
-                    b.HasIndex("PacienteIdUsuario");
-
-                    b.ToTable("FloresDelUsuario");
-                });
-
-            modelBuilder.Entity("Domain.HistoryTestModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("IdCuestionario")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
+                    b.Property<string>("name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PacienteIdUsuario")
+                    b.Property<int?>("stickerId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.Property<int>("type")
+                        .HasColumnType("int");
 
-                    b.HasIndex("PacienteIdUsuario");
+                    b.HasKey("goalId");
 
-                    b.ToTable("HistorialesCuestionariosCompletados");
+                    b.HasIndex("PatientuserId");
+
+                    b.ToTable("goals");
                 });
 
             modelBuilder.Entity("Domain.ImageModel", b =>
                 {
-                    b.Property<int>("IdImage")
+                    b.Property<int>("imageId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdImage"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("imageId"), 1L, 1);
 
-                    b.Property<int?>("FlorIdFlor")
+                    b.Property<int?>("flowerId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Url")
+                    b.Property<string>("url")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("IdImage");
+                    b.HasKey("imageId");
 
-                    b.HasIndex("FlorIdFlor");
+                    b.HasIndex("flowerId");
 
                     b.ToTable("ImageModel");
                 });
 
-            modelBuilder.Entity("Domain.Logro", b =>
+            modelBuilder.Entity("Domain.Note", b =>
                 {
-                    b.Property<int>("IdLogro")
+                    b.Property<int>("noteId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdLogro"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("noteId"), 1L, 1);
 
-                    b.Property<string>("Descripcion")
+                    b.Property<string>("content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Nombre")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Tipo")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("idFlor")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("idSticker")
-                        .HasColumnType("int");
-
-                    b.HasKey("IdLogro");
-
-                    b.ToTable("Logros");
-                });
-
-            modelBuilder.Entity("Domain.Nota", b =>
-                {
-                    b.Property<int>("IdNota")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdNota"), 1L, 1);
-
-                    b.Property<string>("Contenido")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("EmocionIdEmocion")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("FechaCreacion")
+                    b.Property<DateTime>("dateCreated")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("FechaModificacion")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("PacienteIdUsuario")
+                    b.Property<int?>("diaryId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Titulo")
+                    b.Property<int>("emotionId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("modifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Visible")
+                    b.Property<bool>("visible")
                         .HasColumnType("bit");
 
-                    b.HasKey("IdNota");
+                    b.HasKey("noteId");
 
-                    b.HasIndex("EmocionIdEmocion");
+                    b.HasIndex("diaryId");
 
-                    b.HasIndex("PacienteIdUsuario");
+                    b.HasIndex("emotionId");
 
-                    b.ToTable("Notas");
+                    b.ToTable("Note");
                 });
 
-            modelBuilder.Entity("Domain.Notificacion", b =>
+            modelBuilder.Entity("Domain.NotificationModel", b =>
                 {
-                    b.Property<int>("IdNotificacion")
+                    b.Property<int>("notificationId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdNotificacion"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("notificationId"), 1L, 1);
 
                     b.Property<string>("Descripcion")
                         .IsRequired()
@@ -516,801 +403,924 @@ namespace Data.Migrations
                     b.Property<DateTime>("FechaCreacion")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("FechaEmision")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime>("FechaModificacion")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("PacienteIdUsuario")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Referencia")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TipoNotificacion")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TipoRecomendacion")
+                    b.Property<int?>("PatientuserId")
                         .HasColumnType("int");
 
                     b.Property<string>("Titulo")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Url")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime?>("emitDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<int?>("idRecomandacion")
+                    b.Property<int>("notificationType")
                         .HasColumnType("int");
 
-                    b.HasKey("IdNotificacion");
+                    b.Property<int?>("recomendationId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("PacienteIdUsuario");
+                    b.Property<int?>("recomendationType")
+                        .HasColumnType("int");
 
-                    b.ToTable("Notificaciones");
+                    b.Property<string>("reference")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("url")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("notificationId");
+
+                    b.HasIndex("PatientuserId");
+
+                    b.ToTable("notifications");
                 });
 
-            modelBuilder.Entity("Domain.Paciente", b =>
+            modelBuilder.Entity("Domain.Patient", b =>
                 {
-                    b.Property<int>("IdUsuario")
+                    b.Property<int>("userId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdUsuario"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("userId"), 1L, 1);
 
-                    b.Property<int>("ConfiguracionId")
+                    b.Property<int>("age")
                         .HasColumnType("int");
 
-                    b.Property<string>("Contraseña")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Correo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Edad")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("EspecialistaIdUsuario")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("FechaCreacion")
+                    b.Property<DateTime>("bornDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("FechaModificacion")
+                    b.Property<DateTime>("dateCreated")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("FechaNacimiento")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Nombre")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Sexo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Telefono")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TerminosycondicionesIdTerminosYCondiciones")
+                    b.Property<int>("diaryId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Token")
+                    b.Property<string>("mail")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TokenRelacional")
+                    b.Property<DateTime>("modifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("registerSet")
+                    b.Property<string>("password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("registerState")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("relationalToken")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("settingsId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("sex")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("specialistuserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("termsAndConditionsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("testId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("userInterfaceId")
+                        .HasColumnType("int");
+
+                    b.HasKey("userId");
+
+                    b.HasIndex("diaryId");
+
+                    b.HasIndex("settingsId");
+
+                    b.HasIndex("specialistuserId");
+
+                    b.HasIndex("termsAndConditionsId");
+
+                    b.HasIndex("testId");
+
+                    b.HasIndex("userInterfaceId");
+
+                    b.ToTable("patients");
+                });
+
+            modelBuilder.Entity("Domain.PatientRequest", b =>
+                {
+                    b.Property<int>("patientRequestId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("patientRequestId"), 1L, 1);
+
+                    b.Property<int?>("SpecialistuserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("patientuserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("patientRequestId");
+
+                    b.HasIndex("SpecialistuserId");
+
+                    b.HasIndex("patientuserId");
+
+                    b.ToTable("patientRequest");
+                });
+
+            modelBuilder.Entity("Domain.Question", b =>
+                {
+                    b.Property<int>("questionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("questionId"), 1L, 1);
+
+                    b.Property<DateTime>("dateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("modifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("questionnaireId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("statement")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("type")
+                        .HasColumnType("int");
+
+                    b.HasKey("questionId");
+
+                    b.HasIndex("questionnaireId");
+
+                    b.ToTable("Question");
+                });
+
+            modelBuilder.Entity("Domain.Questionnaire", b =>
+                {
+                    b.Property<int>("questionnaireId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("questionnaireId"), 1L, 1);
+
+                    b.Property<DateTime>("dateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("instructions")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("modifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("objective")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("questionnaireName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("questionnaireId");
+
+                    b.ToTable("questionnaires");
+                });
+
+            modelBuilder.Entity("Domain.QuestionnaireForUser", b =>
+                {
+                    b.Property<int>("questionnaireForUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("questionnaireForUserId"), 1L, 1);
+
+                    b.Property<int>("questionnaireId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("testId")
+                        .HasColumnType("int");
+
+                    b.HasKey("questionnaireForUserId");
+
+                    b.HasIndex("testId");
+
+                    b.ToTable("QuestionnaireForUser");
+                });
+
+            modelBuilder.Entity("Domain.QuestionnaireResult", b =>
+                {
+                    b.Property<int>("questionnaireResultId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("questionnaireResultId"), 1L, 1);
+
+                    b.Property<DateTime>("dateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("modifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("questionnaireId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("result")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("value")
+                        .HasColumnType("int");
+
+                    b.HasKey("questionnaireResultId");
+
+                    b.HasIndex("questionnaireId");
+
+                    b.ToTable("QuestionnaireResult");
+                });
+
+            modelBuilder.Entity("Domain.QuestionnairesHistory", b =>
+                {
+                    b.Property<int>("questionnairesHistoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("questionnairesHistoryId"), 1L, 1);
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("questionnaireId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("testId")
+                        .HasColumnType("int");
+
+                    b.HasKey("questionnairesHistoryId");
+
+                    b.HasIndex("testId");
+
+                    b.ToTable("QuestionnairesHistory");
+                });
+
+            modelBuilder.Entity("Domain.Recomendation", b =>
+                {
+                    b.Property<int>("recomendationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("recomendationId"), 1L, 1);
+
+                    b.Property<string>("content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("createdDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("modifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("reference")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("subTitle")
+                        .HasColumnType("int");
+
+                    b.Property<string>("title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("type")
+                        .HasColumnType("int");
+
+                    b.Property<string>("url")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("recomendationId");
+
+                    b.ToTable("Recomendation");
+                });
+
+            modelBuilder.Entity("Domain.SettingsP", b =>
+                {
+                    b.Property<int>("settingsId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("settingsId"), 1L, 1);
+
+                    b.Property<bool>("diaryActive")
                         .HasColumnType("bit");
 
-                    b.HasKey("IdUsuario");
-
-                    b.HasIndex("ConfiguracionId");
-
-                    b.HasIndex("EspecialistaIdUsuario");
-
-                    b.HasIndex("TerminosycondicionesIdTerminosYCondiciones");
-
-                    b.ToTable("Pacientes");
-                });
-
-            modelBuilder.Entity("Domain.Pregunta", b =>
-                {
-                    b.Property<int>("IdPregunta")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdPregunta"), 1L, 1);
-
-                    b.Property<int?>("CuestionarioIdCuestionario")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Enunciado")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("FechaCreacion")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("FechaModificacion")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Tipo")
-                        .HasColumnType("int");
-
-                    b.HasKey("IdPregunta");
-
-                    b.HasIndex("CuestionarioIdCuestionario");
-
-                    b.ToTable("Pregunta");
-                });
-
-            modelBuilder.Entity("Domain.Publicacion", b =>
-                {
-                    b.Property<int>("IdPublicacion")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdPublicacion"), 1L, 1);
-
-                    b.Property<string>("Contenido")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("FechaPublicacion")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("IdUsuario")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Likes")
-                        .HasColumnType("int");
-
-                    b.Property<string>("NombreUsuario")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("IdPublicacion");
-
-                    b.ToTable("Publicaciones");
-                });
-
-            modelBuilder.Entity("Domain.Recomendacion", b =>
-                {
-                    b.Property<int>("IdRecomendacion")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdRecomendacion"), 1L, 1);
-
-                    b.Property<string>("Contenido")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("FechaCreacion")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("FechaModificacion")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Referencia")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("SubTitulo")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Tipo")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Titulo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Url")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("IdRecomendacion");
-
-                    b.ToTable("Recomendaciones");
-                });
-
-            modelBuilder.Entity("Domain.RecomendacionCompletada", b =>
-                {
-                    b.Property<int>("IdRecomendacion")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdRecomendacion"), 1L, 1);
-
-                    b.Property<DateTime>("FechaCompletada")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("IdUsuario")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("RecomendacionIdRecomendacion")
-                        .HasColumnType("int");
-
-                    b.HasKey("IdRecomendacion");
-
-                    b.HasIndex("RecomendacionIdRecomendacion");
-
-                    b.ToTable("RecomendacionCompletada");
-                });
-
-            modelBuilder.Entity("Domain.Respuesta", b =>
-                {
-                    b.Property<int>("IdRespuesta")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdRespuesta"), 1L, 1);
-
-                    b.Property<DateTime>("FechaCreacion")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("FechaModificacion")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("PreguntaIdPregunta")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TextoRespuesta")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("IdRespuesta");
-
-                    b.HasIndex("PreguntaIdPregunta");
-
-                    b.ToTable("Respuesta");
-                });
-
-            modelBuilder.Entity("Domain.RespuestaCarta", b =>
-                {
-                    b.Property<int>("IdCarta")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCarta"), 1L, 1);
-
-                    b.Property<int?>("CartaIdCarta")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Contenido")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("FechaCreacion")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("FechaModificacion")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("IdReceptor")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IdSticker")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Leida")
+                    b.Property<bool>("notificationsActive")
                         .HasColumnType("bit");
 
-                    b.Property<string>("LetraReceptor")
+                    b.Property<bool>("questionnaireActive")
+                        .HasColumnType("bit");
+
+                    b.HasKey("settingsId");
+
+                    b.ToTable("SettingsP");
+                });
+
+            modelBuilder.Entity("Domain.Specialist", b =>
+                {
+                    b.Property<int>("userId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("userId"), 1L, 1);
+
+                    b.Property<string>("adress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("age")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("bornDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("dateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("focus")
                         .IsRequired()
-                        .HasColumnType("nvarchar(1)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("IdCarta");
+                    b.Property<string>("institution")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("CartaIdCarta");
+                    b.Property<string>("license")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.ToTable("RespuestaCarta");
-                });
+                    b.Property<string>("mail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-            modelBuilder.Entity("Domain.SolicitudCita", b =>
-                {
-                    b.Property<int>("IdSolicitudCita")
-                        .ValueGeneratedOnAdd()
+                    b.Property<DateTime>("modifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("presentation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("relationalToken")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("sex")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("termsAndConditionsId")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdSolicitudCita"), 1L, 1);
+                    b.Property<string>("token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("CitaIdCita")
-                        .HasColumnType("int");
+                    b.HasKey("userId");
 
-                    b.Property<int?>("EspecialistaIdUsuario")
-                        .HasColumnType("int");
+                    b.HasIndex("termsAndConditionsId");
 
-                    b.HasKey("IdSolicitudCita");
-
-                    b.HasIndex("CitaIdCita");
-
-                    b.HasIndex("EspecialistaIdUsuario");
-
-                    b.ToTable("SolicitudesCita");
-                });
-
-            modelBuilder.Entity("Domain.SolicitudPaciente", b =>
-                {
-                    b.Property<int>("IdSolicitudPaciente")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdSolicitudPaciente"), 1L, 1);
-
-                    b.Property<int?>("EspecialistaIdUsuario")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PacienteIdUsuario")
-                        .HasColumnType("int");
-
-                    b.HasKey("IdSolicitudPaciente");
-
-                    b.HasIndex("EspecialistaIdUsuario");
-
-                    b.HasIndex("PacienteIdUsuario");
-
-                    b.ToTable("SolicitudesPaciente");
+                    b.ToTable("specialists");
                 });
 
             modelBuilder.Entity("Domain.Sticker", b =>
                 {
-                    b.Property<int>("IdSticker")
+                    b.Property<int>("stickerId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdSticker"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("stickerId"), 1L, 1);
 
-                    b.Property<string>("Imagen")
+                    b.Property<string>("url")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("IdSticker");
+                    b.HasKey("stickerId");
 
-                    b.ToTable("Sticker");
+                    b.ToTable("stickers");
                 });
 
-            modelBuilder.Entity("Domain.StickerDeUsuarioModel", b =>
+            modelBuilder.Entity("Domain.TermsAndConditions", b =>
                 {
-                    b.Property<int>("IdStickerDeUsuarioModel")
+                    b.Property<int>("termsAndConditionsId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdStickerDeUsuarioModel"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("termsAndConditionsId"), 1L, 1);
 
-                    b.Property<int?>("PacienteIdUsuario")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Posicion")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StickerIdSticker")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idUsuario")
-                        .HasColumnType("int");
-
-                    b.HasKey("IdStickerDeUsuarioModel");
-
-                    b.HasIndex("PacienteIdUsuario");
-
-                    b.HasIndex("StickerIdSticker");
-
-                    b.ToTable("StickersDeUsuario");
-                });
-
-            modelBuilder.Entity("Domain.TerminosYCondiciones", b =>
-                {
-                    b.Property<int>("IdTerminosYCondiciones")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdTerminosYCondiciones"), 1L, 1);
-
-                    b.Property<string>("terminosYCondiciones")
+                    b.Property<string>("termsAndConditions")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("IdTerminosYCondiciones");
+                    b.HasKey("termsAndConditionsId");
 
-                    b.ToTable("TerminosYCondiciones");
+                    b.ToTable("terms");
+                });
+
+            modelBuilder.Entity("Domain.Test", b =>
+                {
+                    b.Property<int>("testId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("testId"), 1L, 1);
+
+                    b.HasKey("testId");
+
+                    b.ToTable("Test");
                 });
 
             modelBuilder.Entity("Domain.TestInfoModel", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("testInfoModelId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("testInfoModelId"), 1L, 1);
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime>("date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("HistoryTestModelId")
+                    b.Property<int?>("questionnairesHistoryId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Result")
+                    b.Property<string>("result")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Visible")
+                    b.Property<bool>("visible")
                         .HasColumnType("bit");
 
-                    b.HasKey("Id");
+                    b.HasKey("testInfoModelId");
 
-                    b.HasIndex("HistoryTestModelId");
+                    b.HasIndex("questionnairesHistoryId");
 
                     b.ToTable("TestInfoModel");
                 });
 
             modelBuilder.Entity("Domain.TestQuestionWithAnswer", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("testQuestionWithAnswerId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("testQuestionWithAnswerId"), 1L, 1);
 
-                    b.Property<string>("Answer")
+                    b.Property<string>("answer")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Question")
+                    b.Property<string>("question")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("TestInfoModelId")
+                    b.Property<int?>("testInfoModelId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("testQuestionWithAnswerId");
 
-                    b.HasIndex("TestInfoModelId");
+                    b.HasIndex("testInfoModelId");
 
                     b.ToTable("TestQuestionWithAnswer");
                 });
 
-            modelBuilder.Entity("LogroPaciente", b =>
+            modelBuilder.Entity("Domain.UserFlower", b =>
                 {
-                    b.Property<int>("PacientesIdUsuario")
+                    b.Property<int>("userFlowerId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("logrosIdLogro")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("userFlowerId"), 1L, 1);
+
+                    b.Property<int>("flowerId")
                         .HasColumnType("int");
 
-                    b.HasKey("PacientesIdUsuario", "logrosIdLogro");
+                    b.Property<int?>("position")
+                        .HasColumnType("int");
 
-                    b.HasIndex("logrosIdLogro");
+                    b.Property<int>("state")
+                        .HasColumnType("int");
 
-                    b.ToTable("LogroPaciente");
+                    b.Property<int?>("userInterfaceId")
+                        .HasColumnType("int");
+
+                    b.HasKey("userFlowerId");
+
+                    b.HasIndex("flowerId");
+
+                    b.HasIndex("userInterfaceId");
+
+                    b.ToTable("UserFlower");
                 });
 
-            modelBuilder.Entity("CuestionarioPaciente", b =>
+            modelBuilder.Entity("Domain.UserInterface", b =>
                 {
-                    b.HasOne("Domain.Cuestionario", null)
+                    b.Property<int>("userInterfaceId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("userInterfaceId"), 1L, 1);
+
+                    b.Property<int>("backgroundUrl")
+                        .HasColumnType("int");
+
+                    b.Property<int>("themeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("userInterfaceId");
+
+                    b.ToTable("UserInterface");
+                });
+
+            modelBuilder.Entity("Domain.UserSticker", b =>
+                {
+                    b.Property<int>("userStickerId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("userStickerId"), 1L, 1);
+
+                    b.Property<int?>("position")
+                        .HasColumnType("int");
+
+                    b.Property<int>("stickerId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("userInterfaceId")
+                        .HasColumnType("int");
+
+                    b.HasKey("userStickerId");
+
+                    b.HasIndex("stickerId");
+
+                    b.HasIndex("userInterfaceId");
+
+                    b.ToTable("UserSticker");
+                });
+
+            modelBuilder.Entity("Domain.Answer", b =>
+                {
+                    b.HasOne("Domain.Question", null)
+                        .WithMany("answers")
+                        .HasForeignKey("questionId");
+                });
+
+            modelBuilder.Entity("Domain.Cart", b =>
+                {
+                    b.HasOne("Domain.Patient", null)
+                        .WithMany("carts")
+                        .HasForeignKey("PatientuserId");
+
+                    b.HasOne("Domain.Specialist", null)
+                        .WithMany("communityCarts")
+                        .HasForeignKey("SpecialistuserId");
+                });
+
+            modelBuilder.Entity("Domain.CartAnswer", b =>
+                {
+                    b.HasOne("Domain.Cart", null)
+                        .WithMany("cartAnswers")
+                        .HasForeignKey("cartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.CompleteQuestionnaires", b =>
+                {
+                    b.HasOne("Domain.Test", null)
+                        .WithMany("completeQuestionnaires")
+                        .HasForeignKey("testId");
+                });
+
+            modelBuilder.Entity("Domain.Date", b =>
+                {
+                    b.HasOne("Domain.Specialist", null)
+                        .WithMany("dates")
+                        .HasForeignKey("SpecialistuserId");
+
+                    b.HasOne("Domain.Patient", "patient")
+                        .WithMany("dates")
+                        .HasForeignKey("patientuserId");
+
+                    b.Navigation("patient");
+                });
+
+            modelBuilder.Entity("Domain.DateRequest", b =>
+                {
+                    b.HasOne("Domain.Date", "Cita")
                         .WithMany()
-                        .HasForeignKey("CuestionariosIdCuestionario")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CitadateId");
 
-                    b.HasOne("Domain.Paciente", null)
-                        .WithMany()
-                        .HasForeignKey("PacienteIdUsuario")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Domain.Carta", b =>
-                {
-                    b.HasOne("Domain.Especialista", null)
-                        .WithMany("CartasDeComunidad")
-                        .HasForeignKey("EspecialistaIdUsuario");
-
-                    b.HasOne("Domain.Paciente", null)
-                        .WithMany("Cartas")
-                        .HasForeignKey("PacienteIdUsuario");
-                });
-
-            modelBuilder.Entity("Domain.Cita", b =>
-                {
-                    b.HasOne("Domain.Especialista", null)
-                        .WithMany("Citas")
-                        .HasForeignKey("EspecialistaIdUsuario");
-
-                    b.HasOne("Domain.Paciente", "Paciente")
-                        .WithMany("Citas")
-                        .HasForeignKey("PacienteIdUsuario");
-
-                    b.Navigation("Paciente");
-                });
-
-            modelBuilder.Entity("Domain.Comentario", b =>
-                {
-                    b.HasOne("Domain.Publicacion", null)
-                        .WithMany("Comentarios")
-                        .HasForeignKey("PublicacionIdPublicacion");
-                });
-
-            modelBuilder.Entity("Domain.CuestionarioCompletado", b =>
-                {
-                    b.HasOne("Domain.Paciente", null)
-                        .WithMany("cuestionarioCompletados")
-                        .HasForeignKey("PacienteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Domain.Especialista", b =>
-                {
-                    b.HasOne("Domain.TerminosYCondiciones", "Terminosycondiciones")
-                        .WithMany()
-                        .HasForeignKey("TerminosycondicionesIdTerminosYCondiciones")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Terminosycondiciones");
-                });
-
-            modelBuilder.Entity("Domain.FloresDelUsuarioModel", b =>
-                {
-                    b.HasOne("Domain.Flor", "Flor")
-                        .WithMany()
-                        .HasForeignKey("FlorIdFlor")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Paciente", null)
-                        .WithMany("FloresDelUsuario")
-                        .HasForeignKey("PacienteIdUsuario");
-
-                    b.Navigation("Flor");
-                });
-
-            modelBuilder.Entity("Domain.HistoryTestModel", b =>
-                {
-                    b.HasOne("Domain.Paciente", null)
-                        .WithMany("HistorialCuestionarios")
-                        .HasForeignKey("PacienteIdUsuario");
-                });
-
-            modelBuilder.Entity("Domain.ImageModel", b =>
-                {
-                    b.HasOne("Domain.Flor", null)
-                        .WithMany("Imagenes")
-                        .HasForeignKey("FlorIdFlor");
-                });
-
-            modelBuilder.Entity("Domain.Nota", b =>
-                {
-                    b.HasOne("Domain.Emocion", "Emocion")
-                        .WithMany("Notas")
-                        .HasForeignKey("EmocionIdEmocion")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Paciente", null)
-                        .WithMany("Notas")
-                        .HasForeignKey("PacienteIdUsuario");
-
-                    b.Navigation("Emocion");
-                });
-
-            modelBuilder.Entity("Domain.Notificacion", b =>
-                {
-                    b.HasOne("Domain.Paciente", null)
-                        .WithMany("Notificaciones")
-                        .HasForeignKey("PacienteIdUsuario");
-                });
-
-            modelBuilder.Entity("Domain.Paciente", b =>
-                {
-                    b.HasOne("Domain.ConfiguracionP", "Configuracion")
-                        .WithMany()
-                        .HasForeignKey("ConfiguracionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Especialista", "Especialista")
-                        .WithMany("Pacientes")
-                        .HasForeignKey("EspecialistaIdUsuario");
-
-                    b.HasOne("Domain.TerminosYCondiciones", "Terminosycondiciones")
-                        .WithMany()
-                        .HasForeignKey("TerminosycondicionesIdTerminosYCondiciones")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Configuracion");
-
-                    b.Navigation("Especialista");
-
-                    b.Navigation("Terminosycondiciones");
-                });
-
-            modelBuilder.Entity("Domain.Pregunta", b =>
-                {
-                    b.HasOne("Domain.Cuestionario", null)
-                        .WithMany("Preguntas")
-                        .HasForeignKey("CuestionarioIdCuestionario");
-                });
-
-            modelBuilder.Entity("Domain.RecomendacionCompletada", b =>
-                {
-                    b.HasOne("Domain.Recomendacion", null)
-                        .WithMany("recomendacionCompletadas")
-                        .HasForeignKey("RecomendacionIdRecomendacion");
-                });
-
-            modelBuilder.Entity("Domain.Respuesta", b =>
-                {
-                    b.HasOne("Domain.Pregunta", null)
-                        .WithMany("Respuestas")
-                        .HasForeignKey("PreguntaIdPregunta");
-                });
-
-            modelBuilder.Entity("Domain.RespuestaCarta", b =>
-                {
-                    b.HasOne("Domain.Carta", null)
-                        .WithMany("Respuestas")
-                        .HasForeignKey("CartaIdCarta");
-                });
-
-            modelBuilder.Entity("Domain.SolicitudCita", b =>
-                {
-                    b.HasOne("Domain.Cita", "Cita")
-                        .WithMany()
-                        .HasForeignKey("CitaIdCita");
-
-                    b.HasOne("Domain.Especialista", null)
-                        .WithMany("SolicitudesCita")
-                        .HasForeignKey("EspecialistaIdUsuario");
+                    b.HasOne("Domain.Specialist", null)
+                        .WithMany("dateRequests")
+                        .HasForeignKey("SpecialistuserId");
 
                     b.Navigation("Cita");
                 });
 
-            modelBuilder.Entity("Domain.SolicitudPaciente", b =>
+            modelBuilder.Entity("Domain.Goal", b =>
                 {
-                    b.HasOne("Domain.Especialista", null)
-                        .WithMany("solicitudPacientes")
-                        .HasForeignKey("EspecialistaIdUsuario");
-
-                    b.HasOne("Domain.Paciente", "Paciente")
-                        .WithMany()
-                        .HasForeignKey("PacienteIdUsuario")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Paciente");
+                    b.HasOne("Domain.Patient", null)
+                        .WithMany("goals")
+                        .HasForeignKey("PatientuserId");
                 });
 
-            modelBuilder.Entity("Domain.StickerDeUsuarioModel", b =>
+            modelBuilder.Entity("Domain.ImageModel", b =>
                 {
-                    b.HasOne("Domain.Paciente", null)
-                        .WithMany("Stickersds")
-                        .HasForeignKey("PacienteIdUsuario");
+                    b.HasOne("Domain.Flower", null)
+                        .WithMany("images")
+                        .HasForeignKey("flowerId");
+                });
 
-                    b.HasOne("Domain.Sticker", "Sticker")
+            modelBuilder.Entity("Domain.Note", b =>
+                {
+                    b.HasOne("Domain.Diary", null)
+                        .WithMany("notes")
+                        .HasForeignKey("diaryId");
+
+                    b.HasOne("Domain.Emotion", "emotion")
                         .WithMany()
-                        .HasForeignKey("StickerIdSticker")
+                        .HasForeignKey("emotionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Sticker");
+                    b.Navigation("emotion");
+                });
+
+            modelBuilder.Entity("Domain.NotificationModel", b =>
+                {
+                    b.HasOne("Domain.Patient", null)
+                        .WithMany("notifications")
+                        .HasForeignKey("PatientuserId");
+                });
+
+            modelBuilder.Entity("Domain.Patient", b =>
+                {
+                    b.HasOne("Domain.Diary", "diary")
+                        .WithMany()
+                        .HasForeignKey("diaryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.SettingsP", "settings")
+                        .WithMany()
+                        .HasForeignKey("settingsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Specialist", "specialist")
+                        .WithMany("patients")
+                        .HasForeignKey("specialistuserId");
+
+                    b.HasOne("Domain.TermsAndConditions", "termsAndConditions")
+                        .WithMany()
+                        .HasForeignKey("termsAndConditionsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Test", "test")
+                        .WithMany()
+                        .HasForeignKey("testId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.UserInterface", "userInterface")
+                        .WithMany()
+                        .HasForeignKey("userInterfaceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("diary");
+
+                    b.Navigation("settings");
+
+                    b.Navigation("specialist");
+
+                    b.Navigation("termsAndConditions");
+
+                    b.Navigation("test");
+
+                    b.Navigation("userInterface");
+                });
+
+            modelBuilder.Entity("Domain.PatientRequest", b =>
+                {
+                    b.HasOne("Domain.Specialist", null)
+                        .WithMany("patientsRequests")
+                        .HasForeignKey("SpecialistuserId");
+
+                    b.HasOne("Domain.Patient", "patient")
+                        .WithMany()
+                        .HasForeignKey("patientuserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("patient");
+                });
+
+            modelBuilder.Entity("Domain.Question", b =>
+                {
+                    b.HasOne("Domain.Questionnaire", null)
+                        .WithMany("questions")
+                        .HasForeignKey("questionnaireId");
+                });
+
+            modelBuilder.Entity("Domain.QuestionnaireForUser", b =>
+                {
+                    b.HasOne("Domain.Test", null)
+                        .WithMany("questionnaires")
+                        .HasForeignKey("testId");
+                });
+
+            modelBuilder.Entity("Domain.QuestionnaireResult", b =>
+                {
+                    b.HasOne("Domain.Questionnaire", null)
+                        .WithMany("questionnaireResults")
+                        .HasForeignKey("questionnaireId");
+                });
+
+            modelBuilder.Entity("Domain.QuestionnairesHistory", b =>
+                {
+                    b.HasOne("Domain.Test", null)
+                        .WithMany("questionnairesHistory")
+                        .HasForeignKey("testId");
+                });
+
+            modelBuilder.Entity("Domain.Specialist", b =>
+                {
+                    b.HasOne("Domain.TermsAndConditions", "termsAndConditions")
+                        .WithMany()
+                        .HasForeignKey("termsAndConditionsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("termsAndConditions");
                 });
 
             modelBuilder.Entity("Domain.TestInfoModel", b =>
                 {
-                    b.HasOne("Domain.HistoryTestModel", null)
+                    b.HasOne("Domain.QuestionnairesHistory", null)
                         .WithMany("testInfoModels")
-                        .HasForeignKey("HistoryTestModelId");
+                        .HasForeignKey("questionnairesHistoryId");
                 });
 
             modelBuilder.Entity("Domain.TestQuestionWithAnswer", b =>
                 {
                     b.HasOne("Domain.TestInfoModel", null)
-                        .WithMany("TestQuestionWithAnswers")
-                        .HasForeignKey("TestInfoModelId");
+                        .WithMany("testQuestionWithAnswers")
+                        .HasForeignKey("testInfoModelId");
                 });
 
-            modelBuilder.Entity("LogroPaciente", b =>
+            modelBuilder.Entity("Domain.UserFlower", b =>
                 {
-                    b.HasOne("Domain.Paciente", null)
+                    b.HasOne("Domain.Flower", "flower")
                         .WithMany()
-                        .HasForeignKey("PacientesIdUsuario")
+                        .HasForeignKey("flowerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Logro", null)
+                    b.HasOne("Domain.UserInterface", null)
+                        .WithMany("userFlowers")
+                        .HasForeignKey("userInterfaceId");
+
+                    b.Navigation("flower");
+                });
+
+            modelBuilder.Entity("Domain.UserSticker", b =>
+                {
+                    b.HasOne("Domain.Sticker", "sticker")
                         .WithMany()
-                        .HasForeignKey("logrosIdLogro")
+                        .HasForeignKey("stickerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Domain.UserInterface", null)
+                        .WithMany("userStickers")
+                        .HasForeignKey("userInterfaceId");
+
+                    b.Navigation("sticker");
                 });
 
-            modelBuilder.Entity("Domain.Carta", b =>
+            modelBuilder.Entity("Domain.Cart", b =>
                 {
-                    b.Navigation("Respuestas");
+                    b.Navigation("cartAnswers");
                 });
 
-            modelBuilder.Entity("Domain.Cuestionario", b =>
+            modelBuilder.Entity("Domain.Diary", b =>
                 {
-                    b.Navigation("Preguntas");
+                    b.Navigation("notes");
                 });
 
-            modelBuilder.Entity("Domain.Emocion", b =>
+            modelBuilder.Entity("Domain.Flower", b =>
                 {
-                    b.Navigation("Notas");
+                    b.Navigation("images");
                 });
 
-            modelBuilder.Entity("Domain.Especialista", b =>
+            modelBuilder.Entity("Domain.Patient", b =>
                 {
-                    b.Navigation("CartasDeComunidad");
+                    b.Navigation("carts");
 
-                    b.Navigation("Citas");
+                    b.Navigation("dates");
 
-                    b.Navigation("Pacientes");
+                    b.Navigation("goals");
 
-                    b.Navigation("SolicitudesCita");
-
-                    b.Navigation("solicitudPacientes");
+                    b.Navigation("notifications");
                 });
 
-            modelBuilder.Entity("Domain.Flor", b =>
+            modelBuilder.Entity("Domain.Question", b =>
                 {
-                    b.Navigation("Imagenes");
+                    b.Navigation("answers");
                 });
 
-            modelBuilder.Entity("Domain.HistoryTestModel", b =>
+            modelBuilder.Entity("Domain.Questionnaire", b =>
+                {
+                    b.Navigation("questionnaireResults");
+
+                    b.Navigation("questions");
+                });
+
+            modelBuilder.Entity("Domain.QuestionnairesHistory", b =>
                 {
                     b.Navigation("testInfoModels");
                 });
 
-            modelBuilder.Entity("Domain.Paciente", b =>
+            modelBuilder.Entity("Domain.Specialist", b =>
                 {
-                    b.Navigation("Cartas");
+                    b.Navigation("communityCarts");
 
-                    b.Navigation("Citas");
+                    b.Navigation("dateRequests");
 
-                    b.Navigation("FloresDelUsuario");
+                    b.Navigation("dates");
 
-                    b.Navigation("HistorialCuestionarios");
+                    b.Navigation("patients");
 
-                    b.Navigation("Notas");
-
-                    b.Navigation("Notificaciones");
-
-                    b.Navigation("Stickersds");
-
-                    b.Navigation("cuestionarioCompletados");
+                    b.Navigation("patientsRequests");
                 });
 
-            modelBuilder.Entity("Domain.Pregunta", b =>
+            modelBuilder.Entity("Domain.Test", b =>
                 {
-                    b.Navigation("Respuestas");
-                });
+                    b.Navigation("completeQuestionnaires");
 
-            modelBuilder.Entity("Domain.Publicacion", b =>
-                {
-                    b.Navigation("Comentarios");
-                });
+                    b.Navigation("questionnaires");
 
-            modelBuilder.Entity("Domain.Recomendacion", b =>
-                {
-                    b.Navigation("recomendacionCompletadas");
+                    b.Navigation("questionnairesHistory");
                 });
 
             modelBuilder.Entity("Domain.TestInfoModel", b =>
                 {
-                    b.Navigation("TestQuestionWithAnswers");
+                    b.Navigation("testQuestionWithAnswers");
+                });
+
+            modelBuilder.Entity("Domain.UserInterface", b =>
+                {
+                    b.Navigation("userFlowers");
+
+                    b.Navigation("userStickers");
                 });
 #pragma warning restore 612, 618
         }

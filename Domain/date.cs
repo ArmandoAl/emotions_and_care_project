@@ -30,7 +30,7 @@ namespace Domain
     }
 
     public class goalWithDate {
-        public Goal? Logro { get; set; } = new Goal();
+        public Goal? goal { get; set; } = new Goal();
         public int dateId { get; set; }
     }
 }

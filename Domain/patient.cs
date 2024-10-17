@@ -12,9 +12,9 @@ namespace Domain
         public Specialist? specialist { get; set; }
 
         //Caja de Notificaciones
-        public List<Notification> notifications { get; set; } = new List<Notification>();  
+        public List<NotificationModel> notifications { get; set; } = new List<NotificationModel>();  
 
-        public Schedule schedule { get; set; } = new Schedule();
+        public List<Date> dates { get; set; } = new List<Date>();
 
         public Diary diary { get; set; } = new Diary();
 
@@ -34,14 +34,6 @@ namespace Domain
     }
 
 
-
-    public class Schedule
-    {
-        [Key]
-        public int scheduleId { get; set; }
-        public List<Date> dates { get; set; } = new List<Date>();
-    }
-
     public class Diary
     {
         [Key]
@@ -53,11 +45,19 @@ namespace Domain
     {
         [Key]
         public int testId { get; set; }
-        public List<Questionnaire> questionnaires { get; set; } = new List<Questionnaire>();
+        public List<QuestionnaireForUser> questionnaires { get; set; } = new List<QuestionnaireForUser>();
 
         public List<CompleteQuestionnaires> completeQuestionnaires { get; set; } = new List<CompleteQuestionnaires>();
 
         public List<QuestionnairesHistory> questionnairesHistory { get; set; } = new List<QuestionnairesHistory>();
+    }
+
+    public class QuestionnaireForUser
+    {
+        [Key]
+        public int questionnaireForUserId { get; set; }
+        public int questionnaireId { get; set; }
+
     }
 
 
