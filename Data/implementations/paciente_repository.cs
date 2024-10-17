@@ -136,7 +136,8 @@ namespace Data.Implementations
                                 name = y.flower.name,
                                 images = y.flower.images,
 
-                            }
+                            },
+                            position = y.position,
                         }).ToList(),
                         userStickers = x.userInterface.userStickers.Select(y => new UserSticker
                         {
@@ -145,8 +146,9 @@ namespace Data.Implementations
                             {
                                 stickerId = y.sticker.stickerId,
                                 url = y.sticker.url,
-
-                            }
+                            },
+                            position = y.position
+                            
                         }).ToList(),
                         backgroundUrl = x.userInterface.backgroundUrl,
                         themeId = x.userInterface.themeId

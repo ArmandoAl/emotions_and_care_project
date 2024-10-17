@@ -81,7 +81,7 @@ namespace Data.Implementations
              .Options;
             using (var db = new DBContext(options: connectionOptions))
             {
-                var patient = db.patients.FirstOrDefault(x => x.userId == idPatient);
+                var patient = db.patients.Where(x => x.userId == idPatient).Include(x => x.diary).ThenInclude(x => x.notes).ThenInclude(x => x.emotion).FirstOrDefault();
 
                 if (patient == null) return null;
 
@@ -105,7 +105,7 @@ namespace Data.Implementations
             List<Note> notes = new List<Note>();
             using (var db = new DBContext(options: connectionOptions))
             {
-                var patient = db.patients.FirstOrDefault(x => x.userId == idPaciente);
+                var patient = db.patients.Where(x => x.userId == idPaciente).Include(x => x.diary).ThenInclude(x => x.notes).ThenInclude(x => x.emotion).FirstOrDefault();
 
                 if (patient == null) return null;
 

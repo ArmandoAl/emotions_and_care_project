@@ -19,12 +19,15 @@ namespace Business.Implementations
 
         private readonly IItemsRepository _itemsRepository;
 
-        public CuestionarioService(IQuestionnaireRepository cuestionarioService, INotificationRepository notificacionService, IGoalRepository logroService, IItemsRepository itemsRepository)
+        private readonly IPatientRepository _patientRepository;
+
+        public CuestionarioService(IQuestionnaireRepository cuestionarioService, INotificationRepository notificacionService, IGoalRepository logroService, IItemsRepository itemsRepository, IPatientRepository patientRepository)
         {
             _cuestionarioService = cuestionarioService;
             _notificacionService = notificacionService;
             _logroService = logroService;
             _itemsRepository = itemsRepository;
+            _patientRepository = patientRepository;
         }
         public int AddCuestionario(Questionnaire cuestionario)
         {
@@ -58,6 +61,8 @@ namespace Business.Implementations
                         var idLogro = _logroService.AddGoalPatient(idPaciente, 5);
 
                         bool addStickerResult = _itemsRepository.addStickerToPatient(6, idPaciente);
+
+                        _patientRepository.registerSet(idPaciente, "firstTestCompleted");
 
 
                         if (addStickerResult == false) return null;
