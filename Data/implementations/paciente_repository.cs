@@ -442,15 +442,13 @@ namespace Data.Implementations
             {
                 //primero vamos a encontrar al paciente y vamos a importar dede el paciente sus stickers, despues vamos a encontrar el sticker que queremos agregar y si esta en la lista de stickers del paciente, vamos a modificar la posicion del sticker, pe tenemos que tener cuidado al hacer eso, ya que primero tenemos que revisar si hay otro de sus sticker que tienen la misma posicion, si es asi, vamos a cambiar la posicion de ese sticker a null, y despues vamos a cambiar la posicion del sticker que queremos agregar
 
-                var thisPaciente = db.patients.Where(x => x.userId == idPatient).Include(x => x.userInterface).Include(x => x.userInterface.userStickers).ThenInclude(x => x.sticker).FirstOrDefault();
+                var thisPaciente = db.patients.Where(x => x.userId == idPatient).Include(x => x.userInterface).ThenInclude(x => x.userStickers).ThenInclude(x => x.sticker).FirstOrDefault();
 
                 Console.WriteLine(thisPaciente);
 
                 if (thisPaciente == null) return 0;
 
-                var userSticker = thisPaciente.userInterface.userStickers.FirstOrDefault(x => x.userStickerId == idUserSticker);
-
-                Console.WriteLine(userSticker);
+                var userSticker = thisPaciente.userInterface.userStickers.FirstOrDefault(x => x.sticker.stickerId == idUserSticker);
 
                 if (userSticker == null) return 0;
 
@@ -464,8 +462,6 @@ namespace Data.Implementations
                     }
                     userSticker.position = position;
                 }
-
-                Console.WriteLine(userSticker.userStickerId);
 
                 db.SaveChanges();
 
