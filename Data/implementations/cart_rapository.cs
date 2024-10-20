@@ -107,7 +107,7 @@ namespace Data.Implementations
             using (var db = new DBContext(options: connectionOptions))
             {
                 //cartas que no seas del usuario y que no esten expiradas
-                List<Cart> cartasTotales = db.carts.Where(c => c.transmitterId != idUsuario && c.state == CartState.expired).
+                List<Cart> cartasTotales = db.carts.Where(c => c.transmitterId != idUsuario && c.state == CartState.sent).
                       Include(c => c.cartAnswers).ToList();
 
                 var cartasSinMiRespuesta = new List<Cart>();
@@ -173,12 +173,16 @@ namespace Data.Implementations
                 .Options;
             using (var db = new DBContext(options: connectionOptions))
             {
-                cartas = db.carts.Where(c => c.state == CartState.expired).
+                cartas = db.carts.Where(c => c.state == CartState.sent).
                     ToList();
+
+                Console.WriteLine("cartas: " + cartas.Count);
+
                 foreach (var carta in cartas)
                 {
                     if (hasMoreThanSevenDays(carta))
                     {
+                        Console.WriteLine("carta: " + carta.cartId);
                         carta.state = CartState.expired;
                         db.carts.Update(carta);
                     }

@@ -146,6 +146,7 @@ namespace Data.Implementations
                         testQuestionWithAnswers = listQuestions
                     });
                     db.SaveChanges();
+               
                     return historialCuestionario.questionnairesHistoryId;
                 }
               
@@ -377,9 +378,9 @@ namespace Data.Implementations
         }
 
         public TestInfoModel? GetTestInfoModel(int patientId,
-            int idHistoralCuestionario, int idTestInfoModel)
+            int idCuestionario, int idTestInfoModel)
         {
-            if (idHistoralCuestionario <= 0) return null;
+            if (idCuestionario <= 0) return null;
 
             var connectionOptions = new DbContextOptionsBuilder<DBContext>()
              .UseSqlServer(Data.Helpers.Constants.ConnectionString)
@@ -392,11 +393,15 @@ namespace Data.Implementations
                 if (patient == null) return null;
 
 
-                var historialCuestionario = patient.test.questionnairesHistory.FirstOrDefault(x => x.questionnairesHistoryId == idHistoralCuestionario);
+                QuestionnairesHistory? historialCuestionario = patient.test.questionnairesHistory.FirstOrDefault(x => x.questionnaireId == idCuestionario);
 
                 if (historialCuestionario == null) return null;
 
-                return historialCuestionario.testInfoModels.FirstOrDefault(x => x.testInfoModelId == idTestInfoModel);
+                //return the last testInfoModel
+                var histoy = historialCuestionario.testInfoModels.OrderByDescending(x => x.testInfoModelId).FirstOrDefault();
+
+          
+                return histoy;
 
             }
         }

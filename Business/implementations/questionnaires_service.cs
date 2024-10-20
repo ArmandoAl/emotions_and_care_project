@@ -46,16 +46,19 @@ namespace Business.Implementations
 
         public GoalWithTestInfoModel? completarCuestionario(int idCuestionario, int idPaciente, List<TestQuestionForComplete> respuestas, bool isFirstTime)
         {
+
            if (idCuestionario <= 0 || idPaciente <= 0) return null;
 
             var result = _cuestionarioService.completarQuestionnaire(idCuestionario, idPaciente);
 
             if (result)
             {
+              
                 var idHistoralCuestionario = _cuestionarioService.AgregarHistorialQuestionnaire(idCuestionario, respuestas, idPaciente);
 
                 if (idHistoralCuestionario >= 0)
                 {
+                 
                 
                     if(isFirstTime) {
                         var idLogro = _logroService.AddGoalPatient(idPaciente, 5);
@@ -86,7 +89,6 @@ namespace Business.Implementations
                                 idPaciente,
                                 idCuestionario,
                                 idHistoralCuestionario
-                                    
                                 )!,
 
                             Logro = null
