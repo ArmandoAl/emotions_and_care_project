@@ -77,7 +77,7 @@ namespace API.Controllers
         {
             if (id < 1) return Task.FromResult<ActionResult>(BadRequest());
             var result = _service.registerSet(id, state);
-            if (result != "sucess") return Task.FromResult<ActionResult>(BadRequest());
+            if (result != "success") return Task.FromResult<ActionResult>(BadRequest());
             return Task.FromResult<ActionResult>(Ok(result));
         }
     }       
