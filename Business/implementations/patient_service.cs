@@ -82,5 +82,12 @@ namespace Business.Implementations
             return _service.registerSet(id, state);
 
         }
+
+        public int putStickeriInInterface(int idPatient, int idUserSticker, int position) {
+            
+            if (idPatient < 1 || idUserSticker < 1 || position < 1) { return 0; }
+            return _service.putStickeriInInterface(idPatient, idUserSticker, position);
+            
+         }
     }
 }

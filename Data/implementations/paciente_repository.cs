@@ -444,9 +444,13 @@ namespace Data.Implementations
 
                 var thisPaciente = db.patients.Where(x => x.userId == idPatient).Include(x => x.userInterface).Include(x => x.userInterface.userStickers).ThenInclude(x => x.sticker).FirstOrDefault();
 
+                Console.WriteLine(thisPaciente);
+
                 if (thisPaciente == null) return 0;
 
                 var userSticker = thisPaciente.userInterface.userStickers.FirstOrDefault(x => x.userStickerId == idUserSticker);
+
+                Console.WriteLine(userSticker);
 
                 if (userSticker == null) return 0;
 
@@ -460,6 +464,8 @@ namespace Data.Implementations
                     }
                     userSticker.position = position;
                 }
+
+                Console.WriteLine(userSticker.userStickerId);
 
                 db.SaveChanges();
 

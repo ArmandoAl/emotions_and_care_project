@@ -80,6 +80,17 @@ namespace API.Controllers
             if (result != "success") return Task.FromResult<ActionResult>(BadRequest());
             return Task.FromResult<ActionResult>(Ok(result));
         }
+
+        [HttpPut("{id}/putStickeriInInterface/{idUserSticker}/{position}")]
+        public Task<ActionResult> putStickeriInInterface(int id, int idUserSticker, int position)
+        {
+            if (id < 1) return Task.FromResult<ActionResult>(BadRequest());
+            var result = _service.putStickeriInInterface(id, idUserSticker, position);
+
+            if (result < 1) return Task.FromResult<ActionResult>(BadRequest());
+            return Task.FromResult<ActionResult>(Ok(result));
+        }
+
     }       
 }
 

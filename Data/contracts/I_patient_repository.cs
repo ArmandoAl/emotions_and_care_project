@@ -28,5 +28,8 @@ namespace Data.Contracts
         int agregarStickerDeUsuarioModel(int? index, int idUsuario);
 
         string registerSet(int patientId, string state);
+
+
+        int putStickeriInInterface(int idPatient, int idUserSticker, int position);
     }
 }

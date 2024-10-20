@@ -28,6 +28,8 @@ namespace Business.Contracts
        string? registerSet(
             int id,
             string state);
+
+        int putStickeriInInterface(int idPatient, int idUserSticker, int position);
         
     }
 }
