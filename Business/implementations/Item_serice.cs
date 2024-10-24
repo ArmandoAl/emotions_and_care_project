@@ -70,5 +70,10 @@ namespace Business.implementations
         {
             return _itemsRepository.putFlowerInInterface(id, flowerId);
         }
+
+        public int AddFlowersToPatient(int idPatient, int indexStart, int indexEnd)
+        {
+            return _itemsRepository.AddFlowersToPatient(idPatient, indexStart, indexEnd);
+        }
     }
 }

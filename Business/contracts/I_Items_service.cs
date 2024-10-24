@@ -21,5 +21,8 @@ namespace Business
         List<Flower> GetAllFlores();
 
         bool putFlowerInInterface(int id, int flowerId);
+
+        int AddFlowersToPatient(int idPatient, int indexStart, int indexEnd);
+
     }
 }

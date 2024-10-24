@@ -37,9 +37,10 @@ namespace Data.contracts
              int patientId,
             int stickerId, int? position);
 
-    
+        bool putFlowerInInterface(int id, int flowerId);
 
-    bool putFlowerInInterface(int id, int flowerId);
+
+        int AddFlowersToPatient(int idPatient, int indexStart, int indexEnd);
 
     }
 }

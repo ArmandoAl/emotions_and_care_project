@@ -293,6 +293,55 @@ namespace Data.Implementations
         }
 
 
+        public int AddFlowersToPatient(int idPatient, int indexStart, int indexEnd)
+{
+    if (idPatient <= 0 || indexStart < 0 || indexEnd < 0 || indexStart > indexEnd) 
+        return 0;
+
+    var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+        .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+        .Options;
+
+    using (var db = new DBContext(options: connectionOptions))
+    {
+        var patient = db.patients.FirstOrDefault(x => x.userId == idPatient);
+
+        if (patient == null) 
+            return 0;
+
+        var flowers = db.flowers.ToList();
+
+        if (flowers == null || flowers.Count == 0) 
+            return 0;
+
+        // Ensure indexEnd does not exceed the bounds of the flowers list
+        indexEnd = Math.Min(indexEnd, flowers.Count - 1);
+
+        for (int i = indexStart; i <= indexEnd; i++)
+        {
+            var flower = flowers[i];
+
+            if (flower == null) 
+                return 0;
+
+            patient.userInterface.userFlowers.Add(new UserFlower
+            {
+                flower = flower,
+                position = null,
+                state = 0
+            });
+        }
+
+        db.SaveChanges();
+
+        return 1;
+    }
+    }
+
+
+
+
+
 
 
         

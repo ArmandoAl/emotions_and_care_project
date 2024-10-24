@@ -71,5 +71,19 @@ namespace API.Controllers
             if (result == null) return NotFound();
             return Ok(result);
         }
+
+
+
+        [HttpPost("AddFlowersToPatient/{idPatient}/{indexStart}/{indexEnd}")] 
+        public ActionResult AddFlorToPatient([FromRoute] int idPatient, [FromRoute] int indexStart, [FromRoute] int indexEnd)
+        {
+            if (idPatient <= 0) return BadRequest();
+            var result = _itemsService.AddFlowersToPatient(idPatient, indexStart, indexEnd);
+            if (result == 0) return BadRequest();
+            return Ok(result);
+        }
+
+
+
     }
 }
