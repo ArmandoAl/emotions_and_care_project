@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 namespace Domain
 {
     public class AddPatient
     {
+//Puto
         public string name { get; set; } = "";
 
         public string mail { get; set; } = "";
