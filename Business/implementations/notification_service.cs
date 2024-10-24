@@ -45,7 +45,7 @@ namespace Business.Implementations
                         {
                             return notiList;
                         } else {
-                            if(noti.Titulo == "Buzon" && noti.Descripcion.StartsWith("Parece que tienes cartas sin abrir"))
+                            if(noti.Titulo == "Buzón" && noti.Descripcion.StartsWith("Parece que tienes cartas sin abrir"))
                             {
                                 return notiList;
                             } else {
@@ -99,7 +99,7 @@ namespace Business.Implementations
                 var notificacion = new NotificationModel
                 {
                     notificationType = NotificationType.ReminderNotification,
-                    Titulo = "Buzon",
+                    Titulo = "Buzón",
                     Descripcion = "Parece que tienes cartas sin abrir, revisalas en tu buzon de el apartado de comunidad"
                 };
 
