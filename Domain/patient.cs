@@ -83,6 +83,8 @@ namespace Domain
         public Flower flower { get; set; } = new Flower();
         public int state { get; set; }
 
+        public bool active { get; set; } = false;
+
         public int? position { get; set; }
     }
 

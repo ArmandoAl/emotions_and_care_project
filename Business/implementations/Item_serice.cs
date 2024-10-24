@@ -65,5 +65,10 @@ namespace Business.implementations
         {
             return _itemsRepository.GetSticker(id);
         }
+
+        public bool putFlowerInInterface(int id, int flowerId)
+        {
+            return _itemsRepository.putFlowerInInterface(id, flowerId);
+        }
     }
 }

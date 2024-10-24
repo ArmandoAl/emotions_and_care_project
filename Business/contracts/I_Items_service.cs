@@ -19,5 +19,7 @@ namespace Business
         List<Sticker> GetAllStickers();
 
         List<Flower> GetAllFlores();
+
+        bool putFlowerInInterface(int id, int flowerId);
     }
 }

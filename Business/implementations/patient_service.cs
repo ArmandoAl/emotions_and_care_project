@@ -1,4 +1,5 @@
 ﻿using Business.Contracts;
+using Data.contracts;
 using Data.Contracts;
 using Domain;
 using System;
@@ -13,9 +14,12 @@ namespace Business.Implementations
     {
         private readonly IPatientRepository _service;
 
-        public PatientService(IPatientRepository service)
+        private readonly IItemsRepository _itemsService;
+
+        public PatientService(IPatientRepository service, IItemsRepository itemsService)
         {
             _service = service;
+            _itemsService = itemsService;
         }
 
         public int Add(AddPatient paciente)
@@ -27,6 +31,21 @@ namespace Business.Implementations
             {
             return 0;        
             }
+
+
+           for (int i = 0; i < 4; i++)
+            {
+
+                Console.WriteLine("i: " + i);
+                Console.WriteLine("id: " + id);
+                bool result = _itemsService.putFlowerInInterface(id, i + 1);
+
+                if (!result)
+                {
+                    return 0;
+                }
+            }
+
             return id;
         }
 

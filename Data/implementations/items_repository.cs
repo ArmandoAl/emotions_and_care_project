@@ -248,7 +248,49 @@ namespace Data.Implementations
                 return true;
             }
 
-                }
+        }
+
+
+        public bool putFlowerInInterface(int id, int flowerId) {
+
+            Console.WriteLine("Id: " + id);
+            Console.WriteLine("FlowerId: " + flowerId);
+
+            if(flowerId <= 0 || id <= 0) return false;
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                        .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                        .Options;
+
+            using (var db = new DBContext(options: connectionOptions))
+            {
+
+                Console.WriteLine("Id: " + id);
+
+                var patient = db.patients.Where(x => x.userId == id).Include(x => x.userInterface).ThenInclude(x => x.userFlowers).FirstOrDefault();
+
+
+                Console.WriteLine("Patient: " + patient);
+
+                if(patient == null) return false;
+
+                var flower = db.flowers.FirstOrDefault(x => x.flowerId == flowerId);
+
+                Console.WriteLine("Flower: " + flower);
+
+                if(flower == null) return false;
+
+                patient.userInterface.userFlowers.Add(new UserFlower{
+                    flower = flower,
+                    position = null,
+                    state = 0,
+                });
+
+                db.SaveChanges();
+
+                return true;
+            }
+        }
 
 
 
