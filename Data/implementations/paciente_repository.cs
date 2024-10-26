@@ -14,13 +14,22 @@ namespace Data.Implementations
         public int Add(AddPatient patient)
         {
             if (patient == null) return 0;
+
+            // Email validation regex pattern
+            var emailRegex = new System.Text.RegularExpressions.Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+
+            if (!emailRegex.IsMatch(patient.mail))
+                throw new ArgumentException("Must enter a valid email address.");
+            
+            if (!emailRegex.IsMatch(patient.mail)) return -3; // Invalid email format
+
             var connectionOptions = new DbContextOptionsBuilder<DBContext>()
-              .UseSqlServer(Data.Helpers.Constants.ConnectionString)
-              .Options;
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
             using (var db = new DBContext(options: connectionOptions))
             {
                 var thisEmailExist = db.patients.FirstOrDefault(x => x.mail == patient.mail);
-
                 var thisNumberExist = db.patients.FirstOrDefault(x => x.phone == patient.phone);    
 
                 if (thisNumberExist != null) return -2;
@@ -29,7 +38,6 @@ namespace Data.Implementations
                 {
                     var isaEspacialistaEmail = db.specialists.FirstOrDefault(x => x.mail == patient.mail);
                     if (isaEspacialistaEmail != null) return -1;
-
 
                     var newpaciente = new Patient
                     {
@@ -43,14 +51,13 @@ namespace Data.Implementations
                         token = patient.token,
                         relationalToken = getTheFirstSixDigits(patient.token),
                         termsAndConditions = db.terms!.FirstOrDefault(x => x.termsAndConditionsId == patient.termsiD)!,
-                      
                     };
 
                     db.patients.Add(newpaciente);
                     db.SaveChanges();
                     return newpaciente.userId;
-
-                } else
+                }
+                else
                 {
                     return -1;
                 }
