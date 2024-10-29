@@ -40,8 +40,9 @@ namespace Data.Implementations
             public DbSet<Flower> flowers { get; set; } = null!;
 
 
-
             public DbSet<Recomendation> recomendation { get; set; } = null!;
+
+            public DbSet<Stage> stages { get; set; } = null!;
 
 
             public DBContext(DbContextOptions<DBContext> options) : base(options) { }

@@ -30,7 +30,27 @@ namespace Domain
 
         public string registerState { get; set; } = "register";
 
+       public Progress? progress { get; set; } = new Progress {
+            stage = 0,
+            lastDate = DateTime.Now,
+            begginDate = DateTime.Now 
+         };
+
         public UserInterface userInterface { get; set; } = new UserInterface();
+    }
+
+
+    public class Progress
+    {
+        [Key]
+        public int progressId { get; set; }
+
+        public int stage { get; set; } = 0;
+
+        public DateTime? lastDate { get; set; }
+
+        public DateTime? begginDate { get; set; }
+        
     }
 
 
