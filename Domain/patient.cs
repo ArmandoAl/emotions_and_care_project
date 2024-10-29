@@ -60,6 +60,8 @@ namespace Domain
 
     }
 
+    //Historial de cuestionarios completados
+
 
     public class UserInterface
     {
