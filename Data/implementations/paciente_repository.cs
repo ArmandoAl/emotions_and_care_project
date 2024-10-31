@@ -477,7 +477,151 @@ namespace Data.Implementations
 
 
         }
+
+        private readonly Dictionary<string, Func<int?, int?, int, bool>> progressFunctionMap = new Dictionary<string, Func<int?, int?, int, bool>> {
+            { "firstDiary", validateFirstDiary },
+            { "diary", validatediaryforDays}
+        };
+
+       private static bool validatediaryforDays(int? value, int? dayRange, int idPatient)
+        {
+            // Validaciones iniciales
+            if (value == null || dayRange == null || idPatient <= 0) return false;
+
+            // Configuración de la conexión a la base de datos
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+            
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                // Obtener el paciente y sus notas asociadas
+                var patient = db.patients
+                    .Where(x => x.userId == idPatient)
+                    .Include(x => x.diary)
+                    .ThenInclude(x => x.notes)
+                    .FirstOrDefault();
+
+                if (patient == null || patient.diary == null) return false;
+
+                // Fecha actual y límite de días
+                var currentDate = DateTime.Now;
+                var startDate = currentDate.AddDays(-dayRange.Value);
+
+                // Filtrar las notas dentro del rango de días
+                var recentNotes = patient.diary.notes
+                    .Where(x => x.dateCreated >= startDate && x.dateCreated <= currentDate)
+                    .ToList();
+
+                // Agrupar notas por día
+                var notesGroupedByDay = recentNotes
+                    .GroupBy(x => x.dateCreated.Date) // Agrupación por día (sin hora)
+                    .ToDictionary(g => g.Key, g => g.Count());
+
+                // Verificar que cada día tenga al menos la cantidad especificada de notas
+                for (var date = startDate.Date; date <= currentDate.Date; date = date.AddDays(1))
+                {
+                    // Verifica si hay suficientes notas para el día actual
+                    if (!notesGroupedByDay.TryGetValue(date, out var notesCount) || notesCount < value)
+                    {
+                        return false; // Si algún día no cumple, retornar false
+                    }
+                }
+
+                // Si todos los días cumplen con el mínimo de notas, retornar true
+                return true;
+            }
+        }
+
+        private static bool validateFirstDiary(int? value, int? dayRange, int idPatient) {
+            if(value == null || dayRange == null || idPatient <= 0) return false;
+
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+              .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+              .Options;
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var thisPaciente = db.patients.Where(x => x.userId == idPatient).Include(x => x.diary).ThenInclude(x => x.notes).FirstOrDefault();
+
+                if (thisPaciente == null) return false;
+
+                var diary = thisPaciente.diary;
+
+                return diary.notes.Count >= 1;
+            }
+
+           
+        }
+
+        private bool validateProgress(string name, int? value, int? dayRange, int idPatient) {
+            if (progressFunctionMap.ContainsKey(name)) {
+                return progressFunctionMap[name](value, dayRange, idPatient);
+            }
+            return false;
+        }
+
+
+
+        public bool canGrowFlower(int idPatient) {
+            if (idPatient <= 0) return false;
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+              .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+              .Options;
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var thisPaciente = db.patients.Where(x => x.userId == idPatient).Include(x => x.progress).FirstOrDefault();
+
+                var stages = db.stages.Include(x => x.stageRequests).ToList();
+
+                List<StageRequest> stagesRequests = stages[thisPaciente!.progress!.stage!].stageRequests;
+
+                bool canGrow = true;
+
+                foreach (var stageRequest in stagesRequests) {
+                    if (validateProgress(stageRequest.name, stageRequest.value, stageRequest.dayRange, thisPaciente.userId) == false) {
+                        canGrow = false;
+                        return canGrow;
+                    }
+                }
+
+                return canGrow;
+            }
+        }
+    
+
+    public bool growStage(int idPatient) {
+        if (idPatient <= 0) return false;
+
+        var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+          .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+          .Options;
+        using (var db = new DBContext(options: connectionOptions))
+        {
+            var thisPaciente = db.patients.Where(x => x.userId == idPatient).Include(x => x.progress).FirstOrDefault();
+
+            if (thisPaciente == null) return false;
+
+            thisPaciente.progress!.stage = thisPaciente.progress!.stage! + 1;
+
+            db.SaveChanges();
+
+            return true;
+        }
     }
+
+
+}
+    
+    
 }
 
 
+//crea un mapa que retorne funciones, me explico, si el name es firstDiary, lo que retornas es la funcion validateFirstDiary, y asi con todos los nombres de los stageRequest
+//despues, en el metodo canGrowFlower, vas a iterar sobre todos los stageRequest, y vas a llamar a la funcion que corresponde al nombre del stageRequest, si alguna de las funciones retorna false, entonces retornas false, si todas las funciones retornan true, entonces retornas true
+
+
+
+
+ 

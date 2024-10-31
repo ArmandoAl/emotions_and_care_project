@@ -56,7 +56,7 @@ namespace API.Controllers
             return Ok(result);
         }
 
-        [HttpPost]
+        [HttpPost("AddRequest")]
         public ActionResult AddRequest(StageRequest stageRequest)
         {
             if (stageRequest == null) return BadRequest();

@@ -24,9 +24,8 @@ namespace Domain
         public int stageId { get; set; }
         public string name { get; set; } = "";
 
-        public int? value { get; set; } = 0;
+        public int? value { get; set; } = 1;
 
-        public int? dayRange { get; set; } = 0;
+        public int? dayRange { get; set; } = 7;
     }
-
 }

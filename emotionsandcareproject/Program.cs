@@ -31,8 +31,6 @@ builder.Services.AddScoped<IQuestionnaireService, CuestionarioService>();
 builder.Services.AddScoped<IQuestionnaireRepository, CuestionarioRepository>();
 builder.Services.AddScoped<ITermsService, TermsService>();
 builder.Services.AddScoped<ITermsAndConditionsRepository, TerminosYCondicionesRepository>();
-
-
 builder.Services.AddScoped<INoteService, NotaService>();
 builder.Services.AddScoped<INoteRepository, NoteRepository>();
 builder.Services.AddScoped<IEmotionSerrvice, EmotionService>();
@@ -47,6 +45,8 @@ builder.Services.AddScoped<IItemsRepository, ItemsRepository>();
 builder.Services.AddScoped<IItemsService, ItemsSerice>();
 builder.Services.AddScoped<IGoalRepository, GoalRepository>();
 builder.Services.AddScoped<IGoalService, LogroService>();
+builder.Services.AddScoped<IStageService, StageService>();
+builder.Services.AddScoped<IStagesRepository, StageRepository>();
 
 
 builder.Services.AddScoped<IDBRepository, DBReporitory>();

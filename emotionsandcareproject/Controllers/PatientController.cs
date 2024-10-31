@@ -91,6 +91,15 @@ namespace API.Controllers
             return Task.FromResult<ActionResult>(Ok(result));
         }
 
+        [HttpGet("{id}/canGrowFlower")]
+        public Task<ActionResult> canGrowFlower(int id)
+        {
+            if (id < 1) return Task.FromResult<ActionResult>(BadRequest());
+            var result = _service.canGrowFlower(id);
+            if (result == false) return Task.FromResult<ActionResult>(NotFound());
+            return Task.FromResult<ActionResult>(Ok(result));
+        }
+
     }       
 }
 

@@ -108,5 +108,25 @@ namespace Business.Implementations
             return _service.putStickeriInInterface(idPatient, idUserSticker, position);
             
          }
+        
+        public bool canGrowFlower(int idPatient) {
+            if (idPatient < 1) { return false; }
+
+            
+            bool can = _service.canGrowFlower(idPatient);
+
+            if (can)
+            {
+               _service.growStage(idPatient);   
+            }
+
+            return can;
+        }
+
+        public bool growStage(int idPatient) {
+            if (idPatient < 1) { return false; }
+            return _service.growStage(idPatient);
+
+        }
     }
 }

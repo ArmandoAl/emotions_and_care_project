@@ -4,7 +4,7 @@
 
 namespace Data.Migrations
 {
-    public partial class stages : Migration
+    public partial class InitialMigration4 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

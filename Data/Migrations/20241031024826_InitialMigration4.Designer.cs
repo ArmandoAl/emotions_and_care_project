@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20241024050158_inti2")]
-    partial class inti2
+    [Migration("20241031024826_InitialMigration4")]
+    partial class InitialMigration4
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -479,6 +479,9 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("progressId")
+                        .HasColumnType("int");
+
                     b.Property<string>("registerState")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -514,6 +517,8 @@ namespace Data.Migrations
 
                     b.HasIndex("diaryId");
 
+                    b.HasIndex("progressId");
+
                     b.HasIndex("settingsId");
 
                     b.HasIndex("specialistuserId");
@@ -548,6 +553,28 @@ namespace Data.Migrations
                     b.HasIndex("patientuserId");
 
                     b.ToTable("patientRequest");
+                });
+
+            modelBuilder.Entity("Domain.Progress", b =>
+                {
+                    b.Property<int>("progressId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("progressId"), 1L, 1);
+
+                    b.Property<DateTime?>("begginDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("lastDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("stage")
+                        .HasColumnType("int");
+
+                    b.HasKey("progressId");
+
+                    b.ToTable("Progress");
                 });
 
             modelBuilder.Entity("Domain.Question", b =>
@@ -828,6 +855,47 @@ namespace Data.Migrations
                     b.HasIndex("termsAndConditionsId");
 
                     b.ToTable("specialists");
+                });
+
+            modelBuilder.Entity("Domain.Stage", b =>
+                {
+                    b.Property<int>("stageId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("stageId"), 1L, 1);
+
+                    b.HasKey("stageId");
+
+                    b.ToTable("stages");
+                });
+
+            modelBuilder.Entity("Domain.StageRequest", b =>
+                {
+                    b.Property<int>("stageRequestId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("stageRequestId"), 1L, 1);
+
+                    b.Property<int?>("dayRange")
+                        .HasColumnType("int");
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("stageId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("value")
+                        .HasColumnType("int");
+
+                    b.HasKey("stageRequestId");
+
+                    b.HasIndex("stageId");
+
+                    b.ToTable("StageRequest");
                 });
 
             modelBuilder.Entity("Domain.Sticker", b =>
@@ -1112,6 +1180,10 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Domain.Progress", "progress")
+                        .WithMany()
+                        .HasForeignKey("progressId");
+
                     b.HasOne("Domain.SettingsP", "settings")
                         .WithMany()
                         .HasForeignKey("settingsId")
@@ -1141,6 +1213,8 @@ namespace Data.Migrations
                         .IsRequired();
 
                     b.Navigation("diary");
+
+                    b.Navigation("progress");
 
                     b.Navigation("settings");
 
@@ -1205,6 +1279,15 @@ namespace Data.Migrations
                         .IsRequired();
 
                     b.Navigation("termsAndConditions");
+                });
+
+            modelBuilder.Entity("Domain.StageRequest", b =>
+                {
+                    b.HasOne("Domain.Stage", null)
+                        .WithMany("stageRequests")
+                        .HasForeignKey("stageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.TestInfoModel", b =>
@@ -1305,6 +1388,11 @@ namespace Data.Migrations
                     b.Navigation("patients");
 
                     b.Navigation("patientsRequests");
+                });
+
+            modelBuilder.Entity("Domain.Stage", b =>
+                {
+                    b.Navigation("stageRequests");
                 });
 
             modelBuilder.Entity("Domain.Test", b =>

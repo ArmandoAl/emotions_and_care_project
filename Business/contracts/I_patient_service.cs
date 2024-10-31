@@ -30,6 +30,10 @@ namespace Business.Contracts
             string state);
 
         int putStickeriInInterface(int idPatient, int idUserSticker, int position);
-        
+
+        bool canGrowFlower(int idPatient);
+
+        bool growStage(int idPatient);
+
     }
 }
