@@ -44,6 +44,8 @@ namespace Data.Implementations
 
             public DbSet<Stage> stages { get; set; } = null!;
 
+            public DbSet<RecomendationComplete> recomendationComplete { get; set; } = null!;
+
 
             public DBContext(DbContextOptions<DBContext> options) : base(options) { }
         }

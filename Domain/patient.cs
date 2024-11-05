@@ -14,6 +14,8 @@ namespace Domain
         //Caja de Notificaciones
         public List<NotificationModel> notifications { get; set; } = new List<NotificationModel>();  
 
+        public List<RecomendationComplete> completeRecomendations { get; set; } = new List<RecomendationComplete>();
+
         public List<Date> dates { get; set; } = new List<Date>();
 
         public Diary diary { get; set; } = new Diary();
@@ -39,6 +41,13 @@ namespace Domain
         public UserInterface userInterface { get; set; } = new UserInterface();
     }
 
+    public class  RecomendationComplete {
+        [Key]
+        public int recomendationCompleteId { get; set; }
+        public int recomendationId { get; set; }
+        public DateTime dateCompleted { get; set; }
+    }
+    
 
     public class Progress
     {
