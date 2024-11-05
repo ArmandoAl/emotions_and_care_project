@@ -754,6 +754,60 @@ namespace Data.Implementations
         }
     }
 
+    public bool reviewCanCheck(int idPatient) {
+        if (idPatient <= 0) return false;
+
+        var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+          .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+          .Options;
+        using (var db = new DBContext(options: connectionOptions))
+        {
+            var thisPaciente = db.patients.Where(x => x.userId == idPatient).Include(x => x.progress).FirstOrDefault();
+
+            //revisa cuando fue la ultima vez que se actualizo el progreso osea lastDate, si tiene mas de 7 dias de eso, entonces se retorna true
+
+            if (thisPaciente == null) return false;
+
+            var currentDate = DateTime.Now;
+
+            var lastDate = thisPaciente.progress!.lastDate;
+
+            var begginDate = thisPaciente.progress!.begginDate;
+
+            if (lastDate == null) return true;
+
+            if(begginDate == null) return true;
+
+            //si begginDate es igual a lastDate, entonces no se ha actualizado el progreso, por lo tanto se retorna true
+            if (begginDate == lastDate) return true;
+
+            var days = (currentDate - lastDate!.Value).TotalDays;
+
+            return days >= 7;
+
+        }
+    }
+
+    public bool updateLastProgressDate(int idPatient) {
+        if (idPatient <= 0) return false;
+
+        var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+          .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+          .Options;
+        using (var db = new DBContext(options: connectionOptions))
+        {
+            var thisPaciente = db.patients.Where(x => x.userId == idPatient).Include(x => x.progress).FirstOrDefault();
+
+            if (thisPaciente == null) return false;
+
+            thisPaciente.progress!.lastDate = DateTime.Now;
+
+            db.SaveChanges();
+
+            return true;
+        }
+    }
+
 
 }
     

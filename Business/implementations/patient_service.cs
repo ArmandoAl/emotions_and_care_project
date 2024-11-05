@@ -112,12 +112,16 @@ namespace Business.Implementations
         public bool canGrowFlower(int idPatient) {
             if (idPatient < 1) { return false; }
 
+
+            bool canReview = _service.reviewCanCheck(idPatient);
+
             
             bool can = _service.canGrowFlower(idPatient);
 
             if (can)
             {
                _service.growStage(idPatient);   
+               _service.updateLastProgressDate(idPatient);
             }
 
             return can;

@@ -37,5 +37,9 @@ namespace Data.Contracts
 
         bool growStage(int idPatient);
 
+        bool reviewCanCheck(int idPatient);
+
+        bool updateLastProgressDate(int idPatient); 
+
     }
 }
