@@ -480,8 +480,20 @@ namespace Data.Implementations
 
         private readonly Dictionary<string, Func<int?, int?, int, bool>> progressFunctionMap = new Dictionary<string, Func<int?, int?, int, bool>> {
             { "firstDiary", validateFirstDiary },
-            { "diary", validatediaryforDays}
+            { "diary", validatediaryforDays},
+            //{ "recommendations", validateRecommendationCount },
+            //{ "relateSpecialist", validateRelateSpecialist },
+            //{ "goals", validateGoals }
+            /*,
+            { "questionnaire", validateQuestionnaire },
+            { "sticker", validateSticker },
+            { "flower", validateFlower },
+            { "stickerInInterface", validateStickerInInterface },
+            { "flowerInInterface", validateFlowerInInterface },
+            { "registerState", validateRegisterState }
+            */
         };
+
 
        private static bool validatediaryforDays(int? value, int? dayRange, int idPatient)
         {
@@ -533,6 +545,8 @@ namespace Data.Implementations
             }
         }
 
+        //stageRequestId: 4
+
         private static bool validateFirstDiary(int? value, int? dayRange, int idPatient) {
             if(value == null || dayRange == null || idPatient <= 0) return false;
 
@@ -554,14 +568,61 @@ namespace Data.Implementations
            
         }
 
+        //stageRequestId: 5
+        // Una funcion que valida el numero de recomendaciones hechos por el paciente
+
+        /*
+        private static bool validateRecommendationCount(int? value, int? dayRange, int idPatient)
+        {
+            if (value == null || dayRange == null || idPatient <= 0) return false;
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+              .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+              .Options;
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var patient = db.patients
+                    .Where(x => x.userId == idPatient)
+                    .Include(x => x.recomendations)
+                    .FirstOrDefault();
+
+                return patient != null && patient.recomendations.Count >= value;
+            }
+        }
+
+        //stageRequestId: 6
+        // El usuario se vincula con su especialista
+        private static bool validateRelateSpecialist(int? value, int? dayRange, int idPatient)
+        {
+            if (value == null || dayRange == null || idPatient <= 0) return false;
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+              .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+              .Options;
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var patient = db.patients
+                    .Where(x => x.userId == idPatient)
+                    .Include(x => x.specialist)
+                    .FirstOrDefault();
+
+                return patient != null && patient.specialist != null;
+            }
+        }
+
+        //stageRequestId: 7
+        // El usuario tiene al menos un objetivo
+
+        */
+
+
+
         private bool validateProgress(string name, int? value, int? dayRange, int idPatient) {
             if (progressFunctionMap.ContainsKey(name)) {
                 return progressFunctionMap[name](value, dayRange, idPatient);
             }
             return false;
         }
-
-
 
         public bool canGrowFlower(int idPatient) {
             if (idPatient <= 0) return false;
