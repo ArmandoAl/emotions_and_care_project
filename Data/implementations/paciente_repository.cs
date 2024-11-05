@@ -132,6 +132,7 @@ namespace Data.Implementations
                     modifiedDate = DateTime.Now,
                     termsAndConditions = x.termsAndConditions,
                     settings = x.settings,
+                    progress = x.progress,
                     userInterface = new UserInterface
                     {
                         userInterfaceId = x.userInterface.userInterfaceId,
@@ -479,20 +480,99 @@ namespace Data.Implementations
         }
 
         private readonly Dictionary<string, Func<int?, int?, int, bool>> progressFunctionMap = new Dictionary<string, Func<int?, int?, int, bool>> {
+            {"patientRegister" , validateRegisterPatient},
+            {"firstTestComplete", validateFirstTestComplete},
+            {"tutorialCompleted", validateTutorialCompleted},
             { "firstDiary", validateFirstDiary },
+             {"oneRecommendation", validateOneRecommendation},
+            {"relateSpecialist", validateRelateSpecialist},
             { "diary", validatediaryforDays},
-            //{ "recommendations", validateRecommendationCount },
-            //{ "relateSpecialist", validateRelateSpecialist },
-            //{ "goals", validateGoals }
-            /*,
-            { "questionnaire", validateQuestionnaire },
-            { "sticker", validateSticker },
-            { "flower", validateFlower },
-            { "stickerInInterface", validateStickerInInterface },
-            { "flowerInInterface", validateFlowerInInterface },
-            { "registerState", validateRegisterState }
-            */
+           
         };
+
+        private static bool validateRelateSpecialist(int? value, int? dayRange, int idPatient) {
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+              .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+              .Options;
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var patient = db.patients
+                    .Where(x => x.userId == idPatient)
+                    .Include(x => x.specialist)
+                    .FirstOrDefault();
+
+                return patient != null && patient.specialist != null;
+            }
+        }
+
+        private static bool validateOneRecommendation(int? value, int? dayRange, int idPatient) {
+        
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+              .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+              .Options;
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var patient = db.patients
+                    .Where(x => x.userId == idPatient)
+                    .Include(x => x.completeRecomendations)
+                    .FirstOrDefault();
+
+                return patient != null && patient.completeRecomendations.Count >= value;
+            }
+        }
+
+        private static bool validateTutorialCompleted(int? value, int? dayRange, int idPatient) {
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+              .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+              .Options;
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var patient = db.patients
+                    .Find(idPatient);
+
+                if(patient == null) return false;
+
+                
+                var status = patient.registerState;
+
+                return status == "registerSuccess";
+
+            }
+        }
+
+        private static bool validateFirstTestComplete(int? value, int? dayRange, int idPatient) {
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+              .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+              .Options;
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var patient = db.patients
+                    .Where(x => x.userId == idPatient)
+                    .Include(x => x.test).ThenInclude(x => x.completeQuestionnaires);
+
+                var completedTests = patient.SelectMany(x => x.test.completeQuestionnaires).ToList();
+
+                return completedTests.Count >= 1;
+            }
+        }
+    
+
+        private static bool validateRegisterPatient(int? value, int? dayRange, int idPatient) {
+    
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+              .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+              .Options;
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var patient = db.patients
+                    .Where(x => x.userId == idPatient)
+                    ;
+
+                return patient != null;
+            }
+        }
 
 
        private static bool validatediaryforDays(int? value, int? dayRange, int idPatient)
@@ -548,10 +628,8 @@ namespace Data.Implementations
         //stageRequestId: 4
 
         private static bool validateFirstDiary(int? value, int? dayRange, int idPatient) {
-            if(value == null || dayRange == null || idPatient <= 0) return false;
-
-
-            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+          
+         var connectionOptions = new DbContextOptionsBuilder<DBContext>()
               .UseSqlServer(Data.Helpers.Constants.ConnectionString)
               .Options;
             using (var db = new DBContext(options: connectionOptions))
@@ -561,6 +639,8 @@ namespace Data.Implementations
                 if (thisPaciente == null) return false;
 
                 var diary = thisPaciente.diary;
+
+      
 
                 return diary.notes.Count >= 1;
             }
@@ -618,7 +698,9 @@ namespace Data.Implementations
 
 
         private bool validateProgress(string name, int? value, int? dayRange, int idPatient) {
+
             if (progressFunctionMap.ContainsKey(name)) {
+      
                 return progressFunctionMap[name](value, dayRange, idPatient);
             }
             return false;

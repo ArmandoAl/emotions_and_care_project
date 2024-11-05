@@ -24,7 +24,6 @@ namespace Domain
        public List<Cart> carts { get; set; } = new List<Cart>();
 
         public Test test { get; set; } = new Test();
-
         //Configuracion
         public SettingsP settings { get; set; } = new SettingsP();
 
@@ -47,7 +46,7 @@ namespace Domain
         public int recomendationId { get; set; }
         public DateTime dateCompleted { get; set; }
     }
-    
+
 
     public class Progress
     {
