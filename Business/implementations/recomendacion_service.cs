@@ -23,6 +23,11 @@ namespace Business.Implementations
             return _recomendacionRepository.Add(recomendacion);
         }
 
+        public bool recomendationCompleted(int idRecomendation, int idUsuario){
+            if (idRecomendation <= 0 || idUsuario <= 0) return false;
+            return _recomendacionRepository.recomendationCompleted(idRecomendation, idUsuario);
+        }
+
         // public bool AddRecomendacionCompletada(int idRecomendacion, int idUsuario)
         // {
         //     if (idRecomendacion <= 0 || idUsuario <= 0) return false;

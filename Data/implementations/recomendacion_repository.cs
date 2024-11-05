@@ -95,6 +95,38 @@ namespace Data.Implementations
             }
         }
 
+        public bool recomendationCompleted(int idRecomendation, int idUsuario)
+        {
+            if (idRecomendation <= 0 || idUsuario <= 0) return false;
+
+            Console.WriteLine("idRecomendation: " + idRecomendation);
+            Console.WriteLine("idUsuario: " + idUsuario);
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+          .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+          .Options;
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var recomendation = db.recomendation.Find(idRecomendation);
+                Console.WriteLine("recomendation: " + recomendation);
+                if (recomendation == null) return false;
+                var usuario = db.patients.FirstOrDefault(u => u.userId == idUsuario);
+                if (usuario == null) return false;
+                var recomendationComplete1 = new RecomendationComplete
+                {
+                    recomendationId = idRecomendation,
+                    dateCompleted = DateTime.Now
+
+                };
+
+                usuario.completeRecomendations.Add(recomendationComplete1);
+                db.patients.Update(usuario);
+                db.SaveChanges();
+
+                return true;
+            }
+        }
+
         public bool Update(Recomendation recomendation)
         {
             if (recomendation == null) return false;

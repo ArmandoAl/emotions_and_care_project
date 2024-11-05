@@ -19,6 +19,8 @@ namespace Business.Contracts
 
         bool Delete(int idRecomendacion);
 
+        bool recomendationCompleted(int idRecomendation, int idUsuario);
+
         // bool AddRecomendacionCompletada(int idRecomendacion, int idUsuario);
     }
 }

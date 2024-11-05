@@ -50,6 +50,15 @@ namespace API.Controllers
             _recomendacionService.Delete(id);
             return Ok();
         }
+
+        [HttpPost("{recommendationId}/recomendationCompleted/{userId}")]
+        public IActionResult recomendationCompleted(int recommendationId, int userId)
+        {
+            if (recommendationId <= 0 || userId <= 0) return BadRequest();
+            Console.WriteLine("idRecomendation: " + recommendationId);
+            Console.WriteLine("idUsuario: " + userId);
+            return Ok(_recomendacionService.recomendationCompleted(recommendationId, userId));
+        }
     }
 
 }
