@@ -7,11 +7,18 @@ using System.Threading.Tasks;
 
 namespace Domain
 {
+    // Represents a request for a date.
     public class DateRequest
     {
+        // The unique identifier for the DateRequest. 
+        // This property is marked as the primary key for the database.
         [Key]
         public int dateRequestId { get; set; }
 
+        // The requested date (Cita). 
+        // This is an optional field (nullable DateTime).
+        // If no date is provided, it will be null.
         public Date? Cita { get; set; }
     }
 }
+
