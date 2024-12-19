@@ -10,113 +10,138 @@ using System.Threading.Tasks;
 namespace Data.Implementations
 {
     public class PacienteRepository : IPatientRepository
+{
+    // Adds a new patient to the database.
+    public int Add(AddPatient patient)
     {
-        public int Add(AddPatient patient)
-        {
-            if (patient == null) return 0;
+        if (patient == null) return 0;
 
-            // Email validation regex pattern
-            var emailRegex = new System.Text.RegularExpressions.Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+        // Email validation regex pattern
+        var emailRegex = new System.Text.RegularExpressions.Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
 
-            if (!emailRegex.IsMatch(patient.mail))
-                throw new ArgumentException("Must enter a valid email address.");
-            
-            if (!emailRegex.IsMatch(patient.mail)) return -3; // Invalid email format
-
-            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
-                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
-                .Options;
-
-            using (var db = new DBContext(options: connectionOptions))
-            {
-                var thisEmailExist = db.patients.FirstOrDefault(x => x.mail == patient.mail);
-                var thisNumberExist = db.patients.FirstOrDefault(x => x.phone == patient.phone);    
-
-                if (thisNumberExist != null) return -2;
-
-                if (thisEmailExist == null)
-                {
-                    var isaEspacialistaEmail = db.specialists.FirstOrDefault(x => x.mail == patient.mail);
-                    if (isaEspacialistaEmail != null) return -1;
-
-                    var newpaciente = new Patient
-                    {
-                        name = patient.name,
-                        mail = patient.mail,
-                        password = patient.password,
-                        phone = patient.phone,
-                        bornDate = patient.bornDate,
-                        age = getEdadFromBirthDate(patient.bornDate),
-                        sex = patient.sex,
-                        token = patient.token,
-                        relationalToken = getTheFirstSixDigits(patient.token),
-                        termsAndConditions = db.terms!.FirstOrDefault(x => x.termsAndConditionsId == patient.termsiD)!,
-                    };
-
-                    db.patients.Add(newpaciente);
-                    db.SaveChanges();
-                    return newpaciente.userId;
-                }
-                else
-                {
-                    return -1;
-                }
-            }
-        }
-
+        // Check if the email is in a valid format
+        if (!emailRegex.IsMatch(patient.mail))
+            throw new ArgumentException("Must enter a valid email address.");
         
-        private int getEdadFromBirthDate(DateTime birthDate)
+        // Check if the email format is correct
+        if (!emailRegex.IsMatch(patient.mail)) return -3; // Invalid email format
+
+        var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+            .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+            .Options;
+
+        using (var db = new DBContext(options: connectionOptions))
         {
-            DateTime now = DateTime.Now;
-            int age = now.Year - birthDate.Year;
-            if (now.Month < birthDate.Month || (now.Month == birthDate.Month && now.Day < birthDate.Day))
+            // Check if the email already exists for another patient
+            var thisEmailExist = db.patients.FirstOrDefault(x => x.mail == patient.mail);
+
+            // Check if the phone number already exists for another patient
+            var thisNumberExist = db.patients.FirstOrDefault(x => x.phone == patient.phone);    
+
+            // If the phone number exists, return error code -2
+            if (thisNumberExist != null) return -2;
+
+            // If the email doesn't exist
+            if (thisEmailExist == null)
             {
-                age--;
+                // Check if the email is associated with a specialist
+                var isaEspacialistaEmail = db.specialists.FirstOrDefault(x => x.mail == patient.mail);
+                if (isaEspacialistaEmail != null) return -1;
+
+                // Create a new patient entity
+                var newpaciente = new Patient
+                {
+                    name = patient.name,
+                    mail = patient.mail,
+                    password = patient.password,
+                    phone = patient.phone,
+                    bornDate = patient.bornDate,
+                    age = getEdadFromBirthDate(patient.bornDate), // Get age from birth date
+                    sex = patient.sex,
+                    token = patient.token,
+                    relationalToken = getTheFirstSixDigits(patient.token), // Generate relational token
+                    termsAndConditions = db.terms!.FirstOrDefault(x => x.termsAndConditionsId == patient.termsiD)!,
+                };
+
+                // Add the new patient to the database and save changes
+                db.patients.Add(newpaciente);
+                db.SaveChanges();
+                return newpaciente.userId;
             }
-            return age;
+            else
+            {
+                // If the email already exists, return error code -1
+                return -1;
+            }
+        }
+    }
+
+    // Method to calculate the patient's age based on their birth date
+    private int getEdadFromBirthDate(DateTime birthDate)
+    {
+        DateTime now = DateTime.Now;
+        int age = now.Year - birthDate.Year;
+
+        // Adjust age if the birthday hasn't occurred yet this year
+        if (now.Month < birthDate.Month || (now.Month == birthDate.Month && now.Day < birthDate.Day))
+        {
+            age--;
         }
 
-        private string getTheFirstSixDigits(string token)
-        {
-            //before return the first six digits, we need to verify if that six digits are not already in use
-            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
-              .UseSqlServer(Data.Helpers.Constants.ConnectionString)
-              .Options;
-            using (var db = new DBContext(options: connectionOptions))
-            {
-                var posibleRelationalToken = token.Substring(0, 6);
+        return age;
+    }
 
-                var thisTokenExist = db.patients.FirstOrDefault(x => x.relationalToken == posibleRelationalToken);
-                if (thisTokenExist == null)
-                {
-                    return posibleRelationalToken;
-                }
-                else
-                {
-                    return getTheFirstSixDigits(token.Substring(1, token.Length - 1));
-                }
+    // Method to generate the first six digits of the relational token
+    // It recursively checks to make sure the token isn't already in use
+    private string getTheFirstSixDigits(string token)
+    {
+        var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+            .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+            .Options;
+        using (var db = new DBContext(options: connectionOptions))
+        {
+            var posibleRelationalToken = token.Substring(0, 6);
+
+            // Check if the first six digits of the token already exist in the database
+            var thisTokenExist = db.patients.FirstOrDefault(x => x.relationalToken == posibleRelationalToken);
+            if (thisTokenExist == null)
+            {
+                // If it doesn't exist, return the six digits
+                return posibleRelationalToken;
+            }
+            else
+            {
+                // If it exists, recursively call the method with a shifted substring
+                return getTheFirstSixDigits(token.Substring(1, token.Length - 1));
             }
         }
+    }
 
+    // Retrieves a patient by their user ID from the database, including related data such as goals, user interface, and specialist.
+    public Patient? Get(int id)
+    {
+        if (id <= 0) return null;
 
-        public Patient? Get(int id)
+        var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+            .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+            .Options;
+        using (var db = new DBContext(options: connectionOptions))
         {
-            if (id <= 0) return null;
+            // Retrieve additional information from related tables like stickers, flowers, and goals
+            var stickers = db.stickers.ToList();
+            var flowers = db.flowers.ToList();
 
-            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
-              .UseSqlServer(Data.Helpers.Constants.ConnectionString)
-              .Options;
-            using (var db = new DBContext(options: connectionOptions))
-            {
-                var stickers = db.stickers.ToList();
-                var flowers = db.flowers.ToList();
-
-                return db.patients.Where(x => x.userId == id).Include(x => x.specialist).Include(x => x.goals).Include(x => x.userInterface
-                ).Include(x => x.userInterface.userFlowers).Include(x => x.userInterface.userStickers).
-                Include(x => x.settings).
-                Include(x => x.termsAndConditions).Select
-                    (x => new Patient
-                    {
+            // Return the patient with all their related information
+            return db.patients.Where(x => x.userId == id)
+                .Include(x => x.specialist)
+                .Include(x => x.goals)
+                .Include(x => x.userInterface)
+                .Include(x => x.userInterface.userFlowers)
+                .Include(x => x.userInterface.userStickers)
+                .Include(x => x.settings)
+                .Include(x => x.termsAndConditions)
+                .Select(x => new Patient
+                {
                     userId = x.userId,
                     name = x.name,
                     mail = x.mail,
@@ -143,7 +168,6 @@ namespace Data.Implementations
                                 flowerId = y.flower.flowerId,
                                 name = y.flower.name,
                                 images = y.flower.images,
-
                             },
                             position = y.position,
                         }).ToList(),
@@ -156,12 +180,9 @@ namespace Data.Implementations
                                 url = y.sticker.url,
                             },
                             position = y.position
-                            
                         }).ToList(),
                         backgroundUrl = x.userInterface.backgroundUrl,
                         themeId = x.userInterface.themeId
-
-                      
                     },
                     specialist = x.specialist == null ? null : new Specialist
                     {
@@ -182,14 +203,13 @@ namespace Data.Implementations
                         relationalToken = x.specialist.relationalToken,
                         dateCreated = x.specialist.dateCreated,
                         modifiedDate = x.specialist.modifiedDate
-                        
                     },
                     registerState = x.registerState
                 })
-                   
-                    .FirstOrDefault();
-            }
+                .FirstOrDefault();
         }
+    }
+
 
         public bool Delete(int id)
         {
@@ -234,46 +254,75 @@ namespace Data.Implementations
             }
         }
 
-          public bool VincularEspecialista(int id, string tokenEspecialista)
-          {
+        public bool VincularEspecialista(int id, string tokenEspecialista)
+        {
+            // Return false if the provided id is invalid or the token is empty/null
             if (id <= 0 || string.IsNullOrEmpty(tokenEspecialista)) return false;
 
             var connectionOptions = new DbContextOptionsBuilder<DBContext>()
-              .UseSqlServer(Data.Helpers.Constants.ConnectionString)
-              .Options;
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
             using (var db = new DBContext(options: connectionOptions))
             {
+                // Find the patient with the provided id
                 var thisPaciente = db.patients.FirstOrDefault(x => x.userId == id);
+                
+                // If the patient doesn't exist, return false
                 if (thisPaciente == null) return false;
 
+                // Find the specialist with the given relational token
                 var thisEspecialista = db.specialists.FirstOrDefault(x => x.relationalToken == tokenEspecialista);
+                
+                // If the specialist doesn't exist, return false
                 if (thisEspecialista == null) return false;
 
+                // Link the patient to the specialist by setting the specialist on the patient's record
                 thisPaciente.specialist = thisEspecialista;
+
+                // Update the modified date for both the patient and the specialist
                 thisPaciente.modifiedDate = DateTime.Now;
                 thisEspecialista.modifiedDate = DateTime.Now;
-                thisEspecialista.
-                    patients.Add(thisPaciente);
 
+                // Add the patient to the specialist's patient list
+                thisEspecialista.patients.Add(thisPaciente);
+
+                // Update both the patient and the specialist in the database
                 db.patients.Update(thisPaciente);
                 db.specialists.Update(thisEspecialista);
+
+                // Save changes to the database
                 db.SaveChanges();
+
+                // Return true to indicate the operation was successful
                 return true;
             }
-          }
+        }
 
+
+        /// <summary>
+        /// Retrieves the token of a patient based on the provided patient ID.
+        /// </summary>
+        /// <param name="idPaciente">The ID of the patient.</param>
+        /// <returns>The token of the patient if found, otherwise null.</returns>
         public string? GetByToken(int idPaciente)
         {
+            // Return null if the provided id is invalid (<= 0)
             if (idPaciente <= 0) return null;
 
             var connectionOptions = new DbContextOptionsBuilder<DBContext>()
-              .UseSqlServer(Data.Helpers.Constants.ConnectionString)
-              .Options;
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
             using (var db = new DBContext(options: connectionOptions))
             {
+                // Find the patient with the provided userId (idPaciente)
                 var thisPaciente = db.patients.FirstOrDefault(x => x.userId == idPaciente);
+
+                // If the patient doesn't exist, return null
                 if (thisPaciente == null) return null;
 
+                // Return the token associated with the patient
                 return thisPaciente.token;
             }
         }
@@ -303,49 +352,81 @@ namespace Data.Implementations
             }
         }
 
+        /// <summary>
+        /// Modifies the notification settings for a patient based on the provided settings.
+        /// </summary>
+        /// <param name="id">The ID of the patient whose settings are to be modified.</param>
+        /// <param name="notificacionesActivas">Indicates if notifications should be active.</param>
+        /// <param name="dirioActivado">Indicates if the diary is activated.</param>
+        /// <param name="progresoActivado">Indicates if the progress questionnaire is activated.</param>
+        /// <returns>True if the settings were successfully updated, otherwise false.</returns>
         public bool MoficarConfiguracionNotificaciones(int id, bool notificacionesActivas, bool dirioActivado, bool progresoActivado)
         {
+            // Return false if the provided id is invalid (<= 0)
             if (id <= 0) return false;
 
             var connectionOptions = new DbContextOptionsBuilder<DBContext>()
-              .UseSqlServer(Data.Helpers.Constants.ConnectionString)
-              .Options;
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
             using (var db = new DBContext(options: connectionOptions))
             {
+                // Find the patient with the provided userId (id)
                 var thisPaciente = db.patients.FirstOrDefault(x => x.userId == id);
+
+                // If the patient doesn't exist, return false
                 if (thisPaciente == null) return false;
 
+                // Update the patient's notification settings
                 thisPaciente.settings.notificationsActive = notificacionesActivas;
                 thisPaciente.settings.diaryActive = dirioActivado;
                 thisPaciente.settings.questionnaireActive = progresoActivado;
+
+                // Set the modified date to the current time
                 thisPaciente.modifiedDate = DateTime.Now;
 
+                // Update the patient in the database
                 db.patients.Update(thisPaciente);
+
+                // Save the changes to the database
                 db.SaveChanges();
+
+                // Return true to indicate that the settings were successfully updated
                 return true;
             }
         }
 
-        public int AgregarFlorInicial(int id, 
-            int patientId
-        )
+
+        /// <summary>
+        /// Adds an initial flower to a patient's user interface at a specific position.
+        /// </summary>
+        /// <param name="id">The ID of the patient to associate the flower with.</param>
+        /// <param name="patientId">The ID of the patient to whom the flower is added.</param>
+        /// <returns>The flower ID if the operation is successful, otherwise 0 if any validation fails.</returns>
+        public int AgregarFlorInicial(int id, int patientId)
         {
+            // Return 0 if the provided id is invalid (<= 0)
             if (id <= 0) return 0;
 
             var connectionOptions = new DbContextOptionsBuilder<DBContext>()
-              .UseSqlServer(Data.Helpers.Constants.ConnectionString)
-              .Options;
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
             using (var db = new DBContext(options: connectionOptions))
             {
-
+                // Find the patient with the provided patientId
                 var thisPaciente = db.patients.FirstOrDefault(x => x.userId == patientId);
 
-                if(thisPaciente == null) return 0;
-               
+                // If the patient doesn't exist, return 0
+                if (thisPaciente == null) return 0;
 
+                // Find the flower with flowerId == 1 (the initial flower)
                 var thisFlor = db.flowers.FirstOrDefault(x => x.flowerId == 1);
+                
+                // If the flower doesn't exist, return 0
                 if (thisFlor == null) return 0;
 
+                // Add the initial flower to the patient's user interface at position 2
                 thisPaciente.userInterface.userFlowers.Add(
                     new UserFlower
                     {
@@ -355,140 +436,288 @@ namespace Data.Implementations
                     }
                 );
 
-                
+                // Save the changes to the database
                 db.SaveChanges();
-                return  thisFlor.flowerId;
+
+                // Return the flowerId of the added flower
+                return thisFlor.flowerId;
             }
         }
 
-        public int agregarStickerDeUsuarioModel(int? index, int idUsuario) {
-              var connectionOptions = new DbContextOptionsBuilder<DBContext>()
-              .UseSqlServer(Data.Helpers.Constants.ConnectionString)
-              .Options;
+        /// <summary>
+        /// Adds a user sticker to a patient's user interface based on a given index or default behavior.
+        /// </summary>
+        /// <param name="index">The index of the sticker to be added (nullable). If null, the default sticker is added.</param>
+        /// <param name="idUsuario">The ID of the user to which the sticker will be added.</param>
+        /// <returns>The sticker ID if the operation is successful, otherwise 0 if the user is not found or an issue occurs.</returns>
+        public int agregarStickerDeUsuarioModel(int? index, int idUsuario)
+        {
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
             using (var db = new DBContext(options: connectionOptions))
             {
-
+                // Find the patient with the provided userId (idUsuario)
                 var patient = db.patients.FirstOrDefault(x => x.userId == idUsuario);
 
-                if(patient == null) return 0;
+                // If the patient doesn't exist, return 0
+                if (patient == null) return 0;
 
+                // Retrieve the list of stickers available in the database
+                List<Sticker> stickers = db.stickers.ToList();
 
-              List<Sticker> stickers = db.stickers.ToList();
+                UserSticker stickerDeUsuario;
 
-                UserSticker stickerDeUsuario; 
+                // If no index is provided, get the default sticker (based on your business logic)
+                if (index == null)
+                {
+                    stickerDeUsuario = getStickerFromIndex(stickers, 1, 2, idUsuario); // You should implement this method based on your needs
+                }
+                else
+                {
+                    // Otherwise, find the sticker that is not the one with the provided index and has a stickerId less than 10
+                    stickerDeUsuario = stickers
+                        .Where(x => x.stickerId != index && x.stickerId < 10)
+                        .Select(x => new UserSticker
+                        {
+                            sticker = x,
+                            position = null // You might want to assign a value to position depending on the context
+                        })
+                        .FirstOrDefault()!;
+                }
 
-              if(index == null) {
+                // Add the chosen sticker to the patient's user interface
+                patient.userInterface.userStickers.Add(stickerDeUsuario);
 
-               stickerDeUsuario = getStickerFromIndex(stickers, 1, 2, idUsuario);
-
-              } else {
-                stickerDeUsuario = stickers.Where(x => x.stickerId != index && x.stickerId < 10)
-                    .Select(x => new UserSticker
-                    {
-                        sticker = x,
-                        position = null,
-
-                    }).FirstOrDefault()!;
-              }
-
-            patient.userInterface.userStickers.Add(stickerDeUsuario);
-
-
+                // Save the changes to the database
                 db.SaveChanges();
+
+                // Return the stickerId of the added sticker
                 return stickerDeUsuario.sticker.stickerId;
             }
         }
 
 
+
+        /// <summary>
+        /// Gets a random sticker from the list of stickers, within a specified index range, and creates a UserSticker.
+        /// </summary>
+        /// <param name="stickers">The list of available stickers to choose from.</param>
+        /// <param name="index">The starting index (inclusive) from which the random selection should begin.</param>
+        /// <param name="maxIndex">The maximum index (exclusive) that the random selection can go up to.</param>
+        /// <param name="idUsuario">The ID of the user (not used in this function, but might be for logging or future extensions).</param>
+        /// <returns>A UserSticker object containing the randomly selected sticker.</returns>
         private UserSticker getStickerFromIndex(List<Sticker> stickers, int index, int maxIndex, int idUsuario)
         {
-          //get a random sticker from the list of stickers and return it
+            // Initialize the Random object to generate random numbers
             Random random = new Random();
+
+            // Generate a random index between 'index' (inclusive) and 'maxIndex' (exclusive)
             int randomIndex = random.Next(index, maxIndex);
+
+            // Return a new UserSticker with the randomly selected sticker from the list and no position set
             return new UserSticker
             {
-                sticker = stickers[randomIndex],
-                position = null,
-
-            };       
+                sticker = stickers[randomIndex], // Select a sticker based on the random index
+                position = null, // Position is set to null (you may want to assign a meaningful value)
+            };
         }
 
-        public string registerSet(
-            int patientId,
-            string state)
+
+        /// <summary>
+        /// Updates the registration state of a patient in the database based on the provided patient ID and new state.
+        /// </summary>
+        /// <param name="patientId">The unique ID of the patient whose registration state is being updated.</param>
+        /// <param name="state">The new state to set for the patient's registration.</param>
+        /// <returns>A string indicating the result of the operation: "success" if the update is successful, or "error" if an issue occurs.</returns>
+        public string registerSet(int patientId, string state)
         {
+            // Validate the patient ID to ensure it's greater than 0
             if (patientId <= 0) return "error";
 
+            // Set up the connection to the database using the DbContext
             var connectionOptions = new DbContextOptionsBuilder<DBContext>()
-              .UseSqlServer(Data.Helpers.Constants.ConnectionString)
-              .Options;
+            .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+            .Options;
+
+            // Open the database context and perform the update inside a 'using' block to ensure resources are properly disposed of
             using (var db = new DBContext(options: connectionOptions))
             {
+                // Retrieve the patient from the database using the provided patient ID
                 var thisPaciente = db.patients.FirstOrDefault(x => x.userId == patientId);
+
+                // If the patient does not exist, return an error
                 if (thisPaciente == null) return "error";
 
+                // Update the patient's registration state and set the modified date to the current date and time
                 thisPaciente.registerState = state;
                 thisPaciente.modifiedDate = DateTime.Now;
 
+                // Update the patient's record in the database
                 db.patients.Update(thisPaciente);
+
+                // Save the changes to the database
                 db.SaveChanges();
+
+                // Return a success message
                 return "success";
             }
         }
 
 
 
-        public int putStickeriInInterface(int idPatient, int idUserSticker, int position) {
 
-
+        /// <summary>
+        /// Updates the position of a sticker for a specific patient in their user interface.
+        /// If the position is valid (0 to 4), the sticker's position is updated; otherwise, it is removed from its position.
+        /// If another sticker is already occupying the same position, its position is reset to null.
+        /// </summary>
+        /// <param name="idPatient">The unique ID of the patient whose user interface is being modified.</param>
+        /// <param name="idUserSticker">The unique ID of the sticker that is being positioned.</param>
+        /// <param name="position">The new position of the sticker in the user's interface (0 to 4). If invalid, the sticker's position is cleared.</param>
+        /// <returns>The unique ID of the updated user sticker if successful; otherwise, 0 if an error occurs.</returns>
+        public int putStickeriInInterface(int idPatient, int idUserSticker, int position)
+        {
+            // Validate the patient ID and user sticker ID to ensure they are greater than 0
             if (idPatient <= 0 || idUserSticker <= 0) return 0;
 
+            // Set up the connection to the database using the DbContext
             var connectionOptions = new DbContextOptionsBuilder<DBContext>()
-              .UseSqlServer(Data.Helpers.Constants.ConnectionString)
-              .Options;
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
+            // Open the database context and perform the update inside a 'using' block to ensure resources are properly disposed of
             using (var db = new DBContext(options: connectionOptions))
             {
-                //primero vamos a encontrar al paciente y vamos a importar dede el paciente sus stickers, despues vamos a encontrar el sticker que queremos agregar y si esta en la lista de stickers del paciente, vamos a modificar la posicion del sticker, pe tenemos que tener cuidado al hacer eso, ya que primero tenemos que revisar si hay otro de sus sticker que tienen la misma posicion, si es asi, vamos a cambiar la posicion de ese sticker a null, y despues vamos a cambiar la posicion del sticker que queremos agregar
+                // Find the patient and their user interface, including the list of stickers
+                var thisPaciente = db.patients
+                    .Where(x => x.userId == idPatient)
+                    .Include(x => x.userInterface)
+                    .ThenInclude(x => x.userStickers)
+                    .ThenInclude(x => x.sticker)
+                    .FirstOrDefault();
 
-                var thisPaciente = db.patients.Where(x => x.userId == idPatient).Include(x => x.userInterface).ThenInclude(x => x.userStickers).ThenInclude(x => x.sticker).FirstOrDefault();
-
-                Console.WriteLine(thisPaciente);
-
+                // If the patient is not found, return 0 indicating failure
                 if (thisPaciente == null) return 0;
 
-                var userSticker = thisPaciente.userInterface.userStickers.FirstOrDefault(x => x.sticker.stickerId == idUserSticker);
+                // Find the sticker to be updated
+                var userSticker = thisPaciente.userInterface.userStickers
+                    .FirstOrDefault(x => x.sticker.stickerId == idUserSticker);
 
+                // If the sticker is not found, return 0 indicating failure
                 if (userSticker == null) return 0;
 
-
-                if (position < 0 || position > 4) {
+                // Validate the position; if it's invalid (less than 0 or greater than 4), set the sticker's position to null
+                if (position < 0 || position > 4)
+                {
                     userSticker.position = null;
-                } else {
-                    var stickerWithSamePosition = thisPaciente.userInterface.userStickers.FirstOrDefault(x => x.position == position);
-                    if (stickerWithSamePosition != null) {
+                }
+                else
+                {
+                    // Check if any other sticker already occupies the specified position
+                    var stickerWithSamePosition = thisPaciente.userInterface.userStickers
+                        .FirstOrDefault(x => x.position == position);
+
+                    // If a sticker occupies the position, reset its position to null
+                    if (stickerWithSamePosition != null)
+                    {
                         stickerWithSamePosition.position = null;
                     }
+
+                    // Set the position of the current sticker to the new position
                     userSticker.position = position;
                 }
 
+                // Save the changes to the database
                 db.SaveChanges();
 
+                // Return the ID of the updated user sticker
                 return userSticker.userStickerId;
             }
-
-
         }
 
+
+        /// <summary>
+        /// A dictionary that maps specific progress conditions to their corresponding validation functions.
+        /// Each function checks whether a certain stage or condition is met for a given patient.
+        /// </summary>
+        /// <remarks>
+        /// The keys in the dictionary represent the name of the condition or stage, and the values are 
+        /// the validation functions that take the patient's ID, value, and day range to determine if 
+        /// the condition is satisfied.
+        /// </remarks>
+        /// <example>
+        /// Example of usage:
+        /// To validate if the patient has completed the tutorial:
+        /// bool isTutorialCompleted = progressFunctionMap["tutorialCompleted"](null, null, patientId);
+        /// </example>
         private readonly Dictionary<string, Func<int?, int?, int, bool>> progressFunctionMap = new Dictionary<string, Func<int?, int?, int, bool>> {
-            {"patientRegister" , validateRegisterPatient},
+            
+            /// <summary>
+            /// Validates if the patient is registered in the system.
+            /// </summary>
+            /// <param name="value">Not used.</param>
+            /// <param name="dayRange">Not used.</param>
+            /// <param name="idPatient">The ID of the patient to check for registration.</param>
+            /// <returns>True if the patient is registered, otherwise false.</returns>
+            {"patientRegister", validateRegisterPatient},
+
+            /// <summary>
+            /// Validates if the patient has completed their first test.
+            /// </summary>
+            /// <param name="value">The minimum number of tests to be completed.</param>
+            /// <param name="dayRange">Not used.</param>
+            /// <param name="idPatient">The ID of the patient whose test completion is being validated.</param>
+            /// <returns>True if the patient has completed the first test, otherwise false.</returns>
             {"firstTestComplete", validateFirstTestComplete},
+
+            /// <summary>
+            /// Validates if the patient has completed the tutorial.
+            /// </summary>
+            /// <param name="value">Not used.</param>
+            /// <param name="dayRange">Not used.</param>
+            /// <param name="idPatient">The ID of the patient whose tutorial completion is being checked.</param>
+            /// <returns>True if the patient has completed the tutorial, otherwise false.</returns>
             {"tutorialCompleted", validateTutorialCompleted},
-            { "firstDiary", validateFirstDiary },
-             {"oneRecommendation", validateOneRecommendation},
+
+            /// <summary>
+            /// Validates if the patient has created at least one diary entry.
+            /// </summary>
+            /// <param name="value">Not used.</param>
+            /// <param name="dayRange">Not used.</param>
+            /// <param name="idPatient">The ID of the patient whose diary entries are being validated.</param>
+            /// <returns>True if the patient has created at least one diary entry, otherwise false.</returns>
+            {"firstDiary", validateFirstDiary},
+
+            /// <summary>
+            /// Validates if the patient has completed at least one recommendation.
+            /// </summary>
+            /// <param name="value">The minimum number of recommendations to be completed.</param>
+            /// <param name="dayRange">Not used.</param>
+            /// <param name="idPatient">The ID of the patient whose recommendations are being validated.</param>
+            /// <returns>True if the patient has completed the required recommendations, otherwise false.</returns>
+            {"oneRecommendation", validateOneRecommendation},
+
+            /// <summary>
+            /// Validates if the patient has been assigned to a specialist.
+            /// </summary>
+            /// <param name="value">Not used.</param>
+            /// <param name="dayRange">Not used.</param>
+            /// <param name="idPatient">The ID of the patient whose specialist assignment is being validated.</param>
+            /// <returns>True if the patient has been assigned to a specialist, otherwise false.</returns>
             {"relateSpecialist", validateRelateSpecialist},
-            { "diary", validatediaryforDays},
-           
+
+            /// <summary>
+            /// Validates if the patient has created a specified number of diary entries within a given time frame.
+            /// </summary>
+            /// <param name="value">The minimum number of diary entries per day.</param>
+            /// <param name="dayRange">The time range (in days) within which the entries should have been created.</param>
+            /// <param name="idPatient">The ID of the patient whose diary entries are being validated.</param>
+            /// <returns>True if the patient meets the diary entry criteria, otherwise false.</returns>
+            {"diary", validatediaryforDays},
         };
+
 
         private static bool validateRelateSpecialist(int? value, int? dayRange, int idPatient) {
             var connectionOptions = new DbContextOptionsBuilder<DBContext>()
@@ -697,21 +926,41 @@ namespace Data.Implementations
 
 
 
+        /// <summary>
+        /// Validates the progress of a patient based on the specified progress name and parameters.
+        /// The method uses a function map to find the appropriate validation function and then calls it.
+        /// </summary>
+        /// <param name="name">The name of the progress to be validated. This determines which validation function is used. This is based on the user's flower stage Request</param>
+        /// <param name="value">An optional value used for the validation, depending on the progress being validated.</param>
+        /// <param name="dayRange">An optional day range used for time-based validations.</param>
+        /// <param name="idPatient">The unique ID of the patient whose progress is being validated.</param>
+        /// <returns>
+        /// Returns true if the progress is validated successfully using the corresponding validation function; otherwise, returns false.
+        /// </returns>
         private bool validateProgress(string name, int? value, int? dayRange, int idPatient) {
-
             if (progressFunctionMap.ContainsKey(name)) {
-      
                 return progressFunctionMap[name](value, dayRange, idPatient);
             }
             return false;
         }
 
+
+        /// <summary>
+        /// Determines whether a specific patient can "grow" to the next stage based on their progress.
+        /// This method checks the patient's progress and validates whether all the stage requests for their current stage are met.
+        /// If any stage request is not satisfied, the method returns false. If all are satisfied, it returns true.
+        /// </summary>
+        /// <param name="idPatient">The unique ID of the patient whose ability to grow to the next stage is being evaluated.</param>
+        /// <returns>
+        /// Returns true if all stage requests for the current stage are satisfied and the patient can grow to the next stage;
+        /// otherwise, returns false if any stage request is not met or if the patient is not found.
+        /// </returns>
         public bool canGrowFlower(int idPatient) {
             if (idPatient <= 0) return false;
 
             var connectionOptions = new DbContextOptionsBuilder<DBContext>()
-              .UseSqlServer(Data.Helpers.Constants.ConnectionString)
-              .Options;
+            .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+            .Options;
             using (var db = new DBContext(options: connectionOptions))
             {
                 var thisPaciente = db.patients.Where(x => x.userId == idPatient).Include(x => x.progress).FirstOrDefault();
@@ -732,81 +981,108 @@ namespace Data.Implementations
                 return canGrow;
             }
         }
+
     
 
-    public bool growStage(int idPatient) {
-        if (idPatient <= 0) return false;
+        /// <summary>
+        /// Increments the progress stage for a specific patient, moving them to the next stage in their progress tracking.
+        /// The method retrieves the patient by their unique ID and updates their current progress stage.
+        /// </summary>
+        /// <param name="idPatient">The unique ID of the patient whose progress stage is being incremented.</param>
+        /// <returns>
+        /// Returns true if the stage is successfully incremented and saved to the database; otherwise, returns false if the patient is not found or if an error occurs.
+        /// </returns>
+        public bool growStage(int idPatient) {
+            if (idPatient <= 0) return false;
 
-        var connectionOptions = new DbContextOptionsBuilder<DBContext>()
-          .UseSqlServer(Data.Helpers.Constants.ConnectionString)
-          .Options;
-        using (var db = new DBContext(options: connectionOptions))
-        {
-            var thisPaciente = db.patients.Where(x => x.userId == idPatient).Include(x => x.progress).FirstOrDefault();
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+            .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+            .Options;
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var thisPaciente = db.patients.Where(x => x.userId == idPatient).Include(x => x.progress).FirstOrDefault();
 
-            if (thisPaciente == null) return false;
+                if (thisPaciente == null) return false;
 
-            thisPaciente.progress!.stage = thisPaciente.progress!.stage! + 1;
+                thisPaciente.progress!.stage = thisPaciente.progress!.stage! + 1;
 
-            db.SaveChanges();
+                db.SaveChanges();
 
-            return true;
+                return true;
+            }
         }
-    }
 
-    public bool reviewCanCheck(int idPatient) {
-        if (idPatient <= 0) return false;
 
-        var connectionOptions = new DbContextOptionsBuilder<DBContext>()
-          .UseSqlServer(Data.Helpers.Constants.ConnectionString)
-          .Options;
-        using (var db = new DBContext(options: connectionOptions))
-        {
-            var thisPaciente = db.patients.Where(x => x.userId == idPatient).Include(x => x.progress).FirstOrDefault();
+        /// <summary>
+        /// Checks if the progress of a specific patient can be reviewed based on the last update date.
+        /// If the patient's progress has not been updated in the last 7 days, it returns true, indicating the progress can be reviewed.
+        /// </summary>
+        /// <param name="idPatient">The unique ID of the patient whose progress is being checked.</param>
+        /// <returns>
+        /// Returns true if the progress can be reviewed (i.e., the last update was more than 7 days ago or if the progress has never been updated).
+        /// Returns false if the progress was updated within the last 7 days.
+        /// </returns>
+        public bool reviewCanCheck(int idPatient) {
+            if (idPatient <= 0) return false;
 
-            //revisa cuando fue la ultima vez que se actualizo el progreso osea lastDate, si tiene mas de 7 dias de eso, entonces se retorna true
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+            .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+            .Options;
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var thisPaciente = db.patients.Where(x => x.userId == idPatient).Include(x => x.progress).FirstOrDefault();
 
-            if (thisPaciente == null) return false;
+                // Revisa cuando fue la última vez que se actualizó el progreso (lastDate).
+                if (thisPaciente == null) return false;
 
-            var currentDate = DateTime.Now;
+                var currentDate = DateTime.Now;
 
-            var lastDate = thisPaciente.progress!.lastDate;
+                var lastDate = thisPaciente.progress!.lastDate;
 
-            var begginDate = thisPaciente.progress!.begginDate;
+                var begginDate = thisPaciente.progress!.begginDate;
 
-            if (lastDate == null) return true;
+                if (lastDate == null) return true;
 
-            if(begginDate == null) return true;
+                if (begginDate == null) return true;
 
-            //si begginDate es igual a lastDate, entonces no se ha actualizado el progreso, por lo tanto se retorna true
-            if (begginDate == lastDate) return true;
+                // Si begginDate es igual a lastDate, entonces no se ha actualizado el progreso, por lo tanto se retorna true.
+                if (begginDate == lastDate) return true;
 
-            var days = (currentDate - lastDate!.Value).TotalDays;
+                var days = (currentDate - lastDate!.Value).TotalDays;
 
-            return days >= 7;
-
+                return days >= 7;
+            }
         }
-    }
 
-    public bool updateLastProgressDate(int idPatient) {
-        if (idPatient <= 0) return false;
 
-        var connectionOptions = new DbContextOptionsBuilder<DBContext>()
-          .UseSqlServer(Data.Helpers.Constants.ConnectionString)
-          .Options;
-        using (var db = new DBContext(options: connectionOptions))
-        {
-            var thisPaciente = db.patients.Where(x => x.userId == idPatient).Include(x => x.progress).FirstOrDefault();
+        /// <summary>
+        /// Updates the last progress update date for a specific patient to the current date and time.
+        /// This method sets the patient's last progress update to the current date and saves the changes to the database.
+        /// </summary>
+        /// <param name="idPatient">The unique ID of the patient whose progress update date is being modified.</param>
+        /// <returns>
+        /// Returns true if the progress update date was successfully updated; false if the patient was not found or if the ID is invalid.
+        /// </returns>
+        public bool updateLastProgressDate(int idPatient) {
+            if (idPatient <= 0) return false;
 
-            if (thisPaciente == null) return false;
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+            .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+            .Options;
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var thisPaciente = db.patients.Where(x => x.userId == idPatient).Include(x => x.progress).FirstOrDefault();
 
-            thisPaciente.progress!.lastDate = DateTime.Now;
+                if (thisPaciente == null) return false;
 
-            db.SaveChanges();
+                thisPaciente.progress!.lastDate = DateTime.Now;
 
-            return true;
+                db.SaveChanges();
+
+                return true;
+            }
         }
-    }
+
 
 
 }
