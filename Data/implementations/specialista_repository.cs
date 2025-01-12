@@ -11,25 +11,43 @@ namespace Data.Implementations
 {
     public class SpecialistRepository : ISpecialistRepository
     {
+
+        /// <summary>
+        /// Adds a new specialist to the database.
+        /// </summary>
+        /// <param name="specialist">The specialist entity containing the details to be added.</param>
+        /// <returns>
+        /// The ID of the newly added specialist, or:
+        /// <list type="bullet">
+        /// <item><description>0 if the input is null.</description></item>
+        /// <item><description>-1 if the email already exists or matches a patient's email.</description></item>
+        /// <item><description>-2 if the phone number already exists.</description></item>
+        /// </list>
+        /// </returns>
         public int Add(AddSpecialist specialist)
         {
             if (specialist == null) return 0;
+
             var connectionOptions = new DbContextOptionsBuilder<DBContext>()
-              .UseSqlServer(Data.Helpers.Constants.ConnectionString)
-              .Options;
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
             using (var db = new DBContext(options: connectionOptions))
             {
+                // Check if the email already exists for a specialist
                 var thisEmailExist = db.specialists.FirstOrDefault(x => x.mail == specialist.mail);
 
+                // Check if the phone number already exists for a specialist
                 var thisNumberExist = db.specialists.FirstOrDefault(x => x.phone == specialist.phone);
-
                 if (thisNumberExist != null) return -2;
 
                 if (thisEmailExist == null)
                 {
+                    // Check if the email matches a patient's email
                     var isAPatientEmail = db.patients.FirstOrDefault(x => x.mail == specialist.mail);
                     if (isAPatientEmail != null) return -1;
 
+                    // Create a new specialist entity
                     var newEspecialista = new Specialist
                     {
                         name = specialist.name,
@@ -50,8 +68,10 @@ namespace Data.Implementations
                         modifiedDate = DateTime.Now
                     };
 
+                    // Add the specialist to the database and save changes
                     db.specialists.Add(newEspecialista);
                     db.SaveChanges();
+
                     return newEspecialista.userId;
                 }
                 else
@@ -60,6 +80,7 @@ namespace Data.Implementations
                 }
             }
         }
+
 
         private string getTheFirstSixDigits(string token)
         {

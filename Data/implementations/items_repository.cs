@@ -137,15 +137,27 @@ namespace Data.Implementations
 
             using (var db = new DBContext(options: connectionOptions))
             {
-                var patient = db.patients.Where(x => x.userId == patientId).Include(x => x.userInterface).FirstOrDefault();
+                var patient = db.patients
+                    .Where(x => x.userId == patientId)
+                    .Include(x => x.userInterface)
+                    .ThenInclude(ui => ui.userStickers)
+                    .FirstOrDefault();
 
-                if(patient == null) return false;
+                if (patient == null) return false;
 
                 var sticker = db.stickers.FirstOrDefault(x => x.stickerId == stickerId);
 
-                if(sticker == null) return false;
+                if (sticker == null) return false;
 
-                patient.userInterface.userStickers.Add(new UserSticker{
+                // Check if the user already has this sticker
+                var hasSticker = patient.userInterface.userStickers
+                    .Any(us => us.sticker.stickerId == stickerId);
+
+                if (hasSticker) return false;
+
+                // Add the sticker if not already present
+                patient.userInterface.userStickers.Add(new UserSticker
+                {
                     sticker = sticker,
                     position = null
                 });
@@ -153,7 +165,8 @@ namespace Data.Implementations
                 db.SaveChanges();
 
                 return true;
-            }    
+            }
+    
         }
 
 
