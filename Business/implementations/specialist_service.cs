@@ -1,6 +1,7 @@
 ﻿using Business.Contracts;
 using Data.Contracts;
 using Domain;
+using FirebaseAdmin.Messaging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,7 +57,7 @@ namespace Business.Implementations
             return _service.login(email, password);
         }
 
-        public bool vincularPaciente(int idSpecialist, string tokenPaciente)
+        public bool vincularPaciente(int idSpecialist, string tokenPaciente) 
         {
             if (idSpecialist < 1 || string.IsNullOrEmpty(tokenPaciente)) { return false; }
             return _service.vincularPaciente(idSpecialist, tokenPaciente);

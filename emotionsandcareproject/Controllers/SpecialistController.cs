@@ -1,5 +1,6 @@
-﻿using Business.Contracts;
+using Business.Contracts;
 using Domain;
+using FirebaseAdmin.Messaging;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -9,10 +10,14 @@ namespace API.Controllers
     public class EspecialistaController : Controller
     {
         private readonly ISpecialistService _service;
+        
+        private readonly PushNotificationService _pushNotificationService;
 
-        public EspecialistaController(ISpecialistService service)
+
+        public EspecialistaController(ISpecialistService service, PushNotificationService pushNotificationService)
         {
             _service = service;
+            _pushNotificationService = pushNotificationService;
         }
 
         [HttpPost]
@@ -51,13 +56,40 @@ namespace API.Controllers
             return Task.FromResult<ActionResult>(Ok(result));
         }
 
-        [HttpPost("{id}/vincularPaciente/{tokenPaciente}")]
-        public Task<ActionResult> VincularPaciente([FromRoute] int id, [FromRoute] string tokenPaciente)
+      [HttpPost("{id}/vincularPaciente/{tokenPaciente}")]
+        public async Task<ActionResult> VincularPaciente([FromRoute] int id, [FromRoute] string tokenPaciente)
         {
-            if (id < 1 || tokenPaciente == null) return Task.FromResult<ActionResult>(BadRequest());
+            if (id < 1 || string.IsNullOrEmpty(tokenPaciente))
+                return BadRequest("Id o token inválido.");
+
+            // Intentar vincular al paciente
             var result = _service.vincularPaciente(id, tokenPaciente);
-            if (!result) return Task.FromResult<ActionResult>(BadRequest());
-            return Task.FromResult<ActionResult>(Ok(result));
+            if (!result)
+                return BadRequest("No se pudo vincular el paciente.");
+
+            // Obtener el especialista
+            var specialist = _service.Get(id);
+            if (specialist == null)
+                return NotFound("Especialista no encontrado.");
+
+
+            var patients = _service.GetPacientes(id);
+            var patient = patients?.FirstOrDefault(p => p.token == tokenPaciente);
+            if (patient == null || string.IsNullOrEmpty(patient.token))
+                return NotFound("Paciente no encontrado o token inválido.");
+
+
+        
+            var data = new Dictionary<string, string>()
+            {
+                { "module", "schedule" }
+            };
+
+            
+            await _pushNotificationService.SendPushAsync("Nueva notificación", specialist.name +  " ha aceptado tu solicitud de vinculación. ¡Felicidades!", patient.token, data);
+
+
+            return Ok(result);
         }
 
 
@@ -107,3 +139,6 @@ namespace API.Controllers
         }
     }
 }
+
+
+

@@ -122,6 +122,8 @@ namespace Business.Implementations
             {
                _service.growStage(idPatient);   
                _service.updateLastProgressDate(idPatient);
+
+               //Mandar notificacion
             }
 
             return can;
@@ -132,5 +134,7 @@ namespace Business.Implementations
             return _service.growStage(idPatient);
 
         }
+
+        //growFlowerStage
     }
 }

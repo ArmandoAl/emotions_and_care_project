@@ -1012,6 +1012,8 @@ namespace Data.Implementations
             }
         }
 
+        
+
 
         /// <summary>
         /// Checks if the progress of a specific patient can be reviewed based on the last update date.

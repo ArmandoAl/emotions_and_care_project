@@ -223,6 +223,7 @@ namespace Data.Implementations
 
                 especialista.patients.Add(paciente);
                 db.specialists.Update(especialista);
+
                 db.SaveChanges();
                 return true;
             }

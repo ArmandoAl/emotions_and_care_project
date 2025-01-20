@@ -47,8 +47,7 @@ builder.Services.AddScoped<IGoalRepository, GoalRepository>();
 builder.Services.AddScoped<IGoalService, LogroService>();
 builder.Services.AddScoped<IStageService, StageService>();
 builder.Services.AddScoped<IStagesRepository, StageRepository>();
-
-
+builder.Services.AddSingleton<PushNotificationService>();
 builder.Services.AddScoped<IDBRepository, DBReporitory>();
 
 
@@ -59,8 +58,8 @@ FirebaseApp.Create(new AppOptions()
         @"{
           ""type"": ""service_account"",
           ""project_id"": ""emotionsandcareal"",
-          ""private_key_id"": ""7c5d2b9f04fdc1fd3a836510f43252dc1bdc3d9a"",
-          ""private_key"": ""-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDqpUhuLLuYtCfv\nbNXxBgYn1v5CImB2WeW9g3XJElakfnzpIPiznLJTjgtNSE0DrwUD2VbOUzp3zkP3\nGAM3NtM4M4G7JxTumo66oz9C8EkWarn1jrYbMna2Zu2yTyDGb7lLrk/V6ijdcqM3\ndi68eT9kIrskaMlMyT8iTw9iR18cCSe2rDt4SQU+DTHOEYmCFvN8Me7oVPvK6Lu1\neu5hra0//TSpzZ9d9x0WhEiSO+23bY9C15B0rQuRkJ276WNjAg5Q/GagI6pQqnrP\nUTXd1HrrykUSp9NqXgdx4UhcD0dSuvX5VZ3cim7z7CqLZljYqIswl2ZnHshpW6tU\nEaLki+9JAgMBAAECggEAB6Xi5WIEeVBoVTfDn2TPxY1B4bXAiPFnX650I91UdDpO\nzioN2r9BDSBXnCmLoEYC0IkAeQTu2aHTYEkb+oXWC5wBXsn1NwCHP2xIiK3pS/EN\nmTd3r9o/7IEQi7Vj8mPVpjK+LzdzJO8MHkFck5ysfsVZ1GPf9jNAoT8l14SCncv0\nnWJtP9LweJDCIolWLRzX6Ju2FMxQc6ySbYh+miSmV2TTU5E3UCG98Z5LkAdSDPL3\nreIrqErtRDAL2Ucqbv3kssk/kxZH4PpfR2aZU8KEAwBkp175IDIHN6IrIIF9vmu7\ndss47L3EfPJ0YNvUU4IUUGzBGawuSr1xWEDOAOY7uwKBgQD5+3Iwa0hiK+UZsutD\nsIpaun5x6lkM7J1Ub+ViPqvk011uLReKIU70Xe5ipLImkHseQ1lyXc7W0hZTldMh\nSvzR9UQCSodTTr7XYhW9L6Kt6vMvblD18jOBgTgHB1kUy9UepHToyC+sgsUVcNFx\nNvQYmceXEBQAqOBb0wfyZ8nSQwKBgQDwS1KnusEn6wYbL8pHTHiwHsIQBz+muSnx\nS9NMkRDlrFNS9TW7VfYiA7Yga9II4/nI03SuTX67FHtgOKMcMSwvuqfSd6PSgBMh\n4MDOoD1PLSh58bUu5UQh6RCQ4wZkM3oUJkiohi8PiUjEh93zrvulBOqwJCiKvIvv\nUTnWDuFdgwKBgEdf28KnXwtorQkhZLr29Qnipaew2awvAtzQ9hWO/1VeZBbJGSd/\nSyPKjf3sOFF6fyys3iUhU6VSZr2G0bl3x6fK95gP34ORwDuO7dYOe8xcgQLR5JvU\ng5A+bNjU6EJf0IHnQtoUDkibLdppU+OXZSqA/dPL62okzapqHqK/r4gxAoGBAN3y\nZK0CJWjufxxbXvXOH2dlcZAGcfdX7fKvO8Lr9vR84BWu4etf8dDnJrD5he2qTMv+\n7DYW5Ch+OZrdlWLz1EFdoacX1JwYqhNPmicAAMECD/HanKRtJSpBMIjy+LNSjL7R\nwajPD+bEwg6tBAgRpuN8EB2TuFK05nesycP6yJRrAoGAOpBwDOWE+wbJL1XnyFut\nDTTRIRtl/Id63LDpwtEZG2BKCpNBmFNfYoDMF35tlf1Bm8QzUz4T8oyTVue4FQqU\nQjh/OYHjgjJtmeYdSlT4BuTHzX9fUg7iBVIavHvNWGR/g6keL8XIiZdJtbnGkQ7Q\nUNYFcVoKa3spQIoLP0y8T2s=\n-----END PRIVATE KEY-----\n"",
+          ""private_key_id"": ""07dfd5343d9b797cb2eda870c7817c2f3210bf0b"",
+          ""private_key"": ""-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCUBtQ2uT5UnYwd\nJf+ArlSXS0d4GqB1aqk4xCTUj48GHGXx89p78+9gi7RTLjUa2IUsaDDeb+5V7QSZ\n7a4YUZxWH9rHTSci0LRTSLABaDr5l8eKan+/c7fxpvfxW6tv7RvpywzOLaMUG7or\ntlv+NYGwQWA79sjp48bUeR5qjsciQfJuvuMAibJ7s8BCHk+kHEufREK3L9DQy4Ri\nLbLj4MGXwKKR5u+lRSWDAzADCqaenTMegwxdMwUx0OUzMTHj3Jhsubc5CAAr5nKX\nEEBUB4R8vH22ryRoA0lXWkEJGXkPGVUPtuXrA1xqckznwSorcCuq/8kzxN2CUeTi\nf8RDFXFBAgMBAAECggEAA0y2DRw7kLj2/5STwg+Xn9iaMR9C00/KtrFYbLvmlqGw\nVFqB/4BAgb7j3h9IlmHGxsIWYrDfPcD1HVLoRmke7NtPu7XU1GG6FHRUCD/OqtUg\nkaLoD0kd5zbjDhAOgjzA0Tni8dTEpa8H4HvnYEA2kHVFwbpWKUkeFa+AoTyLS/gL\nJJKBxbc+oiZV95/gRh8Ua0nk3hqLSM6sk2YWMVZn8b6VQlCZezUcFDla+RMyX3q9\nnW5nRq9qWbkV+3orQRK+7NBcIKGMnwkFAEWVBQQUEIN23jucriaK65SlW7dUAK+Z\n/k7S1Kjdp93aGuN55VrDsWqMy5Ta1mqB16pF32+H0wKBgQC2+mNqNNwQrPe/v1VP\nYxsaZwR45BZhYVSUoTebO0ElIsz5lprR3vB43O5a6ErAJaKqSJ85ADQbvDecfIcS\nrVEPvsgVzVWE3slEPpStHV0RrJKaebJEOQtWZ/ukg7xwmdVyIGEJ08FE01l7esea\nE6DmaaPTtKXCeYH9S0KifvdnFwKBgQDPGbI1ODJmeq4t9EdEvRGWJD8cMMD7MR73\noo3l7PPiTuZXayGpSvXvDQcbzLf6VMBhj4ma3xaFW7ZiHJ8jLiI5q62uro58FVSm\nTXL3cs4OuW6Z55ezN+u5ZwP1PWzezKChX+tlVEXaw2FjQn/E9fG1bv64lCpTm/nA\n4iHdCWchZwKBgQCWMoqQj7tk5NapS0GX3N5OmemN4oyMevyW1I90mPsspJhk+D81\nry7tx0zQyoUxnLMd3Gb2vzgG3EU56u5lYmd76TsMynQ8kTPdFRGt2MCg1Wux6dtv\nLPQlhU2HCawRMfWHrRR6oJuxB1wYg/x8eUhGWsjj6xF1xY/yf2i/QkGLGQKBgCAC\nF7H0Ao4mLd96Xr13/0zWQ07HFjx8hg29+PJtYfA7Q4yFSUmSBVqyB8Q7KsAs8yLg\n/WKLUj7AQvr883eLfMyvBQP3hJwW6+NcGwW1n7VU4Yw16BNR9EPOcSUpHjd9JuJq\nIcaidL1v7xBZScgWPwpMol/Cvpv3gm1WReeUuXTHAoGBAJ4puUjvYFnQeLYVJHaU\nEf7dCtxmZFf3mZfaLjPm0J47AzDXaxmakFfTDsz0+UlrlYgJQUkmGtcfAMtriD1P\ncztodAvzZQylKZ/tXZdcYvXlcnWKwNtlkL02zqod5bSGxffvBNYSuLxL/nL+kedE\nlFr78os8GXt5X8GVfbD6JWjw\n-----END PRIVATE KEY-----\n"",
           ""client_email"": ""firebase-adminsdk-aef5s@emotionsandcareal.iam.gserviceaccount.com"",
           ""client_id"": ""109090773728153847853"",
           ""auth_uri"": ""https://accounts.google.com/o/oauth2/auth"",
@@ -68,8 +67,7 @@ FirebaseApp.Create(new AppOptions()
           ""auth_provider_x509_cert_url"": ""https://www.googleapis.com/oauth2/v1/certs"",
           ""client_x509_cert_url"": ""https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-aef5s%40emotionsandcareal.iam.gserviceaccount.com"",
           ""universe_domain"": ""googleapis.com""
-        }
-        ")
+        }")
 });
 
 app.UseCors(options =>
