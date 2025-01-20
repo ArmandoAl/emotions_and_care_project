@@ -55,7 +55,6 @@ builder.Services.AddScoped<IDBRepository, DBReporitory>();
 var app = builder.Build();
 FirebaseApp.Create(new AppOptions()
 {
-
     Credential = GoogleCredential.FromJson(
         @"{
           ""type"": ""service_account"",
@@ -71,7 +70,6 @@ FirebaseApp.Create(new AppOptions()
           ""universe_domain"": ""googleapis.com""
         }
         ")
-
 });
 
 app.UseCors(options =>

@@ -63,7 +63,7 @@ namespace Business.Implementations
                     if(isFirstTime) {
                         var idLogro = _logroService.AddGoalPatient(idPaciente, 5);
 
-                        bool addStickerResult = _itemsRepository.addStickerToPatient(6, idPaciente);
+                        bool addStickerResult = _itemsRepository.addStickerToPatient(5, idPaciente);
 
                         _patientRepository.registerSet(idPaciente, "firstTestCompleted");
 

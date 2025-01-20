@@ -43,7 +43,7 @@ namespace Business.Implementations
                     }
 
 
-                    bool addStickerResult = _itemsRepository.addStickerToPatient(5, idPaciente);
+                    bool addStickerResult = _itemsRepository.addStickerToPatient(3, idPaciente);
 
                     if (!addStickerResult)
                     {

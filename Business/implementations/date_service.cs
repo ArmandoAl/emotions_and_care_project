@@ -53,7 +53,7 @@ namespace Business.Implementations
                     {
                         var idLogro = _logroRepository.AddGoalPatient(idPaciente, 4);
 
-                        _itemsRepository.addStickerToPatient(3, idPaciente);
+                        _itemsRepository.addStickerToPatient(4, idPaciente);
                         if (idLogro <= 0)
                         {
                             _DateRepository.DeleteCita(idDate);
