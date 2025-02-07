@@ -13,9 +13,11 @@ namespace API.Controllers
     public class PacienteController : Controller
     {
         private readonly IPatientService _service;
-        public PacienteController(IPatientService service)
+        private readonly PushNotificationService _pushNotificationService;
+        public PacienteController(IPatientService service, PushNotificationService pushNotificationService)
         {
             _service = service;
+            _pushNotificationService = pushNotificationService;
         }
 
         [HttpPost]
@@ -92,11 +94,28 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}/canGrowFlower")]
-        public Task<ActionResult> canGrowFlower(int id)
+        public async Task<ActionResult> canGrowFlower(int id)
         {
-            if (id < 1) return Task.FromResult<ActionResult>(BadRequest());
+            if (id < 1)
+                return BadRequest("Id o token inválido.");
             var result = _service.canGrowFlower(id);
-            return Task.FromResult<ActionResult>(Ok(result));
+
+            if (result)
+            {
+                var data = new Dictionary<string, string>
+                {
+                    { "module", "yard" },
+                    { "type", "canGrow" }
+                };
+
+                var patient = _service.Get(id);
+                var token = patient?.token;
+                var title = "¡Tu flor ha crecido!";
+                var body = "¡Tu flor ha crecido!";
+                await _pushNotificationService.SendPushAsync(title, body, token, data);
+            }
+
+            return Ok(result);
         }
 
     }       
