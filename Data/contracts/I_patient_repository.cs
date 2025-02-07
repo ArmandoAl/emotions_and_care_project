@@ -41,5 +41,7 @@ namespace Data.Contracts
 
         bool updateLastProgressDate(int idPatient); 
 
+        bool refreshToken(int id, string token);
+
     }
 }

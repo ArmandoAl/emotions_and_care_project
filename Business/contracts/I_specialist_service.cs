@@ -29,5 +29,7 @@ namespace Business.Contracts
         List<Patient>? GetPacientes(int id);
         List<DateRequest>? GetSolicitudesCitas(int id);
         List<Specialist> ListarEspecialists(int offset, int limit);
+
+        bool refreshToken(int id, string token);
     }
 }

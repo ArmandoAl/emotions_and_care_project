@@ -47,5 +47,25 @@ namespace API.Controllers
                 return BadRequest("Usuario no encontrado.");
             }
         }
+
+        [HttpPut("refreshToken/{id}/{token}")]
+        public ActionResult RefreshToken(int id, string token)
+        {
+            if (id == 0 || token == null) return BadRequest();
+            var isPaciente = _pacienteService.Get(id);
+
+            if (isPaciente == null)
+            {
+                var isEspecialista = _especialistaService.Get(id);
+
+                if (isEspecialista == null) return BadRequest("Usuario no encontrado.");
+
+                _especialistaService.refreshToken(id, token);
+                return Ok(_especialistaService.Get(id));
+            }
+
+            _pacienteService.refreshToken(id, token);
+            return Ok(_pacienteService.Get(id));
+        }
     }
 }

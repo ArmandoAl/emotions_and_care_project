@@ -35,5 +35,7 @@ namespace Business.Contracts
 
         bool growStage(int idPatient);
 
+        bool refreshToken(int id, string token);
+
     }
 }

@@ -111,5 +111,11 @@ namespace Business.Implementations
             if (offset < 0 || limit < 1) { return new List<Specialist>(); }
             return _service.ListarEspecialistas(offset, limit);
         }
+
+        public bool refreshToken(int id, string token)
+        {
+            if (id < 1 || string.IsNullOrEmpty(token)) { return false; }
+            return _service.refreshToken(id, token);
+        }
     }
 }

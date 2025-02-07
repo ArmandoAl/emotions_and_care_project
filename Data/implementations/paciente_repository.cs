@@ -76,6 +76,27 @@ namespace Data.Implementations
         }
     }
 
+    public bool refreshToken(int id, string token)
+    {
+        if (id <= 0 || string.IsNullOrEmpty(token)) return false;
+
+        var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+            .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+            .Options;
+        using (var db = new DBContext(options: connectionOptions))
+        {
+            var thisPaciente = db.patients.FirstOrDefault(x => x.userId == id);
+            if (thisPaciente == null) return false;
+
+            thisPaciente.token = token;
+            thisPaciente.modifiedDate = DateTime.Now;
+
+            db.patients.Update(thisPaciente);
+            db.SaveChanges();
+            return true;
+        }
+    }
+
     // Method to calculate the patient's age based on their birth date
     private int getEdadFromBirthDate(DateTime birthDate)
     {
@@ -228,6 +249,8 @@ namespace Data.Implementations
                 return true;
             }
         }
+
+
 
         public bool Update(Patient patient)
         {

@@ -85,7 +85,6 @@ C:/Users/alvar/OneDrive/Documents/projects/emotions_and_care_project/Business/ob
 /Users/martinortiz/Desktop/EandC/emotions_and_care_project/Business/obj/Debug/net6.0/Business.AssemblyInfoInputs.cache
 /Users/martinortiz/Desktop/EandC/emotions_and_care_project/Business/obj/Debug/net6.0/Business.AssemblyInfo.cs
 /Users/martinortiz/Desktop/EandC/emotions_and_care_project/Business/obj/Debug/net6.0/Business.csproj.CoreCompileInputs.cache
-/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Business/obj/Debug/net6.0/Business.csproj.CopyComplete
 /Users/martinortiz/Desktop/EandC/emotions_and_care_project/Business/obj/Debug/net6.0/Business.dll
 /Users/martinortiz/Desktop/EandC/emotions_and_care_project/Business/obj/Debug/net6.0/refint/Business.dll
 /Users/martinortiz/Desktop/EandC/emotions_and_care_project/Business/obj/Debug/net6.0/Business.pdb
@@ -110,3 +109,5 @@ C:/Users/alvar/OneDrive/Documents/projects/emotions_and_care_project/Business/ob
 /Users/armandoalvarado/Documents/projects/emotions_and_care_project/Business/obj/Debug/net6.0/Business.pdb
 /Users/armandoalvarado/Documents/projects/emotions_and_care_project/Business/obj/Debug/net6.0/Business.genruntimeconfig.cache
 /Users/armandoalvarado/Documents/projects/emotions_and_care_project/Business/obj/Debug/net6.0/ref/Business.dll
+/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Business/obj/Debug/net6.0/Business.sourcelink.json
+/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Business/obj/Debug/net6.0/Business.csproj.Up2Date

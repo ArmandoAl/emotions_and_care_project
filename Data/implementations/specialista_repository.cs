@@ -104,6 +104,28 @@ namespace Data.Implementations
             }
 
         }
+
+        public bool refreshToken(int id, string token)
+        {
+            if (id <= 0 || string.IsNullOrEmpty(token)) return false;
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+              .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+              .Options;
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var especialista = db.specialists.FirstOrDefault(x => x.userId == id);
+                if (especialista == null) return false;
+
+                especialista.token = token;
+                especialista.relationalToken = getTheFirstSixDigits(token);
+                especialista.modifiedDate = DateTime.Now;
+
+                db.specialists.Update(especialista);
+                db.SaveChanges();
+                return true;
+            }
+        }
     
 
         public Specialist? Get(int id)

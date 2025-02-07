@@ -135,6 +135,12 @@ namespace Business.Implementations
 
         }
 
+        public bool refreshToken(int id, string token)
+        {
+            if (id < 1 || string.IsNullOrEmpty(token)) { return false; }
+            return _service.refreshToken(id, token);
+        }
+
         //growFlowerStage
     }
 }
