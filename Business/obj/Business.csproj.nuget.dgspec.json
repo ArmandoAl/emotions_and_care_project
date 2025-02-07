@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Business/Business.csproj": {}
+    "/Users/armandoalvarado/Documents/projects/emotions_and_care_project/Business/Business.csproj": {}
   },
   "projects": {
-    "/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Business/Business.csproj": {
+    "/Users/armandoalvarado/Documents/projects/emotions_and_care_project/Business/Business.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Business/Business.csproj",
+        "projectUniqueName": "/Users/armandoalvarado/Documents/projects/emotions_and_care_project/Business/Business.csproj",
         "projectName": "Business",
-        "projectPath": "/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Business/Business.csproj",
-        "packagesPath": "/Users/martinortiz/.nuget/packages/",
-        "outputPath": "/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Business/obj/",
+        "projectPath": "/Users/armandoalvarado/Documents/projects/emotions_and_care_project/Business/Business.csproj",
+        "packagesPath": "/Users/armandoalvarado/.nuget/packages/",
+        "outputPath": "/Users/armandoalvarado/Documents/projects/emotions_and_care_project/Business/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/martinortiz/.nuget/NuGet/NuGet.Config"
+          "/Users/armandoalvarado/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
@@ -26,11 +26,11 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Data/Data.csproj": {
-                "projectPath": "/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Data/Data.csproj"
+              "/Users/armandoalvarado/Documents/projects/emotions_and_care_project/Data/Data.csproj": {
+                "projectPath": "/Users/armandoalvarado/Documents/projects/emotions_and_care_project/Data/Data.csproj"
               },
-              "/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Domain/Domain.csproj": {
-                "projectPath": "/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Domain/Domain.csproj"
+              "/Users/armandoalvarado/Documents/projects/emotions_and_care_project/Domain/Domain.csproj": {
+                "projectPath": "/Users/armandoalvarado/Documents/projects/emotions_and_care_project/Domain/Domain.csproj"
               }
             }
           }
@@ -39,13 +39,7 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "9.0.100"
+        }
       },
       "frameworks": {
         "net6.0": {
@@ -81,36 +75,26 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[6.0.36, 6.0.36]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[6.0.36, 6.0.36]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.102/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.428/RuntimeIdentifierGraph.json"
         }
       }
     },
-    "/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Data/Data.csproj": {
+    "/Users/armandoalvarado/Documents/projects/emotions_and_care_project/Data/Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Data/Data.csproj",
+        "projectUniqueName": "/Users/armandoalvarado/Documents/projects/emotions_and_care_project/Data/Data.csproj",
         "projectName": "Data",
-        "projectPath": "/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Data/Data.csproj",
-        "packagesPath": "/Users/martinortiz/.nuget/packages/",
-        "outputPath": "/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Data/obj/",
+        "projectPath": "/Users/armandoalvarado/Documents/projects/emotions_and_care_project/Data/Data.csproj",
+        "packagesPath": "/Users/armandoalvarado/.nuget/packages/",
+        "outputPath": "/Users/armandoalvarado/Documents/projects/emotions_and_care_project/Data/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/martinortiz/.nuget/NuGet/NuGet.Config"
+          "/Users/armandoalvarado/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
@@ -122,8 +106,8 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Domain/Domain.csproj": {
-                "projectPath": "/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Domain/Domain.csproj"
+              "/Users/armandoalvarado/Documents/projects/emotions_and_care_project/Domain/Domain.csproj": {
+                "projectPath": "/Users/armandoalvarado/Documents/projects/emotions_and_care_project/Domain/Domain.csproj"
               }
             }
           }
@@ -132,13 +116,7 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "9.0.100"
+        }
       },
       "frameworks": {
         "net6.0": {
@@ -174,36 +152,26 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[6.0.36, 6.0.36]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[6.0.36, 6.0.36]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.102/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.428/RuntimeIdentifierGraph.json"
         }
       }
     },
-    "/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Domain/Domain.csproj": {
+    "/Users/armandoalvarado/Documents/projects/emotions_and_care_project/Domain/Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Domain/Domain.csproj",
+        "projectUniqueName": "/Users/armandoalvarado/Documents/projects/emotions_and_care_project/Domain/Domain.csproj",
         "projectName": "Domain",
-        "projectPath": "/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Domain/Domain.csproj",
-        "packagesPath": "/Users/martinortiz/.nuget/packages/",
-        "outputPath": "/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Domain/obj/",
+        "projectPath": "/Users/armandoalvarado/Documents/projects/emotions_and_care_project/Domain/Domain.csproj",
+        "packagesPath": "/Users/armandoalvarado/.nuget/packages/",
+        "outputPath": "/Users/armandoalvarado/Documents/projects/emotions_and_care_project/Domain/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/martinortiz/.nuget/NuGet/NuGet.Config"
+          "/Users/armandoalvarado/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
@@ -221,13 +189,7 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "9.0.100"
+        }
       },
       "frameworks": {
         "net6.0": {
@@ -263,22 +225,12 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[6.0.36, 6.0.36]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[6.0.36, 6.0.36]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.102/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.428/RuntimeIdentifierGraph.json"
         }
       }
     }

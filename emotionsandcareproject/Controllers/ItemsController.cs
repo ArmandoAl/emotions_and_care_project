@@ -1,8 +1,5 @@
 using Business;
-using Business.Contracts;
-using Business.Implementations;
 using Domain;
-using FirebaseAdmin.Messaging;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers

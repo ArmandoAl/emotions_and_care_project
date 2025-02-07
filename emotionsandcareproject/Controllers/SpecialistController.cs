@@ -62,6 +62,8 @@ namespace API.Controllers
             if (id < 1 || string.IsNullOrEmpty(tokenPaciente))
                 return BadRequest("Id o token inválido.");
 
+            
+
             // Intentar vincular al paciente
             var result = _service.vincularPaciente(id, tokenPaciente);
             if (!result)
@@ -74,18 +76,25 @@ namespace API.Controllers
 
 
             var patients = _service.GetPacientes(id);
-            var patient = patients?.FirstOrDefault(p => p.token == tokenPaciente);
+            var patient = patients?.FirstOrDefault(p => p.relationalToken == tokenPaciente);
             if (patient == null || string.IsNullOrEmpty(patient.token))
                 return NotFound("Paciente no encontrado o token inválido.");
 
 
+                //make a dictionary with this
+                //  { "module", "schedule", 
+                //     "type": "patient_linked",
+                //     "specialist_id": specialist.id.ToString(),
+                //  }
         
-            var data = new Dictionary<string, string>()
+            var data = new Dictionary<string, string>
             {
-                { "module", "schedule" }
+                { "module", "schedule" },
+                { "type", "patient_linked" },
+                { "specialist_id", specialist.userId.ToString() }
             };
+        
 
-            
             await _pushNotificationService.SendPushAsync("Nueva notificación", specialist.name +  " ha aceptado tu solicitud de vinculación. ¡Felicidades!", patient.token, data);
 
 
