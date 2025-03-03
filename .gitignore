@@ -1,0 +1,18 @@
+# Carpetas de compilación
+bin/
+obj/
+
+# Archivos generados por .NET
+*.dll
+*.exe
+*.pdb
+*.nuget.cache
+*.deps.json
+*.log
+*.lock.json
+
+# Archivos de configuración de Visual Studio y Rider
+.vscode/
+.idea/
+*.csproj.user
+

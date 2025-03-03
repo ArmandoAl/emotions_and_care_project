@@ -19,6 +19,8 @@ namespace Domain
         // This is an optional field (nullable DateTime).
         // If no date is provided, it will be null.
         public Date? Cita { get; set; }
+
+        public DateTime? dateCreated { get; set; } = DateTime.Now;
     }
 }
 

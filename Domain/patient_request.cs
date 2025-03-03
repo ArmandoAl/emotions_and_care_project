@@ -16,5 +16,8 @@ namespace Domain
 
         // The patient associated with this request (an object of type Patient)
         public Patient patient { get; set; } = new Patient();
+
+
+        public DateTime? date { get; set; } = DateTime.Now;
     }
 }
