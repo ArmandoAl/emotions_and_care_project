@@ -177,7 +177,6 @@ namespace Data.Implementations
                 thisEspecialista.phone = specialist.phone;
                 thisEspecialista.password = specialist.password;
                 thisEspecialista.license = specialist.license;
-                thisEspecialista.relationalToken = specialist.relationalToken;
                 thisEspecialista.modifiedDate = DateTime.Now;
 
                 db.specialists.Update(thisEspecialista);

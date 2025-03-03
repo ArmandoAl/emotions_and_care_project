@@ -39,6 +39,7 @@ namespace Domain
         // Represents the patients that the specialist is treating or working with.
         public List<Patient> patients { get; set; } = new List<Patient>();
 
+
         // A list of 'DateRequest' objects representing date requests made by the specialist.
         public List<DateRequest> dateRequests { get; set; } = new List<DateRequest>();
 

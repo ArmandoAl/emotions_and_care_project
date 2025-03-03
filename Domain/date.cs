@@ -8,6 +8,15 @@ using System.Threading.Tasks;
 namespace Domain
 {
     // The 'Date' class represents an appointment or scheduled event
+
+     public enum Status
+    {
+        Initial,
+        Confirmed,
+        Completed,
+        NotCompleted,
+        PendingToMatch
+    }
     public class Date
     {
         // The primary key for the 'Date' entity
@@ -26,6 +35,8 @@ namespace Domain
         // An optional property to describe the event (e.g., "Consultation with Dr. Smith")
         public string? description { get; set; }
 
+        public string? specialistNotes { get; set; } = "";
+
         // A boolean indicating whether the patient has confirmed the event
         public bool patientConfirm { get; set; } = false;
 
@@ -37,6 +48,9 @@ namespace Domain
 
         // A reference to the 'Patient' object associated with this event (can be null)
         public Patient? patient { get; set; }
+
+        public Status status { get; set; } = Status.Initial;
+
     }
 
     // The 'goalWithDate' class represents a link between a 'Goal' and a 'Date'

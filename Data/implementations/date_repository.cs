@@ -114,9 +114,7 @@ namespace Data.Implementations
              .Options;
             using (var db = new DBContext(options: connectionOptions))
             {
-              
-
-
+                
                 var citaToUpdate = db.dates.FirstOrDefault(x => x.dateId == cita.dateId);
 
 
@@ -126,6 +124,7 @@ namespace Data.Implementations
                 citaToUpdate.hour = cita.hour;
                 citaToUpdate.place = cita.place;
                 citaToUpdate.description = cita.description;
+
 
                 db.SaveChanges();
 
