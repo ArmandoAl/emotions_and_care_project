@@ -24,12 +24,7 @@ namespace Data.Implementations
                 var pattient = db.patients.FirstOrDefault(x => x.userId == idPaciente);
 
                 if (pattient == null) return 0;
-
                 
-              
-
-               
-
                 db.dates.Add(cita);
 
                 db.SaveChanges();
@@ -114,7 +109,7 @@ namespace Data.Implementations
              .Options;
             using (var db = new DBContext(options: connectionOptions))
             {
-                
+
                 var citaToUpdate = db.dates.FirstOrDefault(x => x.dateId == cita.dateId);
 
 

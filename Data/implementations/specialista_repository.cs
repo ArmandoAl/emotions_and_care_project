@@ -231,8 +231,6 @@ namespace Data.Implementations
         {
             if(idSpecialist <= 0 || string.IsNullOrEmpty(patientToken)) return false;
 
-            Console.WriteLine("Vincular paciente");
-
             var connectionOptions = new DbContextOptionsBuilder<DBContext>()
               .UseSqlServer(Data.Helpers.Constants.ConnectionString)
               .Options;
@@ -241,19 +239,13 @@ namespace Data.Implementations
                 var especialista = db.specialists.FirstOrDefault(x => x.userId == idSpecialist);
                 if(especialista == null) return false;
 
-                Console.WriteLine("Vincular paciente");
-
                 var paciente = db.patients.FirstOrDefault(x => x.relationalToken == patientToken);
                 if(paciente == null) return false;
-
-                Console.WriteLine("Vincular paciente");
 
                 especialista.patients.Add(paciente);
                 db.specialists.Update(especialista);
 
                 db.SaveChanges();
-
-                Console.WriteLine("Vincular paciente");
                 return true;
             }
         }

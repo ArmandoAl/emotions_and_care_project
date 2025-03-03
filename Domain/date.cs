@@ -51,6 +51,8 @@ namespace Domain
 
         public Status status { get; set; } = Status.Initial;
 
+        public bool sentBySpecialist { get; set; } = false;
+
     }
 
     // The 'goalWithDate' class represents a link between a 'Goal' and a 'Date'

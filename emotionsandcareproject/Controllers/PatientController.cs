@@ -65,6 +65,12 @@ namespace API.Controllers
             return Task.FromResult<ActionResult>(Ok(result));
         }   
 
+        //vincularDirecto
+        [HttpPost("{id}/vincularDirecto/{tokenEspecialista}")]
+        
+
+
+
         [HttpPut("{id}/MoficarConfiguracionNotificaciones/{notificacionesActivas}/{dirioActivado}/{progresoActivado}")]
         public Task<ActionResult> ActivarNotificaciones([FromRoute] int id, [FromRoute] bool notificacionesActivas, [FromRoute] bool dirioActivado, [FromRoute] bool progresoActivado)
         {
