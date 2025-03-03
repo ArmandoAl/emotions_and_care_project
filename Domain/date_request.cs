@@ -21,6 +21,8 @@ namespace Domain
         public Date? Cita { get; set; }
 
         public DateTime? dateCreated { get; set; } = DateTime.Now;
+
+        //iaoribao
     }
 }
 
