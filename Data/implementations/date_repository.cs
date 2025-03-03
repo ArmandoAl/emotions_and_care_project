@@ -100,7 +100,7 @@ namespace Data.Implementations
             }
         }
 
-        public bool UpdateCita(Date cita)
+       public bool UpdateCita(Date cita)
         {
             if (cita == null) return false;
 
@@ -120,6 +120,29 @@ namespace Data.Implementations
                 citaToUpdate.place = cita.place;
                 citaToUpdate.description = cita.description;
 
+                citaToUpdate.sentBySpecialist = cita.sentBySpecialist;
+                citaToUpdate.status = Status.PendingToMatch;
+
+                db.SaveChanges();
+
+                return true;
+            }
+        }
+        public bool UpdateStatusCita(Date cita)
+        {
+            if (cita == null) return false;
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+             .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+             .Options;
+            using (var db = new DBContext(options: connectionOptions))
+            {
+
+                var citaToUpdate = db.dates.FirstOrDefault(x => x.dateId == cita.dateId);
+                if (citaToUpdate == null) return false;
+
+                citaToUpdate.status = cita.status;
+                citaToUpdate.specialistNotes = cita.specialistNotes;
 
                 db.SaveChanges();
 

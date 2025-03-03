@@ -45,10 +45,10 @@ namespace Business.Implementations
             return _service.Update(especialista);
         }
 
-        public string? GetByToken(int idPaciente)
+        public Specialist? GetByToken(string relatedToken)
         {
-            if (idPaciente < 1) { return null; }
-            return _service.GetByToken(idPaciente);
+            if (string.IsNullOrEmpty(relatedToken)) { return null; }
+            return _service.GetByToken(relatedToken);
         }
 
         public int login(string email, string password)
@@ -57,12 +57,21 @@ namespace Business.Implementations
             return _service.login(email, password);
         }
 
-        public bool vincularPaciente(int idSpecialist, string tokenPaciente) 
+        public bool aceptarSolicitud(int idSpecialist, int pacientId)
         {
-            if (idSpecialist < 1 || string.IsNullOrEmpty(tokenPaciente)) { return false; }
-            return _service.vincularPaciente(idSpecialist, tokenPaciente);
+            if (idSpecialist < 1 || pacientId < 1) { return false; }
+
+            return _service.aceptarSolicitud(idSpecialist, pacientId);
         }
 
+
+        public bool rechazarSolicitud(int idSpecialist, int pacientId)
+        {
+            if (idSpecialist < 1 || pacientId < 1) { return false; }
+
+            return _service.rechazarSolicitud(idSpecialist, pacientId);
+        }
+        
         public bool aceptarCita(int idEspecialista, int idCita)
         {
             if (idCita < 1 || idEspecialista < 1) { return false; }

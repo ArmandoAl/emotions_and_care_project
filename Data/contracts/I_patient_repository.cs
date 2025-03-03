@@ -43,5 +43,7 @@ namespace Data.Contracts
 
         bool refreshToken(int id, string token);
 
+         bool VincularDirecto(int id, string tokenEspecialista);
+
     }
 }

@@ -141,6 +141,12 @@ namespace Business.Implementations
             return _service.refreshToken(id, token);
         }
 
+        public bool VincularDirecto(int id, string tokenEspecialista)
+        {
+            if (id < 1 || string.IsNullOrEmpty(tokenEspecialista)) { return false; }
+            return _service.VincularDirecto(id, tokenEspecialista);
+        }
+
         //growFlowerStage
     }
 }

@@ -18,11 +18,13 @@ namespace Business.Contracts
 
         bool Update(Specialist especialist);
 
-        string? GetByToken(int idPaciente);
+        Specialist? GetByToken(string relatedToken);
 
         int login(string email, string password);
 
-        bool vincularPaciente(int idSpecialist, string tokenPaciente);
+        bool aceptarSolicitud(int idSpecialist, int pacientId);
+
+        bool rechazarSolicitud(int idSpecialist, int pacientId);
 
         bool aceptarCita(int idEspecialist, int idCita);
         bool rechazarCita(int id, int idCita);

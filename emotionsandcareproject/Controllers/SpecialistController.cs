@@ -10,9 +10,7 @@ namespace API.Controllers
     public class EspecialistaController : Controller
     {
         private readonly ISpecialistService _service;
-        
         private readonly PushNotificationService _pushNotificationService;
-
 
         public EspecialistaController(ISpecialistService service, PushNotificationService pushNotificationService)
         {
@@ -56,16 +54,13 @@ namespace API.Controllers
             return Task.FromResult<ActionResult>(Ok(result));
         }
 
-      [HttpPost("{id}/vincularPaciente/{tokenPaciente}")]
-        public async Task<ActionResult> VincularPaciente([FromRoute] int id, [FromRoute] string tokenPaciente)
+      [HttpPost("{id}/aceptarSolicitud/{pacientId}")]
+        public async Task<ActionResult> VincularPaciente([FromRoute] int id, [FromRoute] int pacientId)
         {
-            if (id < 1 || string.IsNullOrEmpty(tokenPaciente))
-                return BadRequest("Id o token inválido.");
-
-            
+            if (id < 1 || pacientId < 1) return BadRequest();        
 
             // Intentar vincular al paciente
-            var result = _service.vincularPaciente(id, tokenPaciente);
+            var result = _service.aceptarSolicitud(id, pacientId);
             if (!result)
                 return BadRequest("No se pudo vincular el paciente.");
 
@@ -76,27 +71,58 @@ namespace API.Controllers
 
 
             var patients = _service.GetPacientes(id);
-            var patient = patients?.FirstOrDefault(p => p.relationalToken == tokenPaciente);
+            var patient = patients?.FirstOrDefault(p => p.userId == pacientId);
+            if (patient == null || string.IsNullOrEmpty(patient.token))
+                return NotFound("Paciente no encontrado o token inválido.");
+            
+           try {
+            var data = new Dictionary<string, string>
+            {
+                { "module", "sync" },
+                { "type", "specialistSync" },
+            };
+
+            await _pushNotificationService.SendPushAsync("Nueva notificación", specialist.name +  " ha aceptado tu solicitud de vinculación. ¡Felicidades!", patient.token, data);
+           } catch (Exception e) {
+                Console.WriteLine(e.Message);
+            }
+
+            return Ok(result);
+        }
+
+        //rechazar solicitud
+        [HttpPost("{id}/rechazarSolicitud/{pacientId}")]
+        public async Task<ActionResult> RechazarPaciente([FromRoute] int id, [FromRoute] int pacientId)
+        {
+            if (id < 1 || pacientId < 1) return BadRequest();
+
+            // Intentar vincular al paciente
+            var result = _service.rechazarSolicitud(id, pacientId);
+            if (!result)
+                return BadRequest("No se pudo vincular el paciente.");
+
+            // Obtener el especialista
+            var specialist = _service.Get(id);
+            if (specialist == null)
+                return NotFound("Especialista no encontrado.");
+
+            var patients = _service.GetPacientes(id);
+            var patient = patients?.FirstOrDefault(p => p.userId == pacientId);
             if (patient == null || string.IsNullOrEmpty(patient.token))
                 return NotFound("Paciente no encontrado o token inválido.");
 
-
-                //make a dictionary with this
-                //  { "module", "schedule", 
-                //     "type": "patient_linked",
-                //     "specialist_id": specialist.id.ToString(),
-                //  }
-        
-            var data = new Dictionary<string, string>
+            try {
+                var data = new Dictionary<string, string>
             {
-                { "module", "schedule" },
-                { "type", "patient_linked" },
-                { "specialist_id", specialist.userId.ToString() }
+                { "module", "sync" },
+                { "type", "specialistSyncReject" },
+            
             };
-        
 
-            await _pushNotificationService.SendPushAsync("Nueva notificación", specialist.name +  " ha aceptado tu solicitud de vinculación. ¡Felicidades!", patient.token, data);
-
+            await _pushNotificationService.SendPushAsync("Nueva notificación", specialist.name + " ha rechazado tu solicitud de vinculación.", patient.token, data);
+            } catch (Exception e) {
+                Console.WriteLine(e.Message);
+            }
 
             return Ok(result);
         }

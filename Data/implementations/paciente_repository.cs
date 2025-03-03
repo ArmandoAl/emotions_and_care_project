@@ -16,16 +16,6 @@ namespace Data.Implementations
     {
         if (patient == null) return 0;
 
-        // Email validation regex pattern
-        var emailRegex = new System.Text.RegularExpressions.Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
-
-        // Check if the email is in a valid format
-        if (!emailRegex.IsMatch(patient.mail))
-            throw new ArgumentException("Must enter a valid email address.");
-        
-        // Check if the email format is correct
-        if (!emailRegex.IsMatch(patient.mail)) return -3; // Invalid email format
-
         var connectionOptions = new DbContextOptionsBuilder<DBContext>()
             .UseSqlServer(Data.Helpers.Constants.ConnectionString)
             .Options;
@@ -89,6 +79,7 @@ namespace Data.Implementations
             if (thisPaciente == null) return false;
 
             thisPaciente.token = token;
+            thisPaciente.relationalToken = getTheFirstSixDigits(token);
             thisPaciente.modifiedDate = DateTime.Now;
 
             db.patients.Update(thisPaciente);
@@ -297,6 +288,58 @@ namespace Data.Implementations
                 // Find the specialist with the given relational token
                 var thisEspecialista = db.specialists.FirstOrDefault(x => x.relationalToken == tokenEspecialista);
                 
+                // If the specialist doesn't exist, return false
+                if (thisEspecialista == null) return false;
+
+                // Link the patient to the specialist by setting the specialist on the patient's record
+              
+
+                // Update the modified date for both the patient and the specialist
+                thisPaciente.modifiedDate = DateTime.Now;
+                thisEspecialista.modifiedDate = DateTime.Now;
+
+                // Add the patient to the specialist's patient list
+
+                PatientRequest patientRequest = new PatientRequest
+                {
+                    patient = thisPaciente,
+                    
+                };
+
+                thisEspecialista.patientsRequests.Add(patientRequest);
+
+                // Update both the patient and the specialist in the database
+                db.patients.Update(thisPaciente);
+                db.specialists.Update(thisEspecialista);
+
+                // Save changes to the database
+                db.SaveChanges();
+
+                // Return true to indicate the operation was successful
+                return true;
+            }
+        }
+
+        public bool VincularDirecto(int id, string tokenEspecialista)
+        {
+            // Return false if the provided id is invalid or the token is empty/null
+            if (id <= 0 || string.IsNullOrEmpty(tokenEspecialista)) return false;
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                // Find the patient with the provided id
+                var thisPaciente = db.patients.FirstOrDefault(x => x.userId == id);
+
+                // If the patient doesn't exist, return false
+                if (thisPaciente == null) return false;
+
+                // Find the specialist with the given relational token
+                var thisEspecialista = db.specialists.FirstOrDefault(x => x.relationalToken == tokenEspecialista);
+
                 // If the specialist doesn't exist, return false
                 if (thisEspecialista == null) return false;
 

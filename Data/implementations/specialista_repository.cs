@@ -185,19 +185,19 @@ namespace Data.Implementations
             }
         }
 
-        public string? GetByToken(int specialistId)
+        public Specialist? GetByToken(string relatedToken)
         {
-            if (specialistId <= 0) return null;
+            if (string.IsNullOrEmpty(relatedToken)) return null;
 
             var connectionOptions = new DbContextOptionsBuilder<DBContext>()
               .UseSqlServer(Data.Helpers.Constants.ConnectionString)
               .Options;
             using (var db = new DBContext(options: connectionOptions))
             {
-                var especialista = db.specialists.FirstOrDefault(x => x.userId == specialistId);
+                var especialista = db.specialists.FirstOrDefault(x => x.relationalToken == relatedToken);
                 if (especialista == null) return null;
 
-                return especialista.token;
+                return especialista;
             }
         }
 
@@ -227,9 +227,9 @@ namespace Data.Implementations
             }
         }
 
-        public bool vincularPaciente(int idSpecialist, string patientToken)
+        public bool aceptarSolicitud(int idSpecialist, int pacientId)
         {
-            if(idSpecialist <= 0 || string.IsNullOrEmpty(patientToken)) return false;
+            if(idSpecialist <= 0 || pacientId <= 0) return false;
 
             var connectionOptions = new DbContextOptionsBuilder<DBContext>()
               .UseSqlServer(Data.Helpers.Constants.ConnectionString)
@@ -239,12 +239,52 @@ namespace Data.Implementations
                 var especialista = db.specialists.FirstOrDefault(x => x.userId == idSpecialist);
                 if(especialista == null) return false;
 
-                var paciente = db.patients.FirstOrDefault(x => x.relationalToken == patientToken);
+                var paciente = db.patients.FirstOrDefault(x => x.userId == pacientId);
                 if(paciente == null) return false;
 
                 especialista.patients.Add(paciente);
-                db.specialists.Update(especialista);
 
+                //encontrar el patientRequest que tenga el usuario y eliminalo
+                PatientRequest? patientRequest = db.patientRequest.FirstOrDefault(x => x.patient.userId == pacientId);
+
+                if (patientRequest != null)
+                {
+                    db.patientRequest.Remove(patientRequest);
+                }
+                especialista.patientsRequests = db.patientRequest.Where(x => x.patient.userId != pacientId).ToList();
+                paciente.specialist = especialista;
+
+                db.specialists.Update(especialista);
+                db.patients.Update(paciente);
+                db.SaveChanges();
+                return true;
+            }
+        }
+
+        public bool rechazarSolicitud(int idSpecialist, int pacientId)
+        {
+            if (idSpecialist <= 0 || pacientId <= 0) return false;
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+              .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+              .Options;
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var especialista = db.specialists.FirstOrDefault(x => x.userId == idSpecialist);
+                if (especialista == null) return false;
+
+                var paciente = db.patients.FirstOrDefault(x => x.userId == pacientId);
+                if (paciente == null) return false;
+
+                //encontrar el patientRequest que tenga el usuario y eliminalo
+                PatientRequest? patientRequest = db.patientRequest.FirstOrDefault(x => x.patient.userId == pacientId);
+
+                if (patientRequest != null)
+                {
+                    db.patientRequest.Remove(patientRequest);
+                }
+                especialista.patientsRequests = db.patientRequest.Where(x => x.patient.userId != pacientId).ToList();
+                db.specialists.Update(especialista);
                 db.SaveChanges();
                 return true;
             }
@@ -272,7 +312,14 @@ namespace Data.Implementations
                                         sex = p.sex,
                                         token = p.token,
                                         relationalToken = p.relationalToken,
-                                        termsAndConditions = p.termsAndConditions,      
+                                        syncDate = p.syncDate,
+                                        // dates = [
+                                          
+                                          
+
+                                        // ],
+
+                                        
                                         // Asigna otras propiedades que necesites
                                     })
                                     .ToList();

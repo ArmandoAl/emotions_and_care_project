@@ -29,6 +29,8 @@ namespace Domain
         // Optional identifier for a sticker associated with the cart answer (nullable)
         public int? stickerId { get; set; }
 
+        
+
         // Indicates whether the cart answer has been read or not (default is false)
         public bool read { get; set; } = false;
 

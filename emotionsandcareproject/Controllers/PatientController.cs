@@ -13,11 +13,13 @@ namespace API.Controllers
     public class PacienteController : Controller
     {
         private readonly IPatientService _service;
+        private readonly ISpecialistService _specialistService;
         private readonly PushNotificationService _pushNotificationService;
-        public PacienteController(IPatientService service, PushNotificationService pushNotificationService)
+        public PacienteController(IPatientService service, PushNotificationService pushNotificationService, ISpecialistService specialistService)
         {
             _service = service;
             _pushNotificationService = pushNotificationService;
+            _specialistService = specialistService;
         }
 
         [HttpPost]
@@ -57,19 +59,59 @@ namespace API.Controllers
         }
 
         [HttpPost("{id}/vincularEspecialista/{tokenEspecialista}")]
-        public Task<ActionResult> VincularEspecialista(int id, string tokenEspecialista)
+        public async Task<ActionResult> VincularEspecialista(int id, string tokenEspecialista)
         {
-            if (id < 1 || tokenEspecialista == null) return Task.FromResult<ActionResult>(BadRequest());
+            if (id < 1 || tokenEspecialista == null) return BadRequest();
             var result = _service.VincularEspecialista(id, tokenEspecialista);
-            if (!result) return Task.FromResult<ActionResult>(BadRequest());
-            return Task.FromResult<ActionResult>(Ok(result));
+
+            try {
+                 var data = new Dictionary<string, string>
+                {
+                    { "module", "patientRequest" },
+                    { "event", "newRequest" }
+                };
+
+                var patient = _service.Get(id);
+                var token = _specialistService.GetByToken(tokenEspecialista)?.token ?? "";
+                var title = "¡Nueva solicitud de vinculación!";
+                var body = patient!.name + " quiere vincularse contigo.";
+                await _pushNotificationService.SendPushAsync(title, body, token,
+                 data);
+               } catch (Exception e) {
+                   Console.WriteLine(e);
+               }
+         
+            return Ok(result);
         }   
 
         //vincularDirecto
         [HttpPost("{id}/vincularDirecto/{tokenEspecialista}")]
-        
+         public async Task<ActionResult> VincularDirecto(int id, string tokenEspecialista)
+        {
+            if (id < 1 || tokenEspecialista == null) return BadRequest();
+            var result = _service.VincularDirecto(id, tokenEspecialista);
+
+            try {
+                var data = new Dictionary<string, string>
+                {
+                    { "module", "sync" },
+                    { "type", "patientSync" },
+                };
+
+            var patient = _service.Get(id);
+            var token = _specialistService.GetByToken(tokenEspecialista)?.token ?? "";
+            var specialist = _specialistService.GetByToken(tokenEspecialista);
+
+            await _pushNotificationService.SendPushAsync("Nueva notificación", 
+            patient!.name + " se ha vinculado contigo.", token, data);
+          
+            } catch (Exception e) {
+                Console.WriteLine(e.Message);
+            }
 
 
+            return Ok(result);
+        }
 
         [HttpPut("{id}/MoficarConfiguracionNotificaciones/{notificacionesActivas}/{dirioActivado}/{progresoActivado}")]
         public Task<ActionResult> ActivarNotificaciones([FromRoute] int id, [FromRoute] bool notificacionesActivas, [FromRoute] bool dirioActivado, [FromRoute] bool progresoActivado)
@@ -108,17 +150,21 @@ namespace API.Controllers
 
             if (result)
             {
-                var data = new Dictionary<string, string>
+               try {
+                 var data = new Dictionary<string, string>
                 {
                     { "module", "yard" },
                     { "type", "canGrow" }
                 };
 
                 var patient = _service.Get(id);
-                var token = patient?.token;
+                var token = patient!.token;
                 var title = "¡Tu flor ha crecido!";
                 var body = "¡Tu flor ha crecido!";
                 await _pushNotificationService.SendPushAsync(title, body, token, data);
+               } catch (Exception e) {
+                   Console.WriteLine(e);
+               }
             }
 
             return Ok(result);

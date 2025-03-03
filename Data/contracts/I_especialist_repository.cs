@@ -17,11 +17,13 @@ namespace Data.Contracts
 
         bool Update(Specialist especialist);
 
-        string? GetByToken(int idPatient);
+        Specialist? GetByToken(string relatedToken);
 
         int login(string email, string password);
 
-        bool vincularPaciente(int idSpecialist, string tokenPatient);
+        bool aceptarSolicitud(int idSpecialist, int pacientId);
+
+        bool rechazarSolicitud(int idSpecialist, int pacientId);
         List<Patient>? GetPacientes(int id);
         List<Specialist> ListarEspecialistas(int offset, int limit);
 

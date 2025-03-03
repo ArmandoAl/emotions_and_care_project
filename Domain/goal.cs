@@ -45,5 +45,6 @@ namespace Domain
 
         // The optional identifier for a flower associated with the goal (nullable)
         public int? flowerId { get; set; }
+
     }
 }
