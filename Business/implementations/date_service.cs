@@ -30,9 +30,13 @@ namespace Business.Implementations
 
             int idDate = _DateRepository.AddCita(date, idPaciente);
 
+            Date? cita = _DateRepository.GetCita(idDate);
+
             if (idDate > 0)
             {
                 bool vinculacion = _DateRepository.vincularCitaConPeciente(idDate, idPaciente);
+                Console.WriteLine("Vinculacion: " + vinculacion);
+
                 if (!vinculacion)
                 {
                     _DateRepository.DeleteCita(idDate);
@@ -41,7 +45,7 @@ namespace Business.Implementations
                 else
                 {
 
-                    int idSolicitudDate = _DateRepository.AddSolicitudCita(date, idEspecialista);
+                    int idSolicitudDate = _DateRepository.AddSolicitudCita(cita!, idEspecialista);
 
                     if(idSolicitudDate == 0)
                     {

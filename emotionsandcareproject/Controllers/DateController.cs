@@ -16,6 +16,7 @@ namespace API.Controllers
         private readonly ISpecialistService _especialistaService;
         private readonly INotificationService _notificacionService;
 
+       
         public CitaController(IDateService service, 
                IPatientService pacienteService, ISpecialistService especialistaService, INotificationService notificacionService
             )
@@ -31,7 +32,10 @@ namespace API.Controllers
 
         {
             if (cita == null) return BadRequest();
+            Console.WriteLine("Cita: " + cita);
             var result = _service.AddDate(cita, idPaciente, idEspecialista, isFirtTime);
+
+            Console.WriteLine("Resultado: " + result);
             if (result == null) return BadRequest();
             return Ok(result);
         }
@@ -110,7 +114,7 @@ namespace API.Controllers
                     Body = "El paciente " + paciente!.name + " ha agendado una cita"
 
                 },
-                Token = _especialistaService.GetByToken(paciente.specialist!.userId)
+                Token = _especialistaService.GetByToken(paciente.specialist!.relationalToken)!.token
             };
 
             await FirebaseMessaging.DefaultInstance.SendAsync(message);
@@ -132,7 +136,7 @@ namespace API.Controllers
                     Title = "Agenda",
                     Body = "El paciente ha cancelado la cita"
                 },
-                Token = _especialistaService.GetByToken(paciente!.specialist!.userId)
+                Token = _especialistaService.GetByToken(paciente!.specialist!.relationalToken)!.token
             };
 
             await FirebaseMessaging.DefaultInstance.SendAsync(message);
