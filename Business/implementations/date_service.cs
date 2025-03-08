@@ -105,6 +105,13 @@ namespace Business.Implementations
             return _DateRepository.UpdateCita(Date);
         }
 
+        public bool UpdateStatusCita(Date cita)
+        {
+            if (cita == null) return false;
+
+            return _DateRepository.UpdateStatusCita(cita);
+        }
+
         public List<Date>? GetDatesPorPaciente(int idPaciente)
         {
             if (idPaciente <= 0) return null;

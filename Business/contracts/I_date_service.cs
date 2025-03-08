@@ -28,5 +28,7 @@ namespace Business.Contracts
         bool cancelarDatePorEspecialista(int idDate, int idEspecialista);
         List<Date>? GetDatesPorEspecialista(int idSpecialist);
         int AddDateSpecialist(Date Date, int idEspecialista, int idPaciente);
+
+          bool UpdateStatusCita(Date cita);
     }
 }

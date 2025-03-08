@@ -141,6 +141,18 @@ namespace API.Controllers
             return Task.FromResult<ActionResult>(Ok(result));
         }
 
+        //putFlowerInInterface
+        [HttpPut("{id}/putFlowerInInterface/{idFlower}/{position}")]
+        public Task<ActionResult> putFlowerInInterface(int id, int idFlower, int position)
+        {
+            if (id < 1) return Task.FromResult<ActionResult>(BadRequest());
+            var result = _service.putFlowerInInterface(id, idFlower, position);
+
+            if (result < 1) return Task.FromResult<ActionResult>(BadRequest());
+            return Task.FromResult<ActionResult>(Ok(result));
+        }
+
+
         [HttpGet("{id}/canGrowFlower")]
         public async Task<ActionResult> canGrowFlower(int id)
         {
@@ -179,6 +191,17 @@ namespace API.Controllers
             return Task.FromResult<ActionResult>(Ok(result));
         }
 
+
+
+        //bool actualizarThemeId(int idPatient, int themeId)
+        [HttpPut("{id}/actualizarThemeId/{themeId}")]
+        public Task<ActionResult> actualizarThemeId(int id, int themeId)
+        {
+            if (id < 1) return Task.FromResult<ActionResult>(BadRequest());
+            var result = _service.actualizarThemeId(id, themeId);
+            if (!result) return Task.FromResult<ActionResult>(BadRequest());
+            return Task.FromResult<ActionResult>(Ok(result));
+        }
     }       
 }
 

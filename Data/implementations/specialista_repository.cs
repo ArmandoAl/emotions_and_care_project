@@ -61,7 +61,7 @@ namespace Data.Implementations
                         institution = specialist.institution,
                         presentation = specialist.presentation,
                         adress = specialist.adress,
-                        license = specialist.license,
+                        license = specialist.license,        
                         relationalToken = getTheFirstSixDigits(specialist.token),
                         termsAndConditions = db.terms!.FirstOrDefault(x => x.termsAndConditionsId! == specialist.termsId)!,
                         dateCreated = DateTime.Now,

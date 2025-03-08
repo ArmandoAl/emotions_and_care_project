@@ -108,6 +108,11 @@ namespace Business.Implementations
             return _service.putStickeriInInterface(idPatient, idUserSticker, position);
             
          }
+
+        public int putFlowerInInterface(int idPatient, int idFlower, int position) {
+            if (idPatient < 1 || idFlower < 1 || position < 1) { return 0; }
+            return _service.putFlowerInInterface(idPatient, idFlower, position);
+        }
         
         public bool canGrowFlower(int idPatient) {
             if (idPatient < 1) { return false; }
@@ -148,5 +153,11 @@ namespace Business.Implementations
         }
 
         //growFlowerStage
+
+        public bool actualizarThemeId(int idPatient, int themeId)
+        {
+            if (idPatient < 1 || themeId < 1) { return false; }
+            return _service.actualizarThemeId(idPatient, themeId);
+        }
     }
 }

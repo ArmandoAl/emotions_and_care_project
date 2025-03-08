@@ -37,5 +37,7 @@ namespace Data.Contracts
         bool eliminarSolicitudCita(int idCita);
         List<DateRequest>? GetSolicitudesCitas(int id);
         List<Date>? GetCitasPorEspecialista(int idSpecialist);
+
+        bool UpdateStatusCita(Date cita);
     }
 }

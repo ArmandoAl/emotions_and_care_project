@@ -21,9 +21,6 @@ namespace Data.Implementations
              .Options;
             using (var db = new DBContext(options: connectionOptions))
             {
-                var pattient = db.patients.FirstOrDefault(x => x.userId == idPaciente);
-
-                if (pattient == null) return 0;
                 
                 db.dates.Add(cita);
 
@@ -87,16 +84,31 @@ namespace Data.Implementations
 
             using (var db = new DBContext(options: connectionOptions))
             {
-               var paciente = db.patients.FirstOrDefault(x => x.userId == idPaciente);
+               var paciente = db.patients.Where(x => x.userId == idPaciente).Include(x => x.dates).FirstOrDefault();
 
                 if (paciente == null) return null;
+
+                Console.WriteLine(paciente.dates.Count);
 
                 citas = paciente.dates.ToList();
 
                 //ordenar citas por fecha de mas reciente a mas antigua
                 citas = citas.OrderByDescending(x => x.date).ToList();
 
-                return citas;
+                return citas.Select(x => new Date
+                {
+                    dateId = x.dateId,
+                    date = x.date,
+                    hour = x.hour,
+                    place = x.place,
+                    description = x.description,
+                    specialistConfirm = x.specialistConfirm,
+                    patientConfirm = x.patientConfirm,
+                    status = x.status,
+                    specialistNotes = x.specialistNotes,
+                    sentBySpecialist = x.sentBySpecialist,
+
+                }).ToList();
             }
         }
 
@@ -119,7 +131,6 @@ namespace Data.Implementations
                 citaToUpdate.hour = cita.hour;
                 citaToUpdate.place = cita.place;
                 citaToUpdate.description = cita.description;
-
                 citaToUpdate.sentBySpecialist = cita.sentBySpecialist;
                 citaToUpdate.status = Status.PendingToMatch;
 
