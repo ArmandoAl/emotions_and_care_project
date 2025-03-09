@@ -88,7 +88,7 @@ namespace Data.Implementations
 
                 if (paciente == null) return null;
 
-                Console.WriteLine(paciente.dates.Count);
+                
 
                 citas = paciente.dates.ToList();
 

@@ -197,6 +197,7 @@ namespace Data.Implementations
                                 images = y.flower.images,
                             },
                             position = y.position,
+                            state = y.state
                         }).ToList(),
                         userStickers = x.userInterface.userStickers.Select(y => new UserSticker
                         {
