@@ -27,25 +27,71 @@ namespace API.Controllers
             _notificacionService = notificacionService;
         }
 
-        [HttpPost("{idPaciente}/AgregarCita/{idEspecialista}/{isFirtTime}")]
-        public ActionResult Add([FromRoute] int idPaciente, [FromBody] Date cita, [FromRoute] int idEspecialista, [FromRoute] bool isFirtTime)
+        [HttpPost("{idPaciente}/AgregarCita/{idEspecialista}")]
+        public async Task<ActionResult> Add([FromRoute] int idPaciente, [FromBody] Date cita, [FromRoute] int idEspecialista)
 
         {
             if (cita == null) return BadRequest();
-            Console.WriteLine("Cita: " + cita);
-            var result = _service.AddDate(cita, idPaciente, idEspecialista, isFirtTime);
+            var result = _service.AddDate(cita, idPaciente, idEspecialista);
 
-            Console.WriteLine("Resultado: " + result);
+            try {
+                var message = new Message()
+            {
+                Notification = new Notification
+                {
+                    Title = "Agenda",
+                    Body = "El paciente " + _pacienteService.Get(idPaciente)!.name + " ha agendado una cita"
+                },
+                Data = new Dictionary<string, string>()
+                {
+                    { "module", "schedule"},
+                    { "event", "newRequest"},
+                },
+                Token = _especialistaService.Get(idEspecialista)!.token
+            };
+
+            await FirebaseMessaging.DefaultInstance.SendAsync(message);
+            }  
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
             if (result == null) return BadRequest();
             return Ok(result);
         }
 
-        [HttpPost("{idEspecialista}/AgregarCitaEspecialista/{idPaciente}")]
-        public ActionResult AddDateSpecialist([FromBody] Date cita, [FromRoute] int idEspecialista, [FromRoute] int idPaciente)
+              [HttpPost("{idEspecialista}/AgregarCitaEspecialista/{idPaciente}")]
+       public async Task<ActionResult> AddDateSpecialist([FromBody] Date cita, [FromRoute] int idEspecialista, [FromRoute] int idPaciente)
 
         {
             if (cita == null) return BadRequest();
             var result = _service.AddDateSpecialist(cita, idEspecialista, idPaciente);
+
+
+            try {
+                var message = new Message()
+            {
+                Notification = new Notification
+                {
+                    Title = "Agenda",
+                    Body = "Tu especialista " + _especialistaService.Get(idEspecialista)!.name + " ha agendado una cita, puedes consultarla en tu agenda"
+                },
+                Data = new Dictionary<string, string>()
+                {  { "module", "schedule"},
+                    { "event", "newDateBySpecialist"},
+                },
+                Token = _especialistaService.Get(idEspecialista)!.token
+            };
+
+            await FirebaseMessaging.DefaultInstance.SendAsync(message);
+            }  
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+
             if (result == 0) return BadRequest();
             return Ok(result);
         }
@@ -97,7 +143,7 @@ namespace API.Controllers
         }
 
 
-        [HttpPut("{idCita}/ConfirmarCitaPorPaciente/{idPaciente}")]
+              [HttpPut("{idCita}/ConfirmarCitaPorPaciente/{idPaciente}")]
         public async Task<ActionResult> ConfirmarCitaPorPaciente(int idCita, int idPaciente)
         {
             if (idCita < 1 || idPaciente < 1) return BadRequest();
@@ -106,18 +152,32 @@ namespace API.Controllers
 
             var paciente = _pacienteService.Get(idPaciente);
 
-            var message = new Message()
+            if (paciente!.specialist == null) return BadRequest();
+           
+            try {
+                var message = new Message()
             {
                 Notification = new Notification
                 {
                     Title = "Agenda",
-                    Body = "El paciente " + paciente!.name + " ha agendado una cita"
-
+                    Body = "Tu cita ha sido confirmada por el paciente"
                 },
-                Token = _especialistaService.GetByToken(paciente.specialist!.relationalToken)!.token
+                Data = new Dictionary<string, string>()
+                {  { "module", "schedule"},
+                    { "event", "dateConfirmedByPatient"},
+                },
+                Token = _especialistaService.Get(paciente!
+                    .specialist!.userId
+                )!.token
             };
 
             await FirebaseMessaging.DefaultInstance.SendAsync(message);
+            }  
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
             return Ok(result);
         }
 
@@ -129,17 +189,30 @@ namespace API.Controllers
             if (!result) return BadRequest();
             var paciente = _pacienteService.Get(idPaciente);
 
-            var message = new Message()
+            try {
+                var message = new Message()
             {
                 Notification = new Notification
                 {
                     Title = "Agenda",
-                    Body = "El paciente ha cancelado la cita"
+                    Body = "Tu cita ha sido cancelada por el paciente"
                 },
-                Token = _especialistaService.GetByToken(paciente!.specialist!.relationalToken)!.token
+                Data = new Dictionary<string, string>()
+                {  { "module", "schedule"},
+                    { "event", "dateCanceledByPatient"},
+                },
+                Token = _especialistaService.Get(paciente!
+                    .specialist!.userId
+                )!.token
             };
 
             await FirebaseMessaging.DefaultInstance.SendAsync(message);
+            }  
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
             return Ok(result);
         }
 
@@ -157,9 +230,13 @@ namespace API.Controllers
                 Descripcion = "Tu cita ha sido confirmada por el especialista"
             };
 
-            var idNotificacion = _notificacionService.AddNotificacion(notificacion, idPaciente);
+            _notificacionService.AddNotificacion(notificacion, idPaciente);
 
-            var message = new Message()
+            var paciente = _pacienteService.Get(idPaciente);
+
+            if (paciente == null) return BadRequest();
+        try {
+                var message = new Message()
             {
                 Notification = new Notification
                 {
@@ -167,14 +244,20 @@ namespace API.Controllers
                     Body = "Tu cita ha sido confirmada por el especialista"
                 },
                 Data = new Dictionary<string, string>()
-                {
-                    { "idNotificacion", idNotificacion.ToString()}
+                {  { "module", "schedule"},
+                    { "event", "dateConfirmedBySpecialist"},
+                
                 },
-                Token = _pacienteService.GetByToken(idPaciente)
+                Token = _especialistaService.Get(paciente!.userId
+                )!.token
             };
 
             await FirebaseMessaging.DefaultInstance.SendAsync(message);
-
+            }  
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
 
             return Ok(result);
         }
@@ -187,22 +270,93 @@ namespace API.Controllers
             if (!result) return BadRequest();
 
 
-            var message = new Message()
+            var paciente = _pacienteService.Get(idPaciente);
+
+            if (paciente == null) return BadRequest();
+
+               try {
+                var message = new Message()
             {
                 Notification = new Notification
                 {
                     Title = "Agenda",
-                    Body = "Tu cita ha sido confirmada por el especialista"
+                    Body = "Tu cita ha sido cancelada por el especialista"
                 },
-                Token = _pacienteService.GetByToken(idPaciente)
+                Data = new Dictionary<string, string>()
+                {  { "module", "schedule"},
+                    { "event", "dateCanceledBySpecialist"},
+                    
+                },
+                Token = _especialistaService.Get(paciente!.userId
+                )!.token
             };
 
             await FirebaseMessaging.DefaultInstance.SendAsync(message);
-
-
+            }  
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
 
             return Ok(result);
         }
+
+        [HttpPut("{patientId}/actualizarCita/{isFromSpecialist}/{specialistId}")]
+        public async Task<ActionResult> Update([FromBody] Date cita, 
+        [FromRoute] int patientId,
+        [FromRoute] bool isFromSpecialist, [FromRoute] int specialistId)
+        {
+            if (cita == null) return BadRequest();
+            var result = _service.UpdateDate(cita);
+
+            var specialist = _especialistaService.Get(specialistId);
+
+              try {
+                var message = new Message()
+            {
+                Notification = new Notification
+                {
+                    Title = "Agenda",
+                    Body = isFromSpecialist ? "El paciente " + _pacienteService.Get(patientId)!.name + " ha actualizado una cita" : "Tu especialista ha actualizado tu cita cita"
+                },
+                Data = new Dictionary<string, string>()
+                {  { "module", "schedule"},
+                    { "event", "dateUpdated"},
+                },
+                Token = isFromSpecialist ? _pacienteService.Get(patientId)!.token : _especialistaService.Get(specialist!.userId)!.token
+            };
+
+            await FirebaseMessaging.DefaultInstance.SendAsync(message);
+            }  
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+
+
+            if (!result) return BadRequest();
+            return Ok(result);
+        }
+
+
+        //put, marcar cita como completada
+        [HttpPut("{idCita}/marcarCitaComoCompletada")]
+        public ActionResult UpdateStatusCita([FromBody] Date cita, [FromRoute] int idCita)
+        {
+            if (cita == null) return BadRequest();
+            var result = _service.UpdateStatusCita(cita);
+            if (!result) return BadRequest();
+            return Ok(result);
+        }
+
+
+
+
+
+
+
+
     }
 }
 

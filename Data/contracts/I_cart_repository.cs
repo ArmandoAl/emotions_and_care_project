@@ -27,5 +27,11 @@ namespace Data.Contracts
 
         bool initCarts();
         bool thereCartsForOpen(int idPaciente);
+
+        bool isFirstTime(int idUsuario);
+
+        bool isFirstTimeAnswer(int idUsuario);
+
+        GoalWithSticker? getGoalWithSticker(int idUsuario, int idCarta);
     }
 }

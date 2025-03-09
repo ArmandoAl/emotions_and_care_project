@@ -24,7 +24,7 @@ namespace Business.Implementations
             _itemsRepository = itemsRepository;
         }
 
-        public goalWithDate? AddDate(Date date, int idPaciente, int idEspecialista, bool isFirtTime)
+        public goalWithDate? AddDate(Date date, int idPaciente, int idEspecialista)
         {
             if (date == null) return null;
 
@@ -35,7 +35,7 @@ namespace Business.Implementations
             if (idDate > 0)
             {
                 bool vinculacion = _DateRepository.vincularCitaConPeciente(idDate, idPaciente);
-                Console.WriteLine("Vinculacion: " + vinculacion);
+          
 
                 if (!vinculacion)
                 {
@@ -52,6 +52,9 @@ namespace Business.Implementations
                         _DateRepository.DeleteCita(idDate);
                         return null;
                     }
+
+
+                    var isFirtTime = _DateRepository.isFirstTime(idPaciente);
 
                     if(isFirtTime)
                     {
@@ -103,6 +106,13 @@ namespace Business.Implementations
             if (Date == null) return false;
 
             return _DateRepository.UpdateCita(Date);
+        }
+
+        public bool UpdateStatusCita(Date cita)
+        {
+            if (cita == null) return false;
+
+            return _DateRepository.UpdateStatusCita(cita);
         }
 
         public List<Date>? GetDatesPorPaciente(int idPaciente)

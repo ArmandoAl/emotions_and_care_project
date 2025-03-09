@@ -32,6 +32,8 @@ namespace Data.Contracts
 
         int putStickeriInInterface(int idPatient, int idUserSticker, int position);
 
+        int putFlowerInInterface(int idPatient, int idUserFlower, int position);
+
 
         bool canGrowFlower(int idPatient);
 
@@ -44,6 +46,8 @@ namespace Data.Contracts
         bool refreshToken(int id, string token);
 
          bool VincularDirecto(int id, string tokenEspecialista);
+
+         bool actualizarThemeId(int id, int themeId);
 
     }
 }

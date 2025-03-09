@@ -21,9 +21,6 @@ namespace Data.Implementations
              .Options;
             using (var db = new DBContext(options: connectionOptions))
             {
-                var pattient = db.patients.FirstOrDefault(x => x.userId == idPaciente);
-
-                if (pattient == null) return 0;
                 
                 db.dates.Add(cita);
 
@@ -87,16 +84,31 @@ namespace Data.Implementations
 
             using (var db = new DBContext(options: connectionOptions))
             {
-               var paciente = db.patients.FirstOrDefault(x => x.userId == idPaciente);
+               var paciente = db.patients.Where(x => x.userId == idPaciente).Include(x => x.dates).FirstOrDefault();
 
                 if (paciente == null) return null;
+
+                Console.WriteLine(paciente.dates.Count);
 
                 citas = paciente.dates.ToList();
 
                 //ordenar citas por fecha de mas reciente a mas antigua
                 citas = citas.OrderByDescending(x => x.date).ToList();
 
-                return citas;
+                return citas.Select(x => new Date
+                {
+                    dateId = x.dateId,
+                    date = x.date,
+                    hour = x.hour,
+                    place = x.place,
+                    description = x.description,
+                    specialistConfirm = x.specialistConfirm,
+                    patientConfirm = x.patientConfirm,
+                    status = x.status,
+                    specialistNotes = x.specialistNotes,
+                    sentBySpecialist = x.sentBySpecialist,
+
+                }).ToList();
             }
         }
 
@@ -119,7 +131,6 @@ namespace Data.Implementations
                 citaToUpdate.hour = cita.hour;
                 citaToUpdate.place = cita.place;
                 citaToUpdate.description = cita.description;
-
                 citaToUpdate.sentBySpecialist = cita.sentBySpecialist;
                 citaToUpdate.status = Status.PendingToMatch;
 
@@ -455,6 +466,28 @@ namespace Data.Implementations
                                        }).ToList();
 
                 return citas;
+            }
+        }
+
+        public bool isFirstTime(int idPaciente)
+        {
+            //tenemos que revisar si el paciente tiene citas o si su id esta en alguna de las solicitudes de citas
+            if(idPaciente <= 0) return false;
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+             .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+             .Options;
+
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var paciente = db.patients.FirstOrDefault(x => x.userId == idPaciente);
+                if (paciente == null) return false;
+
+                if (paciente.dates.Count > 0) return false;
+
+                if (db.dateRequests.Any(x => x.Cita!.patient!.userId == idPaciente)) return false;
+
+                return true;
             }
         }
     }

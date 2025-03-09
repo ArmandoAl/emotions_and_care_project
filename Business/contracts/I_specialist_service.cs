@@ -35,3 +35,4 @@ namespace Business.Contracts
         bool refreshToken(int id, string token);
     }
 }
+

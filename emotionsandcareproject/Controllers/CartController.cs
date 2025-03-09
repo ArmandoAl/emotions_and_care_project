@@ -18,20 +18,20 @@ namespace API.Controllers
             _cartaService = cartaService;
         }
 
-        [HttpPost("{idUsuario}/AgregarCarta/{isPatient}/{isFirtTime}")]
-        public ActionResult Add([FromBody] Cart carta, [FromRoute] int idUsuario, [FromRoute] bool isPatient, [FromRoute] bool isFirtTime)
+        [HttpPost("{idUsuario}/AgregarCarta/{isPatient}")]
+        public ActionResult Add([FromBody] Cart carta, [FromRoute] int idUsuario, [FromRoute] bool isPatient)
         {
-            var idCarta = _cartaService.Add(carta, idUsuario, isPatient, isFirtTime);
+            var idCarta = _cartaService.Add(carta, idUsuario, isPatient);
 
             if (idCarta == null) return BadRequest();
             return Ok(idCarta);
         }
 
-        [HttpPost("{idCarta}/AgregarRespuesta/{isFirtTime}")]
-        public ActionResult AddRespuesta([FromBody] CartAnswer respuesta, [FromRoute] int idCarta, [FromRoute] bool isFirtTime)
+        [HttpPost("{idCarta}/AgregarRespuesta")]
+        public ActionResult AddRespuesta([FromBody] CartAnswer respuesta, [FromRoute] int idCarta)
         {
             if (respuesta == null) return BadRequest();
-            var result = _cartaService.AddRespuesta(respuesta, idCarta, isFirtTime);
+            var result = _cartaService.AddRespuesta(respuesta, idCarta);
             if (result == null) return BadRequest();
             return Ok(result);
         }
@@ -82,6 +82,14 @@ namespace API.Controllers
             return Ok(result);
         }
 
+        [HttpGet("{idUsuario}/goalWithSticker/{idCarta}")]
+        public ActionResult getGoalWithSticker([FromRoute] int idUsuario, [FromRoute] int idCarta)
+        {
+            if (idUsuario < 1 || idCarta < 1) return BadRequest();
+            var result = _cartaService.getGoalWithSticker(idUsuario, idCarta);
+            if (result == null) return NotFound();
+            return Ok(result);
+        }
     }  
 
 }

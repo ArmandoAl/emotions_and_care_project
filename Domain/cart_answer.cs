@@ -50,4 +50,10 @@ namespace Domain
         // The identifier of the cart answer
         public int cartAnswerId { get; set; }
     }
+
+    public class GoalWithSticker
+    {
+        public int cartAnswerId { get; set; }
+        public List<Sticker>? stickers { get; set; } = new List<Sticker>();
+    }
 }

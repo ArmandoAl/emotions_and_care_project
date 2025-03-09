@@ -9,7 +9,7 @@ namespace Business.Contracts
 {
     public interface IDateService
     {
-        goalWithDate? AddDate(Date Date, int idPaciente, int idEspacialista, bool isFirtTime);
+        goalWithDate? AddDate(Date Date, int idPaciente, int idEspacialista);
 
         bool UpdateDate(Date Date);
 
@@ -28,5 +28,7 @@ namespace Business.Contracts
         bool cancelarDatePorEspecialista(int idDate, int idEspecialista);
         List<Date>? GetDatesPorEspecialista(int idSpecialist);
         int AddDateSpecialist(Date Date, int idEspecialista, int idPaciente);
+
+          bool UpdateStatusCita(Date cita);
     }
 }

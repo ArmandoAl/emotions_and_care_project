@@ -26,7 +26,7 @@ namespace Business.Implementations
             _itemsRepository = itemsRepository;
         }
 
-        public GoalWithCart? Add(Cart cart, int idUsuario, bool isPatient, bool isFirtTime)
+        public GoalWithCart? Add(Cart cart, int idUsuario, bool isPatient)
         {
             if(cart == null || idUsuario <= 0) return null;
 
@@ -42,6 +42,8 @@ namespace Business.Implementations
                      _cartRepository.Delete(idCart);
                      return null;
                 }
+
+                bool isFirtTime = _cartRepository.isFirstTime(idUsuario);
 
                 if(isFirtTime && isPatient)
                 {
@@ -68,13 +70,15 @@ namespace Business.Implementations
             return null;
         }
 
-        public GoalWithCartAnswer? AddRespuesta(CartAnswer respuesta, int idCart, bool isFirtTime)
+        public GoalWithCartAnswer? AddRespuesta(CartAnswer respuesta, int idCart)
         {
             if (respuesta == null || idCart <= 0) return null;
             bool res = _cartRepository.AddRespuesta(respuesta, idCart);
 
             if (res)
             {
+
+                 bool isFirtTime = _cartRepository.isFirstTimeAnswer(respuesta.receiverId);
 
                 if(isFirtTime) {
                 var idLogro = _logroRepository.AddGoalPatient(respuesta.receiverId, 2);
@@ -132,6 +136,13 @@ namespace Business.Implementations
             if (init == false) return null;
 
             return _cartRepository.GetNotExpiredCarts(idUsuario);
+        }
+
+        public GoalWithSticker? getGoalWithSticker(int idUsuario, int idCart)
+        {
+            if (idUsuario <= 0 || idCart <= 0) return null;
+            return _cartRepository.getGoalWithSticker(idUsuario, idCart);
+
         }
     }
 }

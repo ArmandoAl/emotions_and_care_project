@@ -164,12 +164,27 @@ namespace Data.Implementations
                     sex = x.sex,
                     token = x.token,
                     relationalToken = x.relationalToken,
-                    goals = x.goals,
-                    dateCreated = DateTime.Now,
-                    modifiedDate = DateTime.Now,
+                    goals = x.goals.Select(y => new Goal
+                    {
+                        goalId = y.goalId,
+                        name = y.name,
+                        desription = y.desription,
+                        type = y.type,
+                        stickerId = y.stickerId,
+                        flowerId = y.flowerId,
+                    }).ToList(),
+                    dateCreated = x.dateCreated,
+                    modifiedDate = x.modifiedDate,
                     termsAndConditions = x.termsAndConditions,
                     settings = x.settings,
-                    progress = x.progress,
+                    progress = new Progress
+                    { 
+                        progressId = x.progress!.progressId,
+                        stage = x.progress.stage,
+                        lastDate = x.progress.lastDate,
+                        begginDate = x.progress.begginDate,
+                       
+                    },
                     userInterface = new UserInterface
                     {
                         userInterfaceId = x.userInterface.userInterfaceId,
@@ -211,7 +226,6 @@ namespace Data.Implementations
                         presentation = x.specialist.presentation,
                         adress = x.specialist.adress,
                         license = x.specialist.license,
-                        termsAndConditions = x.specialist.termsAndConditions,
                         relationalToken = x.specialist.relationalToken,
                         dateCreated = x.specialist.dateCreated,
                         modifiedDate = x.specialist.modifiedDate
@@ -675,7 +689,7 @@ namespace Data.Implementations
                 if (userSticker == null) return 0;
 
                 // Validate the position; if it's invalid (less than 0 or greater than 4), set the sticker's position to null
-                if (position < 0 || position > 4)
+                if (position < 1 || position > 4)
                 {
                     userSticker.position = null;
                 }
@@ -700,6 +714,69 @@ namespace Data.Implementations
 
                 // Return the ID of the updated user sticker
                 return userSticker.userStickerId;
+            }
+        }
+
+        public int putFlowerInInterface(int idPatient, int idFlower, int position)
+        {
+            // Validate the patient ID and flower ID to ensure they are greater than 0
+            if (idPatient <= 0 || idFlower <= 0) return 0;
+
+            // Set up the connection to the database using the DbContext
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
+            // Open the database context and perform the update inside a 'using' block to ensure resources are properly disposed of
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                // Find the patient and their user interface, including the list of flowers
+                var thisPaciente = db.patients
+                    .Where(x => x.userId == idPatient)
+                    .Include(x => x.userInterface)
+                    .ThenInclude(x => x.userFlowers)
+                    .ThenInclude(x => x.flower)
+                    .FirstOrDefault();
+
+                // If the patient is not found, return 0 indicating failure
+                if (thisPaciente == null) return 0;
+
+                // Find the flower to be updated
+                var userFlower = thisPaciente.userInterface.userFlowers
+                    .FirstOrDefault(x => x.flower.flowerId == idFlower);
+
+                // If the flower is not found, return 0 indicating failure
+                if (userFlower == null) return 0;
+
+                // Validate the position; if it's invalid (less than 0 or greater than 4), set the flower's position to null
+                if (position < 1 || position > 3)
+                {
+                    userFlower.position = null;
+                    userFlower.active = false;
+                }
+                else
+                {
+                    // Check if any other flower already occupies the specified position
+                    var flowerWithSamePosition = thisPaciente.userInterface.userFlowers
+                        .FirstOrDefault(x => x.position == position);
+
+                    // If a flower occupies the position, reset its position to null
+                    if (flowerWithSamePosition != null)
+                    {
+                        flowerWithSamePosition.position = null;
+                        flowerWithSamePosition.active = false;
+                    }
+
+                    // Set the position of the current flower to the new position
+                    userFlower.position = position;
+                    userFlower.active = true;
+                }
+
+                // Save the changes to the database
+                db.SaveChanges();
+
+                // Return the ID of the updated user flower
+                return userFlower.userFlowerId;
             }
         }
 
@@ -1151,11 +1228,28 @@ namespace Data.Implementations
             }
         }
 
+        public bool actualizarThemeId(int idPatient, int themeId)
+        {
+            if (idPatient <= 0) return false;
 
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+            .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+            .Options;
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var thisPaciente = db.patients.Where(x => x.userId == idPatient).Include(x => x.userInterface).FirstOrDefault();
 
-}
-    
-    
+                if (thisPaciente == null) return false;
+
+                thisPaciente.userInterface.themeId = themeId;
+
+                db.SaveChanges();
+
+                return true;
+            }
+        }
+    }
+   
 }
 
 

@@ -39,5 +39,9 @@ namespace Business.Contracts
 
         bool VincularDirecto(int id, string tokenEspecialista);
 
+        int putFlowerInInterface(int idPatient, int idUserFlower, int position);
+
+        bool actualizarThemeId(int idPatient, int themeId);
+
     }
 }

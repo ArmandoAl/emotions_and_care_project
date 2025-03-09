@@ -271,5 +271,94 @@ namespace Data.Implementations
 
             return false;
         }
+
+
+        public bool isFirstTime(int idUsuario)
+        {
+            //revisa si es la primera vez que el usuario recibe una carta
+            if (idUsuario <= 0) return false;
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+           .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+           .Options;
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var carts = db.carts;
+
+                //revis si hay almenos una carta que tenga el usuario como transmitterId
+                if (carts.Where(c => c.transmitterId == idUsuario).Count() > 0)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+        }
+
+        public bool isFirstTimeAnswer(int idUsuario)
+        {
+            //revisa si es la primera vez que el usuario responde una carta
+            if (idUsuario <= 0) return false;
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+           .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+           .Options;
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var carts = db.carts;
+
+                //revis si hay almenos una carta que tenga el usuario como receiverId
+                if (carts.Where(c => c.cartAnswers.Where(r => r.receiverId == idUsuario).Count() > 0).Count() > 0)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+        }
+
+       GoalWithSticker? getGoalWithSticker(int idUsuario, int idCarta)
+        {
+            //obtiene el logro y los stickers asociados a una carta
+            if (idUsuario <= 0 || idCarta <= 0) return null;
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+           .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+           .Options;
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var carta = db.carts.Find(idCarta);
+
+                if (carta == null) return new GoalWithSticker
+                {
+                    cartAnswerId = idCarta
+                    
+                };
+                //revisa todas las respuestas y y si en la respuesta hay un stickerid que no es nulo, lo agrega a la lista de stickers
+                List<Sticker> stickers = new List<Sticker>();
+
+                foreach (var respuesta in carta.cartAnswers)
+                {
+                    if (respuesta.stickerId != null)
+                    {
+                        var sticker = db.stickers.Find(respuesta.stickerId);
+                        if (sticker != null)
+                        {
+                            stickers.Add(sticker);
+                        }
+                    }
+                }
+
+                //retorna el 
+                return new GoalWithSticker
+                {
+                  
+                    stickers = stickers,
+                    cartAnswerId = idCarta
+                };
+            }
+        }
+
+        GoalWithSticker? ICartRepository.getGoalWithSticker(int idUsuario, int idCarta)
+        {
+            return getGoalWithSticker(idUsuario, idCarta);
+        }
     }
 }
