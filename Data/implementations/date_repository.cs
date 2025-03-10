@@ -42,11 +42,17 @@ namespace Data.Implementations
             using (var db = new DBContext(options: connectionOptions))
             {
 
+                //hay que revisar si hay una dateRequest con el id de la cita
+
+                var solicitudCita = db.dateRequests.FirstOrDefault(x => x.Cita!.dateId == idCita);
+
+                if (solicitudCita != null)
+                {
+                    db.dateRequests.Remove(solicitudCita);
+                }
+
 
                 var cita = db.dates.FirstOrDefault(x => x.dateId == idCita);
-
-
-
                 if (cita == null) return false;
 
                 db.dates.Remove(cita);
@@ -201,6 +207,7 @@ namespace Data.Implementations
                 if (paciente == null) return false;
 
                 cita.patientConfirm = true;
+                cita.status = Status.Confirmed;
                 db.SaveChanges();
                 return true;
             }
@@ -222,6 +229,7 @@ namespace Data.Implementations
                 if (paciente == null) return false;
 
                 cita.patientConfirm = false;
+                cita.status = Status.NotCompleted;
                 if(cita.specialistConfirm == false)
                 {
                     db.dates.Remove(cita);
@@ -248,6 +256,7 @@ namespace Data.Implementations
                 if (especialista == null) return false;
 
                 cita.specialistConfirm = true;
+                cita.status = Status.Confirmed;
                 db.SaveChanges();
                 return true;
             }

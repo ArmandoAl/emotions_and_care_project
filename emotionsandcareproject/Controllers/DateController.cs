@@ -61,7 +61,7 @@ namespace API.Controllers
             return Ok(result);
         }
 
-              [HttpPost("{idEspecialista}/AgregarCitaEspecialista/{idPaciente}")]
+        [HttpPost("{idEspecialista}/AgregarCitaEspecialista/{idPaciente}")]
        public async Task<ActionResult> AddDateSpecialist([FromBody] Date cita, [FromRoute] int idEspecialista, [FromRoute] int idPaciente)
 
         {
@@ -143,7 +143,7 @@ namespace API.Controllers
         }
 
 
-              [HttpPut("{idCita}/ConfirmarCitaPorPaciente/{idPaciente}")]
+        [HttpPut("{idCita}/ConfirmarCitaPorPaciente/{idPaciente}")]
         public async Task<ActionResult> ConfirmarCitaPorPaciente(int idCita, int idPaciente)
         {
             if (idCita < 1 || idPaciente < 1) return BadRequest();
@@ -332,8 +332,6 @@ namespace API.Controllers
             {
                 Console.WriteLine(e);
             }
-
-
 
             if (!result) return BadRequest();
             return Ok(result);

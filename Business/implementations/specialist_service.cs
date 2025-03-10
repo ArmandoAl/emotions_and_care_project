@@ -100,7 +100,19 @@ namespace Business.Implementations
         {
             if(id < 1 || idCita < 1) { return false; }
 
-            return _citaRepository.eliminarSolicitudCita(idCita);
+            bool res = _citaRepository.eliminarSolicitudCita(idCita);
+
+            if(res)
+            {
+                bool result = _citaRepository.DeleteCita(idCita);
+
+                return result;
+            }
+            else
+            {
+                return false;
+            }
+
         }
 
         public List<Patient>? GetPacientes(int id)
