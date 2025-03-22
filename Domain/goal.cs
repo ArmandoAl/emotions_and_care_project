@@ -46,5 +46,8 @@ namespace Domain
         // The optional identifier for a flower associated with the goal (nullable)
         public int? flowerId { get; set; }
 
+        //propuesta, definir cual es la mejor manera, si hacer otra tabla en la base de datos y asociarla con la tabla de goals o poner la url directamente aqui
+        public string? logoUlr { get; set; }
+
     }
 }

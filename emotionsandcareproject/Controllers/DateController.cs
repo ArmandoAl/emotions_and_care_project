@@ -347,14 +347,6 @@ namespace API.Controllers
             if (!result) return BadRequest();
             return Ok(result);
         }
-
-
-
-
-
-
-
-
     }
 }
 
