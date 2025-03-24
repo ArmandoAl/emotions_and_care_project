@@ -185,6 +185,8 @@ namespace Data.Implementations
 
                 paciente.dates.Add(cita);
 
+                db.patients.Update(paciente);
+
                 db.SaveChanges();
                 return true;
             }

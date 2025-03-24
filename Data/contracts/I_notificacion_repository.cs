@@ -22,5 +22,7 @@ namespace Data.Contracts
         bool vincularNotificationConPaciente(int idNotification, int idPaciente);
 
         bool updateDateEmision(int idNotification);
+
+        bool checkExistGrowNotification(int idPaciente);
     }
 }

@@ -129,8 +129,16 @@ namespace Business.Implementations
             {  
                _service.updateLastProgressDate(idPatient);
 
+               var notiExist = _notificationRepository.checkExistGrowNotification(idPatient);
+
+               if (notiExist)
+               {
+                     return can;    
+                   
+               }
+
                //Mandar notificacion
-               _notificationRepository.AddNotification(new NotificationModel
+               var notiId = _notificationRepository.AddNotification(new NotificationModel
                {
                     Titulo = "¡Tu flor ha crecido!",
                      Descripcion = "Felicidades, te haz esforzado mucho y tu flor esta creciendo. Esperamos que tu salud emocional este mejorando junto con ella.", 
@@ -138,6 +146,8 @@ namespace Business.Implementations
                      FechaCreacion = DateTime.Now,
                      emitDate = DateTime.Now,                     
                });
+
+               _notificationRepository.vincularNotificationConPaciente(notiId, idPatient);
             }
 
             return can;

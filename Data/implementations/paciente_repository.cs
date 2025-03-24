@@ -1205,7 +1205,7 @@ namespace Data.Implementations
             .Options;
             using (var db = new DBContext(options: connectionOptions))
             {
-                var thisPaciente = db.patients.Where(x => x.userId == idPatient).Include(x => x.progress).FirstOrDefault();
+                var thisPaciente = db.patients.Where(x => x.userId == idPatient).Include(x => x.progress).Include(x => x.userInterface).ThenInclude(x => x.userFlowers).FirstOrDefault();
 
                 // Revisa cuando fue la última vez que se actualizó el progreso (lastDate).
                 if (thisPaciente == null) return false;
@@ -1227,9 +1227,23 @@ namespace Data.Implementations
 
                 //valida que la diferencia de días sea mayor o igual a 7 y que la cuenta no tenga mas de 7 días de haberse creado
 
-                if (days >= 7) {
-                    if(thisPaciente.dateCreated.AddDays(7) >= currentDate) {
-                        return true;
+                if (days < 7) {
+                    if(thisPaciente.dateCreated.AddDays(7) >= currentDate 
+                    ) {
+                        //encuentra la flor que esta en la posición 2 y revisa que este en el estado 0
+
+                        var userFlower = thisPaciente.userInterface.userFlowers.Where(x => x.position == 2).FirstOrDefault();
+
+                        if (userFlower != null) {
+                            if(userFlower.state == 0) {
+                                return true;
+                            }
+                        } else {
+
+                        return false;
+                        }
+
+                    return false;
                     }
 
                     return false;

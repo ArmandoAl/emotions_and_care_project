@@ -135,5 +135,22 @@ namespace Data.Implementations
                 return true;
             }
         }
+
+        public bool checkExistGrowNotification(int idPaciente)
+        {
+            if(idPaciente <= 0) return false;
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+            .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+            .Options;
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var paciente = db.patients.Where(x => x.userId == idPaciente).Include(x => x.notifications).FirstOrDefault();
+                if(paciente == null) return false;
+
+                return paciente.notifications.Any(x => x.notificationType == NotificationType.growNotifications);
+            }
+
+        }
     }
 }
