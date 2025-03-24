@@ -285,7 +285,7 @@ namespace Data.Implementations
                 var carts = db.carts;
 
                 //revis si hay almenos una carta que tenga el usuario como transmitterId
-                if (carts.Where(c => c.transmitterId == idUsuario).Count() > 0)
+                if (carts.Where(c => c.transmitterId == idUsuario).Count() > 1)
                 {
                     return false;
                 }
@@ -306,7 +306,7 @@ namespace Data.Implementations
                 var carts = db.carts;
 
                 //revis si hay almenos una carta que tenga el usuario como receiverId
-                if (carts.Where(c => c.cartAnswers.Where(r => r.receiverId == idUsuario).Count() > 0).Count() > 0)
+                if (carts.Where(c => c.cartAnswers.Where(r => r.receiverId == idUsuario).Count() > 0).Count() > 1)
                 {
                     return false;
                 }

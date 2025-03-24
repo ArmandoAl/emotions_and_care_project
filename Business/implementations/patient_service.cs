@@ -16,10 +16,13 @@ namespace Business.Implementations
 
         private readonly IItemsRepository _itemsService;
 
-        public PatientService(IPatientRepository service, IItemsRepository itemsService)
+        private readonly INotificationRepository _notificationRepository;
+
+        public PatientService(IPatientRepository service, IItemsRepository itemsService, INotificationRepository notificationRepository)
         {
             _service = service;
             _itemsService = itemsService;
+            _notificationRepository = notificationRepository;
         }
 
         public int Add(AddPatient paciente)
@@ -117,15 +120,24 @@ namespace Business.Implementations
 
             bool canReview = _service.reviewCanCheck(idPatient);
 
+            if (!canReview) { return false; }
+
             
             bool can = _service.canGrowFlower(idPatient);
 
             if (can)
-            {
-               _service.growStage(idPatient);   
+            {  
                _service.updateLastProgressDate(idPatient);
 
                //Mandar notificacion
+               _notificationRepository.AddNotification(new NotificationModel
+               {
+                    Titulo = "¡Tu flor ha crecido!",
+                     Descripcion = "Felicidades, te haz esforzado mucho y tu flor esta creciendo. Esperamos que tu salud emocional este mejorando junto con ella.", 
+                     notificationType = NotificationType.growNotifications,
+                     FechaCreacion = DateTime.Now,
+                     emitDate = DateTime.Now,                     
+               });
             }
 
             return can;

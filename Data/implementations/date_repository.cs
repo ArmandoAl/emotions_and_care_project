@@ -40,7 +40,7 @@ namespace Data.Implementations
              .UseSqlServer(Data.Helpers.Constants.ConnectionString)
              .Options;
             using (var db = new DBContext(options: connectionOptions))
-            {
+            { 
 
                 //hay que revisar si hay una dateRequest con el id de la cita
 
@@ -494,14 +494,18 @@ namespace Data.Implementations
 
             using (var db = new DBContext(options: connectionOptions))
             {
-                var paciente = db.patients.FirstOrDefault(x => x.userId == idPaciente);
-                if (paciente == null) return false;
+                var paciente = db.patients.Where(x => x.userId == idPaciente).Include(x => x.dates).FirstOrDefault();
+                if (paciente == null) 
+                {
+                    return false;
+                }
 
-                if (paciente.dates.Count > 0) return false;
-
-                if (db.dateRequests.Any(x => x.Cita!.patient!.userId == idPaciente)) return false;
-
-                return true;
+                if (paciente.dates.Count > 0) 
+                {
+                    return false;
+                } else {
+                    return true;
+                }
             }
         }
     }

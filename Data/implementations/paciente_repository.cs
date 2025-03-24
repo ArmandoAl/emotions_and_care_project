@@ -301,7 +301,10 @@ namespace Data.Implementations
                 if (thisPaciente == null) return false;
 
                 // Find the specialist with the given relational token
-                var thisEspecialista = db.specialists.FirstOrDefault(x => x.relationalToken == tokenEspecialista);
+                var thisEspecialista = db.specialists.Where(x => x.relationalToken == tokenEspecialista)
+                    .Include(x => x.patientsRequests)
+                    .ThenInclude(x => x.patient)
+                    .FirstOrDefault();
                 
                 // If the specialist doesn't exist, return false
                 if (thisEspecialista == null) return false;
@@ -314,6 +317,14 @@ namespace Data.Implementations
                 thisEspecialista.modifiedDate = DateTime.Now;
 
                 // Add the patient to the specialist's patient list
+
+                //request exists
+                var request = thisEspecialista.patientsRequests.FirstOrDefault(x => x.patient.userId == id);
+
+                if (request != null)
+                {
+                    return true;
+                }
 
                 PatientRequest patientRequest = new PatientRequest
                 {
@@ -940,9 +951,8 @@ namespace Data.Implementations
             using (var db = new DBContext(options: connectionOptions))
             {
                 var patient = db.patients
-                    .Where(x => x.userId == idPatient)
-                    ;
-
+                    .Where(x => x.userId == idPatient);
+                    
                 return patient != null;
             }
         }
@@ -1111,12 +1121,17 @@ namespace Data.Implementations
 
                 var stages = db.stages.Include(x => x.stageRequests).ToList();
 
+                
+
                 List<StageRequest> stagesRequests = stages[thisPaciente!.progress!.stage!].stageRequests;
 
                 bool canGrow = true;
 
                 foreach (var stageRequest in stagesRequests) {
+                    
                     if (validateProgress(stageRequest.name, stageRequest.value, stageRequest.dayRange, thisPaciente.userId) == false) {
+                       
+
                         canGrow = false;
                         return canGrow;
                     }
@@ -1144,11 +1159,25 @@ namespace Data.Implementations
             .Options;
             using (var db = new DBContext(options: connectionOptions))
             {
-                var thisPaciente = db.patients.Where(x => x.userId == idPatient).Include(x => x.progress).FirstOrDefault();
+                var thisPaciente = db.patients.Where(x => x.userId == idPatient).Include(x => x.progress).Include(x => x.userInterface).ThenInclude(x => x.userFlowers).FirstOrDefault();
 
                 if (thisPaciente == null) return false;
 
-                thisPaciente.progress!.stage = thisPaciente.progress!.stage! + 1;
+
+                if(thisPaciente.progress!.stage > 5) {
+                    thisPaciente.progress!.stage = thisPaciente.progress!.stage! + 1;
+                } else {
+                    thisPaciente.progress!.stage = 0;
+                }
+
+                var userFlower = thisPaciente.userInterface.userFlowers.FirstOrDefault(x => x.position == 2);
+
+                if (userFlower != null) {
+                    if(userFlower.state < 5) {
+                        userFlower.state = userFlower.state + 1;
+                    } 
+                }
+                
 
                 db.SaveChanges();
 
@@ -1196,7 +1225,18 @@ namespace Data.Implementations
 
                 var days = (currentDate - lastDate!.Value).TotalDays;
 
-                return days >= 7;
+                //valida que la diferencia de días sea mayor o igual a 7 y que la cuenta no tenga mas de 7 días de haberse creado
+
+                if (days >= 7) {
+                    if(thisPaciente.dateCreated.AddDays(7) >= currentDate) {
+                        return true;
+                    }
+
+                    return false;
+                } else {
+
+                return true;
+                }
             }
         }
 

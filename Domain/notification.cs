@@ -19,7 +19,9 @@ namespace Domain
         // A note notification
         NoteNotification,
 
-        goal
+        goal,
+
+        growNotifications
     }
 
     // Represents a notification model with various properties related to the notification details

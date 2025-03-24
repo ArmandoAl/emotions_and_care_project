@@ -242,7 +242,7 @@ namespace Data.Implementations
                 var paciente = db.patients.FirstOrDefault(x => x.userId == pacientId);
                 if(paciente == null) return false;
 
-                especialista.patients.Add(paciente);
+               
 
                 //encontrar el patientRequest que tenga el usuario y eliminalo
                 PatientRequest? patientRequest = db.patientRequest.FirstOrDefault(x => x.patient.userId == pacientId);
@@ -253,6 +253,7 @@ namespace Data.Implementations
                 }
                 especialista.patientsRequests = db.patientRequest.Where(x => x.patient.userId != pacientId).ToList();
                 paciente.specialist = especialista;
+                especialista.patients.Add(paciente);
 
                 db.specialists.Update(especialista);
                 db.patients.Update(paciente);
@@ -358,7 +359,25 @@ namespace Data.Implementations
 
                 if (specialista == null) return null;
 
-                return specialista.patientsRequests;
+                var patientRequest = specialista.patientsRequests.Select(x => new PatientRequest
+                {
+                    patientRequestId = x.patientRequestId,
+                    patient = new Patient
+                            {
+                                userId = x.patient!.userId,
+                                name = x.patient.name,
+                                mail = x.patient.mail,
+                                phone = x.patient.phone,
+                                sex = x.patient.sex,
+                                age = x.patient.age,
+                                token = x.patient.token,
+                            },
+                        date = x.date
+                }).ToList();
+
+
+                return patientRequest;
+                            
 
             }
         }
