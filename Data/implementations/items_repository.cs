@@ -351,6 +351,55 @@ namespace Data.Implementations
     }
     }
 
+      public bool UpdateFlower(Flower flower)
+{
+    if (flower == null) return false;
+
+    var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
+    using (var db = new DBContext(options: connectionOptions))
+    {
+        var existingFlower = db.flowers
+            .Include(f => f.images)  // Incluir imágenes en la consulta
+            .FirstOrDefault(x => x.flowerId == flower.flowerId);
+
+        if (existingFlower == null) return false;
+
+        existingFlower.name = flower.name;
+
+        // Eliminar imágenes antiguas
+        existingFlower.images.Clear();
+
+        // Agregar nuevas imágenes
+        existingFlower.images = flower.images;
+
+        db.SaveChanges();
+        return true;
+    }
+}
+
+        public bool UpdateSticker(Sticker sticker)
+        {
+            if(sticker == null) return false;
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                        .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                        .Options;
+
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var newSticker = db.stickers.FirstOrDefault(x => x.stickerId == sticker.stickerId);
+
+                if(newSticker == null) return false;
+
+                newSticker.url = sticker.url;
+                db.SaveChanges();
+                return true;
+            }
+        }   
+
 
 
 

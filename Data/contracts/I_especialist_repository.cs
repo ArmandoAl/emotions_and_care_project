@@ -28,5 +28,7 @@ namespace Data.Contracts
         List<Specialist> ListarEspecialistas(int offset, int limit);
 
         bool refreshToken(int id, string token);
+
+        List<PatientRequest>? GetSolicitudesPacientes(int id);
     }
 }

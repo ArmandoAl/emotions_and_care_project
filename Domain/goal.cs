@@ -22,6 +22,8 @@ namespace Domain
 
         // Goal related to community engagement
         community,
+
+        goal
     }
 
     // Represents a goal with a specific type, description, and associated stickers or flowers

@@ -80,6 +80,24 @@ namespace API.Controllers
             return Ok(result);
         }
 
+        //upgateFloweer
+        [HttpPut("UpdateFlower")]
+        public ActionResult UpdateFlower([FromBody] Flower flower)
+        {
+            var result = _itemsService.UpdateFlower(flower);
+            if (result == false) return BadRequest();
+            return Ok(result);
+        }
+
+        //upgateSticker
+        [HttpPut("UpdateSticker")]
+        public ActionResult UpdateSticker([FromBody] Sticker sticker)
+        {
+            var result = _itemsService.UpdateSticker(sticker);
+            if (result == false) return BadRequest();
+            return Ok(result);
+        }
+
 
 
     }

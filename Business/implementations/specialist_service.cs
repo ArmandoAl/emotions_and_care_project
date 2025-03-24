@@ -1,4 +1,5 @@
 ﻿using Business.Contracts;
+using Data.contracts;
 using Data.Contracts;
 using Domain;
 using FirebaseAdmin.Messaging;
@@ -15,10 +16,19 @@ namespace Business.Implementations
         private readonly ISpecialistRepository _service;
         private readonly IDateRepository _citaRepository;
 
-        public EspecialistaService(ISpecialistRepository service, IDateRepository citaRepository)
+        private readonly IGoalRepository _logroRepository;
+
+        private readonly IItemsRepository _itemsRepository;
+
+        private readonly INotificationRepository _notificationRepository;
+
+        public EspecialistaService(ISpecialistRepository service, IDateRepository citaRepository, IGoalRepository logroRepository, IItemsRepository itemsRepository, INotificationRepository notificationRepository)
         {
             _service = service;
             _citaRepository = citaRepository;
+            _logroRepository = logroRepository;
+            _itemsRepository = itemsRepository;
+            _notificationRepository = notificationRepository;
         }
 
         public int Add(AddSpecialist especialista)
@@ -61,7 +71,31 @@ namespace Business.Implementations
         {
             if (idSpecialist < 1 || pacientId < 1) { return false; }
 
-            return _service.aceptarSolicitud(idSpecialist, pacientId);
+            var result = _service.aceptarSolicitud(idSpecialist, pacientId);
+
+            if (result)
+            {
+                var idLogro = _logroRepository.AddGoalPatient(pacientId, 6);
+
+                if (idLogro > 0)
+                {
+                    _itemsRepository.addStickerToPatient(4, pacientId);
+
+                    var notiId = _notificationRepository.AddNotification(new NotificationModel
+                    {
+                       notificationType = NotificationType.goal,
+                        Titulo = "¡Nuevo logro!",
+                        Descripcion = "Has logrado vincularte con un especialista, ¡sigue así!, te has ganado un nuevo sticker",
+                        url = _itemsRepository.GetSticker(4).url,
+                        stickerId = 4,
+                        reference = "patientSync"                    
+                    });
+
+                    _notificationRepository.vincularNotificationConPaciente(notiId, pacientId);
+                }
+            }
+
+            return result;
         }
 
 
@@ -137,6 +171,12 @@ namespace Business.Implementations
         {
             if (id < 1 || string.IsNullOrEmpty(token)) { return false; }
             return _service.refreshToken(id, token);
+        }
+
+        public List<PatientRequest>? GetSolicitudesPacientes(int id)
+        {
+            if (id < 1) { return null; }
+            return _service.GetSolicitudesPacientes(id);
         }
     }
 }

@@ -172,6 +172,16 @@ namespace API.Controllers
             if (result == null) return Task.FromResult<ActionResult>(NotFound());
             return Task.FromResult<ActionResult>(Ok(result));
         }
+
+        //List<PatientRequest>? GetSolicitudesPacientes(int id)
+        [HttpGet("{id}/solicitudesPacientes")]
+        public Task<ActionResult> GetSolicitudesPacientes([FromRoute] int id)
+        {
+            if (id < 1) return Task.FromResult<ActionResult>(BadRequest());
+            var result = _service.GetSolicitudesPacientes(id);
+            if (result == null) return Task.FromResult<ActionResult>(NotFound());
+            return Task.FromResult<ActionResult>(Ok(result));
+        }   
     }
 }
 

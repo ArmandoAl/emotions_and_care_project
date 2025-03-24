@@ -321,6 +321,9 @@ namespace Data.Migrations
                     b.Property<int?>("flowerId")
                         .HasColumnType("int");
 
+                    b.Property<string>("logoUlr")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -439,6 +442,9 @@ namespace Data.Migrations
 
                     b.Property<string>("reference")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("stickerId")
+                        .HasColumnType("int");
 
                     b.Property<string>("url")
                         .HasColumnType("nvarchar(max)");

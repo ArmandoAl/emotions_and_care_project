@@ -35,9 +35,6 @@ namespace Business.Implementations
 
            for (int i = 0; i < 4; i++)
             {
-
-                Console.WriteLine("i: " + i);
-                Console.WriteLine("id: " + id);
                 bool result = _itemsService.putFlowerInInterface(id, i + 1);
 
                 if (!result)

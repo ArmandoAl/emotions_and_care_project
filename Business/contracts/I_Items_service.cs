@@ -24,5 +24,9 @@ namespace Business
 
         int AddFlowersToPatient(int idPatient, int indexStart, int indexEnd);
 
+        bool UpdateFlower(Flower flower);
+
+        bool UpdateSticker(Sticker sticker);
+
     }
 }

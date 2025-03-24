@@ -427,9 +427,14 @@ namespace Data.Implementations
                                 sex = x.Cita.patient.sex,
                                 age = x.Cita.patient.age,
                                 token = x.Cita.patient.token,
-                                termsAndConditions = x.Cita.patient.termsAndConditions,
+                                
                                
-                            }
+                            },
+
+                            status = x.Cita.status,
+                            specialistNotes = x.Cita.specialistNotes,
+                            sentBySpecialist = x.Cita.sentBySpecialist,
+
                         }
                     }).ToList();
 

@@ -58,9 +58,9 @@ namespace Business.Implementations
 
                     if(isFirtTime)
                     {
-                        var idLogro = _logroRepository.AddGoalPatient(idPaciente, 4);
+                        var idLogro = _logroRepository.AddGoalPatient(idPaciente, 6);
 
-                        _itemsRepository.addStickerToPatient(4, idPaciente);
+                        _itemsRepository.addStickerToPatient(6, idPaciente);
                         if (idLogro <= 0)
                         {
                             _DateRepository.DeleteCita(idDate);

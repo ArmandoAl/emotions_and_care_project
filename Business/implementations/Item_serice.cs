@@ -75,5 +75,15 @@ namespace Business.implementations
         {
             return _itemsRepository.AddFlowersToPatient(idPatient, indexStart, indexEnd);
         }
+
+        public bool UpdateFlower(Flower flower)
+        {
+            return _itemsRepository.UpdateFlower(flower);
+        }
+
+        public bool UpdateSticker(Sticker sticker)
+        {
+            return _itemsRepository.UpdateSticker(sticker);
+        }
     }
 }

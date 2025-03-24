@@ -18,6 +18,8 @@ namespace Domain
 
         // A note notification
         NoteNotification,
+
+        goal
     }
 
     // Represents a notification model with various properties related to the notification details
@@ -47,6 +49,8 @@ namespace Domain
 
         // Optional URL associated with the notification (nullable)
         public string? url { get; set; }
+
+        public int? stickerId { get; set; } = 0;
 
         // Date and time when the notification was emitted (nullable, default is current date and time)
         public DateTime? emitDate { get; set; } = DateTime.Now;

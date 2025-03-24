@@ -345,6 +345,24 @@ namespace Data.Implementations
             }
         }
 
+        public List<PatientRequest>? GetSolicitudesPacientes(int id)
+        {
+            if (id <= 0) return null;
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var specialista = db.specialists.Where(x => x.userId == id).Include(x => x.patientsRequests).ThenInclude(x => x.patient).FirstOrDefault();
+
+                if (specialista == null) return null;
+
+                return specialista.patientsRequests;
+
+            }
+        }
+
     }
 }
 

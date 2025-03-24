@@ -33,6 +33,8 @@ namespace Business.Contracts
         List<Specialist> ListarEspecialists(int offset, int limit);
 
         bool refreshToken(int id, string token);
+
+        List<PatientRequest>? GetSolicitudesPacientes(int id);
     }
 }
 

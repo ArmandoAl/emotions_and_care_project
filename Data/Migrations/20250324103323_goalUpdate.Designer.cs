@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20241031024513_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20250324103323_goalUpdate")]
+    partial class goalUpdate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -205,8 +205,17 @@ namespace Data.Migrations
                     b.Property<string>("place")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("sentBySpecialist")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("specialistConfirm")
                         .HasColumnType("bit");
+
+                    b.Property<string>("specialistNotes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("status")
+                        .HasColumnType("int");
 
                     b.HasKey("dateId");
 
@@ -230,6 +239,9 @@ namespace Data.Migrations
 
                     b.Property<int?>("SpecialistuserId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime?>("dateCreated")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("dateRequestId");
 
@@ -310,6 +322,9 @@ namespace Data.Migrations
 
                     b.Property<int?>("flowerId")
                         .HasColumnType("int");
+
+                    b.Property<string>("logoUlr")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("name")
                         .IsRequired()
@@ -430,6 +445,9 @@ namespace Data.Migrations
                     b.Property<string>("reference")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("stickerId")
+                        .HasColumnType("int");
+
                     b.Property<string>("url")
                         .HasColumnType("nvarchar(max)");
 
@@ -500,6 +518,9 @@ namespace Data.Migrations
                     b.Property<int?>("specialistuserId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime?>("syncDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("termsAndConditionsId")
                         .HasColumnType("int");
 
@@ -542,6 +563,9 @@ namespace Data.Migrations
 
                     b.Property<int?>("SpecialistuserId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime?>("date")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("patientuserId")
                         .HasColumnType("int");
@@ -758,6 +782,30 @@ namespace Data.Migrations
                     b.HasKey("recomendationId");
 
                     b.ToTable("Recomendation");
+                });
+
+            modelBuilder.Entity("Domain.RecomendationComplete", b =>
+                {
+                    b.Property<int>("recomendationCompleteId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("recomendationCompleteId"), 1L, 1);
+
+                    b.Property<int?>("PatientuserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("dateCompleted")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("recomendationId")
+                        .HasColumnType("int");
+
+                    b.HasKey("recomendationCompleteId");
+
+                    b.HasIndex("PatientuserId");
+
+                    b.ToTable("recomendationComplete");
                 });
 
             modelBuilder.Entity("Domain.SettingsP", b =>
@@ -1270,6 +1318,13 @@ namespace Data.Migrations
                         .HasForeignKey("testId");
                 });
 
+            modelBuilder.Entity("Domain.RecomendationComplete", b =>
+                {
+                    b.HasOne("Domain.Patient", null)
+                        .WithMany("completeRecomendations")
+                        .HasForeignKey("PatientuserId");
+                });
+
             modelBuilder.Entity("Domain.Specialist", b =>
                 {
                     b.HasOne("Domain.TermsAndConditions", "termsAndConditions")
@@ -1352,6 +1407,8 @@ namespace Data.Migrations
             modelBuilder.Entity("Domain.Patient", b =>
                 {
                     b.Navigation("carts");
+
+                    b.Navigation("completeRecomendations");
 
                     b.Navigation("dates");
 
