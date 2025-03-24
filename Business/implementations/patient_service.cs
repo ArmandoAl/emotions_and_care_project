@@ -18,11 +18,17 @@ namespace Business.Implementations
 
         private readonly INotificationRepository _notificationRepository;
 
-        public PatientService(IPatientRepository service, IItemsRepository itemsService, INotificationRepository notificationRepository)
+        private readonly IGoalRepository _logroRepository;
+
+        private readonly IItemsRepository _itemsRepository;
+
+        public PatientService(IPatientRepository service, IItemsRepository itemsService, INotificationRepository notificationRepository, IGoalRepository logroRepository, IItemsRepository itemsRepository)
         {
             _service = service;
             _itemsService = itemsService;
             _notificationRepository = notificationRepository;
+            _logroRepository = logroRepository;
+            _itemsRepository = itemsRepository;
         }
 
         public int Add(AddPatient paciente)
@@ -168,7 +174,33 @@ namespace Business.Implementations
         public bool VincularDirecto(int id, string tokenEspecialista)
         {
             if (id < 1 || string.IsNullOrEmpty(tokenEspecialista)) { return false; }
-            return _service.VincularDirecto(id, tokenEspecialista);
+            var result = _service.VincularDirecto(id, tokenEspecialista);
+
+            if (result)
+            {
+               var idLogro = _logroRepository.AddGoalPatient(id, 6);
+
+                if (idLogro > 0)
+                {
+                    _itemsRepository.addStickerToPatient(4, id);
+
+                    var notiId = _notificationRepository.AddNotification(new NotificationModel
+                    {
+                       notificationType = NotificationType.goal,
+                        Titulo = "¡Nuevo logro!",
+                        Descripcion = "Has logrado vincularte con un especialista, ¡sigue así!, te has ganado un nuevo sticker",
+                        url = _itemsRepository.GetSticker(4).url,
+                        stickerId = 4,
+                        reference = "patientSync"                    
+                    });
+
+                    _notificationRepository.vincularNotificationConPaciente(notiId, id);
+                }
+
+            }
+
+            return result;
+
         }
 
         //growFlowerStage
