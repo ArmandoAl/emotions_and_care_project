@@ -237,7 +237,37 @@ namespace Data.Implementations
         }
     }
 
+/*
 
+public bool Delete(int id)
+        {
+            if(id <= 0) return false;
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+            .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+            .Options;
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var opps = db.opps
+                    .Include(o => o.bukayoSakaDiary)   // Include the related Bukayo
+                    .ThenInclude(b => b.SakaNotes)     // Include related SakaNotes
+                    .FirstOrDefault(o => o.BuserId == id);
+
+                
+                if(opps == null) return false;
+
+                // Delete related SakaNotes
+                db.sakaNotes.RemoveRange(opps.bukayoSakaDiary.SakaNotes);
+                db.bukayos.Remove(opps.bukayoSakaDiary);
+                
+
+                db.opps.Remove(opps);
+                db.SaveChanges();
+                return true;
+            }
+        }
+
+*/
         public bool Delete(int id)
         {
             if (id <= 0) return false;
@@ -247,14 +277,79 @@ namespace Data.Implementations
               .Options;
             using (var db = new DBContext(options: connectionOptions))
             {
-                var patient = db.patients.FirstOrDefault(x => x.userId == id);
+                var patient = db.patients
+                    .Include(o => o.specialist)
+                    .Include(o => o.goals)
+                    .Include(o => o.carts).ThenInclude(o => o.cartAnswers)
+                    .Include(o => o.userInterface)
+                    .Include(o => o.notifications)
+                    .Include(o => o.userInterface.userFlowers)
+                    .Include(o => o.userInterface.userStickers)
+                    .Include(o => o.settings)
+                    .Include(o => o.termsAndConditions)
+                    .Include(o => o.progress)
+                    .Include(o => o.diary)   // Include the related Bukayo
+                    .ThenInclude(b => b.notes)     // Include related SakaNotes
+                    .FirstOrDefault(o => o.userId == id);
+                
                 if (patient == null) return false;
 
-                db.patients.Remove(patient);
+                Console.WriteLine("Paciente encontrado:" + patient.userId + " - " + patient.name);
+
+                 //DELETE DIARY
+                db.notes.RemoveRange(patient.diary.notes);
+                db.diaries.Remove(patient.diary);
+
+                //DELETE CARTS AND ANSWERS
+                db.cartAnswers.RemoveRange(patient.carts.SelectMany(x => x.cartAnswers));
+                db.carts.RemoveRange(patient.carts);
+
+
+
+
+
+                
+                //DELETE NOTIFICATIONS
+                db.notifications.RemoveRange(patient.notifications);
+
+                //DELETE CARTS
+                db.carts.RemoveRange(patient.carts);
+
+                if (patient.specialist != null)
+                {
+
+                    var requests = db.patientRequests.Where(x => x.patient.userId == id).ToList();
+                    if (requests != null)
+                    {
+                        db.patientRequests.RemoveRange(requests);
+                    }
+                    patient.specialist.patients.Remove(patient);
+                }
+
+                //GOALS
+                db.goals.RemoveRange(patient.goals);
+                Console.WriteLine("Metas eliminadas");
+
+                db.userInterfaces.Remove(patient.userInterface);
+                Console.WriteLine("Interfaz eliminada");
+
+                db.settings.Remove(patient.settings);
+                Console.WriteLine("Configuraciones eliminadas");
+
+                db.terms.Remove(patient.termsAndConditions);
+                Console.WriteLine("Terminos eliminados");
+
+                db.progresses.Remove(patient.progress);
+                Console.WriteLine("Progreso eliminado");
+
+
+
+
                 db.SaveChanges();
                 return true;
             }
         }
+
 
 
 

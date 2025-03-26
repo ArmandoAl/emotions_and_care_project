@@ -4,6 +4,7 @@ using Data.Implementations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(DBContext))]
-    partial class DBContextModelSnapshot : ModelSnapshot
+    [Migration("20250326032527_notes")]
+    partial class notes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -154,7 +156,7 @@ namespace Data.Migrations
 
                     b.HasIndex("cartId");
 
-                    b.ToTable("cartAnswers");
+                    b.ToTable("CartAnswer");
                 });
 
             modelBuilder.Entity("Domain.CompleteQuestionnaires", b =>
@@ -181,7 +183,7 @@ namespace Data.Migrations
 
                     b.HasIndex("testId");
 
-                    b.ToTable("completeQuestionnaires");
+                    b.ToTable("CompleteQuestionnaires");
                 });
 
             modelBuilder.Entity("Domain.Date", b =>
@@ -645,7 +647,7 @@ namespace Data.Migrations
 
                     b.HasIndex("patientuserId");
 
-                    b.ToTable("PatientRequest");
+                    b.ToTable("patientRequest");
                 });
 
             modelBuilder.Entity("Domain.Progress", b =>
@@ -667,7 +669,7 @@ namespace Data.Migrations
 
                     b.HasKey("progressId");
 
-                    b.ToTable("progresses");
+                    b.ToTable("Progress");
                 });
 
             modelBuilder.Entity("Domain.Question", b =>
@@ -754,7 +756,7 @@ namespace Data.Migrations
 
                     b.HasIndex("testId");
 
-                    b.ToTable("questionnairesForUsers");
+                    b.ToTable("QuestionnaireForUser");
                 });
 
             modelBuilder.Entity("Domain.QuestionnaireResult", b =>
@@ -810,7 +812,7 @@ namespace Data.Migrations
 
                     b.HasIndex("testId");
 
-                    b.ToTable("questionnairesHistories");
+                    b.ToTable("QuestionnairesHistory");
                 });
 
             modelBuilder.Entity("Domain.Recomendation", b =>
@@ -921,7 +923,7 @@ namespace Data.Migrations
 
                     b.HasKey("settingsId");
 
-                    b.ToTable("settings");
+                    b.ToTable("SettingsP");
                 });
 
             modelBuilder.Entity("Domain.Specialist", b =>
@@ -1084,7 +1086,7 @@ namespace Data.Migrations
 
                     b.HasKey("testId");
 
-                    b.ToTable("tests");
+                    b.ToTable("Test");
                 });
 
             modelBuilder.Entity("Domain.TestInfoModel", b =>
@@ -1189,7 +1191,7 @@ namespace Data.Migrations
 
                     b.HasKey("userInterfaceId");
 
-                    b.ToTable("userInterfaces");
+                    b.ToTable("UserInterface");
                 });
 
             modelBuilder.Entity("Domain.UserSticker", b =>

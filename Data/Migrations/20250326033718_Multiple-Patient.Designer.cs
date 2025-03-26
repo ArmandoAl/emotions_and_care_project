@@ -4,6 +4,7 @@ using Data.Implementations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(DBContext))]
-    partial class DBContextModelSnapshot : ModelSnapshot
+    [Migration("20250326033718_Multiple-Patient")]
+    partial class MultiplePatient
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -154,7 +156,7 @@ namespace Data.Migrations
 
                     b.HasIndex("cartId");
 
-                    b.ToTable("cartAnswers");
+                    b.ToTable("CartAnswer");
                 });
 
             modelBuilder.Entity("Domain.CompleteQuestionnaires", b =>
@@ -645,7 +647,7 @@ namespace Data.Migrations
 
                     b.HasIndex("patientuserId");
 
-                    b.ToTable("PatientRequest");
+                    b.ToTable("patientRequest");
                 });
 
             modelBuilder.Entity("Domain.Progress", b =>

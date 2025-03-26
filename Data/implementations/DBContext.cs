@@ -57,6 +57,24 @@ namespace Data.Implementations
 
             public DbSet<Note> notes { get; set; } = null!;
 
+            public DbSet<Progress> progresses { get; set; } = null!;
+
+            public DbSet<Test> tests { get; set; } = null!;
+
+            public DbSet<SettingsP> settings { get; set; } = null!;
+
+            public DbSet<UserInterface> userInterfaces { get; set; } = null!;
+
+            public DbSet<QuestionnaireForUser> questionnairesForUsers { get; set; } = null!;
+
+            public DbSet<CompleteQuestionnaires> completeQuestionnaires { get; set; } = null!;
+
+            public DbSet<QuestionnairesHistory> questionnairesHistories { get; set; } = null!;
+
+            public DbSet<PatientRequest> patientRequests { get; set; } = null!;
+
+            public DbSet<CartAnswer> cartAnswers { get; set; } = null!;
+
 
             public DBContext(DbContextOptions<DBContext> options) : base(options) { }
 
