@@ -36,6 +36,14 @@ namespace Domain
         public DateTime Date { get; set; } = DateTime.Now;
     }
 
+    public class RedCard
+    {
+        [Key]
+        public int Id { get; set; }
+        public string Reason { get; set; } = "";
+        public DateTime Date { get; set; } = DateTime.Now;
+    }
+
 
 }
 

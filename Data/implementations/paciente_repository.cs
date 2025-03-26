@@ -268,6 +268,30 @@ public bool Delete(int id)
         }
 
 */
+    public bool Delete(int id)
+    {
+        var allowedIds = new List<int> { 29, 49, 60, 61, 62, 63, 64, 67, 76, 77, 78, 79, 80, 83, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95 };
+        var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+        .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+        .Options;
+
+        using (var db = new DBContext(options: connectionOptions))
+        {
+            var diariesToDelete = db.diaries
+    .Where(d => !allowedIds.Contains(d.diaryId))
+    .ToList();
+
+db.diaries.RemoveRange(diariesToDelete);
+
+
+
+            Console.WriteLine("Notas encontradas:" + diariesToDelete.Count);
+
+             return true;
+        }
+    }
+    // Deletes a patient from the database based on their user ID
+    /*
         public bool Delete(int id)
         {
             if (id <= 0) return false;
@@ -349,6 +373,8 @@ public bool Delete(int id)
                 return true;
             }
         }
+
+        */
 
 
 
