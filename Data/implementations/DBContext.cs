@@ -55,6 +55,8 @@ namespace Data.Implementations
 
             public DbSet<Diary> diaries { get; set; } = null!;
 
+            public DbSet<Note> notes { get; set; } = null!;
+
 
             public DBContext(DbContextOptions<DBContext> options) : base(options) { }
 
