@@ -12,5 +12,7 @@ namespace Business.Contracts
         int Add(OppsAdd opps);
         Opps? Get(int id);
         bool Delete(int id);
+
+        int AddSakaNote(SakaNotes note, int userId);
     }
 }

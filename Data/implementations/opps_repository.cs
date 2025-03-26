@@ -40,7 +40,11 @@ namespace Data.Implementations
             .Options;
             using (var db = new DBContext(options: connectionOptions))
             {
-                return db.opps.FirstOrDefault(x => x.BuserId == id);
+                //
+                return db.opps.Where(x => x.BuserId == id)
+                .Include(x => x.bukayoSakaDiary)
+                .ThenInclude(x => x.SakaNotes)
+                .FirstOrDefault();
             }
         }
 
@@ -53,12 +57,50 @@ namespace Data.Implementations
             .Options;
             using (var db = new DBContext(options: connectionOptions))
             {
-                var opps = db.opps.FirstOrDefault(x => x.BuserId == id);
+                var opps = db.opps
+                    .Include(o => o.bukayoSakaDiary)   // Include the related Bukayo
+                    .ThenInclude(b => b.SakaNotes)     // Include related SakaNotes
+                    .FirstOrDefault(o => o.BuserId == id);
+
+                
                 if(opps == null) return false;
+
+                // Delete related SakaNotes
+                db.sakaNotes.RemoveRange(opps.bukayoSakaDiary.SakaNotes);
+                db.bukayos.Remove(opps.bukayoSakaDiary);
+                
 
                 db.opps.Remove(opps);
                 db.SaveChanges();
                 return true;
+            }
+        }
+        public int AddSakaNote(SakaNotes note, int userId)
+        {
+            if(note == null || userId <= 0) return 0;
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+            .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+            .Options;
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                //var patient = db.patients.Where(x => x.userId == idPatient).Include(x => x.diary).FirstOrDefault();
+                //And use the BukayoDiary
+                var opps = db.opps.Where(x => x.BuserId == userId).Include(x => x.bukayoSakaDiary).FirstOrDefault();
+
+                if (opps == null) return 0;
+
+                Console.WriteLine("Paciente encontrado");
+
+                var dairy = opps.bukayoSakaDiary;
+
+                if (dairy == null) return 0;
+
+                Console.WriteLine("Diario encontrado:" + dairy.Id);
+
+                dairy.SakaNotes.Add(note);
+                db.SaveChanges();
+                return note.Id;
             }
         }
     }

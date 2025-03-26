@@ -45,5 +45,14 @@ namespace API.Controllers
             if (!result) return Task.FromResult<ActionResult>(BadRequest());
             return Task.FromResult<ActionResult>(Ok(result));
         }
+
+        [HttpPost("{userId}/sakaNote")]
+        public Task<ActionResult> AddSakaNote(SakaNotes note, int userId)
+        {
+            if (note == null || userId < 1) return Task.FromResult<ActionResult>(BadRequest());
+            var result = _service.AddSakaNote(note, userId);
+            if (result == 0) return Task.FromResult<ActionResult>(BadRequest());
+            return Task.FromResult<ActionResult>(Ok(result));
+        }
     }
 }

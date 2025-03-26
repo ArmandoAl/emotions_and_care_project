@@ -36,5 +36,11 @@ namespace Business.Implementations
             if(id < 1) { return null; }
             return _service.Get(id);
         }
+
+        public int AddSakaNote(SakaNotes note, int userId)
+        {
+            if(note == null || userId < 1) { return 0; }
+            return _service.AddSakaNote(note, userId);
+        }
     }
 }

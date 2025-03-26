@@ -47,9 +47,16 @@ namespace Data.Implementations
 
             public DbSet<Opps> opps { get; set; } = null!;
 
+            public DbSet<SakaNotes> sakaNotes { get; set; } = null!;
+
+            public DbSet<Bukayo> bukayos { get; set; } = null!;
+
             public DbSet<RecomendationComplete> recomendationComplete { get; set; } = null!;
+
+            public DbSet<Diary> diaries { get; set; } = null!;
 
 
             public DBContext(DbContextOptions<DBContext> options) : base(options) { }
-        }
+
+    }
 }

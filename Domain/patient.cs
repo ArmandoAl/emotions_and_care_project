@@ -13,6 +13,7 @@ namespace Domain
         // Represents the specialist assigned to the patient (nullable)
         public Specialist? specialist { get; set; }
 
+        
         public DateTime? syncDate { get; set; } = null;
 
         // A list of notifications for the patient
