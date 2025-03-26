@@ -1,6 +1,7 @@
 ﻿using Data.Helpers;
 using Domain;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace Data.Implementations
 {       
@@ -43,6 +44,8 @@ namespace Data.Implementations
             public DbSet<Recomendation> recomendation { get; set; } = null!;
 
             public DbSet<Stage> stages { get; set; } = null!;
+
+            public DbSet<Opps> opps { get; set; } = null!;
 
             public DbSet<RecomendationComplete> recomendationComplete { get; set; } = null!;
 
