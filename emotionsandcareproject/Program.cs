@@ -48,6 +48,9 @@ builder.Services.AddScoped<IGoalService, LogroService>();
 builder.Services.AddScoped<IStageService, StageService>();
 builder.Services.AddScoped<IStagesRepository, StageRepository>();
 builder.Services.AddSingleton<PushNotificationService>();
+builder.Services.AddScoped<IOppsService, OppsService>();
+builder.Services.AddScoped<IOppsRepository, OppsRepository>();
+
 builder.Services.AddScoped<IDBRepository, DBReporitory>();
 
 
