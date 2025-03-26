@@ -472,16 +472,6 @@ C:/Users/alvar/OneDrive/Documents/projects/emotions_and_care_project/emotionsand
 /Users/armandoalvarado/Documents/projects/emotions_and_care_project/emotionsandcareproject/obj/Debug/net6.0/emotionsandcareproject.pdb
 /Users/armandoalvarado/Documents/projects/emotions_and_care_project/emotionsandcareproject/obj/Debug/net6.0/emotionsandcareproject.genruntimeconfig.cache
 /Users/armandoalvarado/Documents/projects/emotions_and_care_project/emotionsandcareproject/obj/Debug/net6.0/ref/emotionsandcareproject.dll
-/Users/martinortiz/Desktop/EandC/emotions_and_care_project/emotionsandcareproject/bin/Debug/net6.0/emotionsandcareproject.staticwebassets.endpoints.json
-/Users/martinortiz/Desktop/EandC/emotions_and_care_project/emotionsandcareproject/obj/Debug/net6.0/emotionsandcareproject.sourcelink.json
-/Users/martinortiz/Desktop/EandC/emotions_and_care_project/emotionsandcareproject/obj/Debug/net6.0/staticwebassets.build.endpoints.json
-/Users/martinortiz/Desktop/EandC/emotions_and_care_project/emotionsandcareproject/obj/Debug/net6.0/staticwebassets/msbuild.emotionsandcareproject.Microsoft.AspNetCore.StaticWebAssets.props
-/Users/martinortiz/Desktop/EandC/emotions_and_care_project/emotionsandcareproject/obj/Debug/net6.0/staticwebassets/msbuild.emotionsandcareproject.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
-/Users/martinortiz/Desktop/EandC/emotions_and_care_project/emotionsandcareproject/obj/Debug/net6.0/staticwebassets/msbuild.build.emotionsandcareproject.props
-/Users/martinortiz/Desktop/EandC/emotions_and_care_project/emotionsandcareproject/obj/Debug/net6.0/staticwebassets/msbuild.buildMultiTargeting.emotionsandcareproject.props
-/Users/martinortiz/Desktop/EandC/emotions_and_care_project/emotionsandcareproject/obj/Debug/net6.0/staticwebassets/msbuild.buildTransitive.emotionsandcareproject.props
-/Users/martinortiz/Desktop/EandC/emotions_and_care_project/emotionsandcareproject/obj/Debug/net6.0/staticwebassets.pack.json
-/Users/martinortiz/Desktop/EandC/emotions_and_care_project/emotionsandcareproject/obj/Debug/net6.0/emotions.82EF0BB9.Up2Date
 /Users/armandoalvarado/Documents/emotions_and_care_project/emotionsandcareproject/bin/Debug/net6.0/appsettings.Development.json
 /Users/armandoalvarado/Documents/emotions_and_care_project/emotionsandcareproject/bin/Debug/net6.0/appsettings.json
 /Users/armandoalvarado/Documents/emotions_and_care_project/emotionsandcareproject/bin/Debug/net6.0/emotionsandcareproject.staticwebassets.runtime.json
@@ -644,3 +634,4 @@ C:/Users/alvar/OneDrive/Documents/projects/emotions_and_care_project/emotionsand
 /Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/emotions_and_care_project/emotionsandcareproject/obj/Debug/net6.0/emotionsandcareproject.pdb
 /Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/emotions_and_care_project/emotionsandcareproject/obj/Debug/net6.0/emotionsandcareproject.genruntimeconfig.cache
 /Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/emotions_and_care_project/emotionsandcareproject/obj/Debug/net6.0/ref/emotionsandcareproject.dll
+/Users/martinortiz/Desktop/EandC/emotions_and_care_project/emotionsandcareproject/obj/Debug/net6.0/emotionsandcareproject.csproj.CopyComplete
