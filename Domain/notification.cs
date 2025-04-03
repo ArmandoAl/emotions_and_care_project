@@ -62,5 +62,8 @@ namespace Domain
 
         // Date and time when the notification was last modified (default is current date and time)
         public DateTime FechaModificacion { get; set; } = DateTime.Now;
+
+        // Optional date and time when the notification is scheduled to be postponed until (nullable)
+        public DateTime? PostponeUntil { get; set; } = null;
     }
 }
