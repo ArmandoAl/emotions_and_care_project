@@ -69,16 +69,49 @@ namespace Data.Implementations
 
         public List<NotificationModel>? GetNotificationesByPaciente(int idPaciente)
         {
-            if(idPaciente <= 0) return null;
+            if (idPaciente <= 0) return null;
 
             var connectionOptions = new DbContextOptionsBuilder<DBContext>()
-            .UseSqlServer(Data.Helpers.Constants.ConnectionString)
-            .Options;
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
             using (var db = new DBContext(options: connectionOptions))
             {
-                return db.patients.Where(x => x.userId == idPaciente).SelectMany(x => x.notifications).ToList();
+                var notifications = db.patients
+                    .Where(x => x.userId == idPaciente)
+                    .SelectMany(x => x.notifications)
+                    .Where(n => n.PostponeUntil == null || n.PostponeUntil <= DateTime.Now)
+                    .ToList();
+
+                // Orden personalizado:
+                return notifications
+                    .OrderByDescending(n => n.PostponeUntil != null && n.PostponeUntil <= DateTime.Now) // Primero los pospuestos listos
+                    .ThenByDescending(n => n.emitDate) // Luego por fecha normal
+                    .ToList();
             }
         }
+
+
+
+        public bool PostponeNotification(int notificationId)
+        {
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var notification = db.notifications.FirstOrDefault(n => n.notificationId == notificationId);
+                if (notification == null) return false;
+
+                notification.PostponeUntil = DateTime.Now.AddHours(6);
+                notification.FechaModificacion = DateTime.Now;
+
+                db.SaveChanges();
+                return true;
+            }
+        }
+
 
         public bool updateDateEmision(int idNotification)
         {

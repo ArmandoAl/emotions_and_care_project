@@ -75,6 +75,8 @@ namespace Data.Implementations
 
             public DbSet<CartAnswer> cartAnswers { get; set; } = null!;
 
+            public DbSet<InAppText> inAppTexts { get; set; } = null!;
+
 
             public DBContext(DbContextOptions<DBContext> options) : base(options) { }
 
