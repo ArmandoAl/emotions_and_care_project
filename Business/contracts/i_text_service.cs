@@ -13,6 +13,8 @@ namespace Business.Contracts
         int Add(InAppText text);
         InAppText? Get(int id);
         bool Delete(int id);
-        bool Update(InAppText text);
+        bool Update(int id, InAppText text);
+
+        List<InAppText> GetAll();
     }
 }

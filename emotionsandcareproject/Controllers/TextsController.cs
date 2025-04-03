@@ -43,12 +43,22 @@ namespace API.Controllers
             return Task.FromResult<ActionResult>(Ok(result));
         }
 
-        [HttpPut]
-        public Task<ActionResult> Update(InAppText text)
+        [HttpPut("Edit/{id}")]
+        public Task<ActionResult> Update(int id, InAppText text)
         {
+            if (id < 1) return Task.FromResult<ActionResult>(BadRequest());
             if (text == null) return Task.FromResult<ActionResult>(BadRequest());
-            var result = _service.Update(text);
+            text.textId = id;
+            var result = _service.Update(id, text);
             if (!result) return Task.FromResult<ActionResult>(BadRequest());
+            return Task.FromResult<ActionResult>(Ok(result));
+        }
+
+        [HttpGet("GET-ALL")]
+        public Task<ActionResult> GetAll()
+        {
+            var result = _service.GetAll();
+            if (result == null || result.Count == 0) return Task.FromResult<ActionResult>(NotFound());
             return Task.FromResult<ActionResult>(Ok(result));
         }
     }

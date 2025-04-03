@@ -34,10 +34,16 @@ namespace Business.Implementations
             if (id < 1) { return null; }
             return _textRepository.Get(id);
         }
-        public bool Update(InAppText text)
+        public bool Update(int id, InAppText text)
         {
+            if (id < 1) { return false; }
             if (text == null) { return false; }
-            return _textRepository.Update(text);
+            text.textId = id;
+            return _textRepository.Update(id, text);
+        }
+        public List<InAppText> GetAll()
+        {
+            return _textRepository.GetAll();
         }
     }
 }

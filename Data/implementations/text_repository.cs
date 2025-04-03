@@ -58,18 +58,37 @@ namespace Data.Implementations
             }
         }
 
-        public bool Update(InAppText text)
+        public bool Update(int id, InAppText text)
         {
             if (text == null) return false;
 
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var existingText = db.inAppTexts.Find(id);
+                if (existingText == null) return false;
+
+                existingText.text = text.text;
+                existingText.textType = text.textType;
+                existingText.modifiedDate = DateTime.Now;
+
+                db.SaveChanges();
+                return true;
+            }
+        }
+
+
+        public List<InAppText> GetAll()
+        {
             var connectionOptions = new DbContextOptionsBuilder<DBContext>()
           .UseSqlServer(Data.Helpers.Constants.ConnectionString)
           .Options;
             using (var db = new DBContext(options: connectionOptions))
             {
-                db.inAppTexts.Update(text);
-                db.SaveChanges();
-                return true;
+                return db.inAppTexts.ToList();
             }
         }
     }
