@@ -108,7 +108,7 @@ namespace Domain
         public int progressId { get; set; }
 
         /// <summary>
-        /// The stage of the patient's progress (e.g., 0 = initial, 1 = halfway, etc.).
+        /// The stage of the patient's progress (e.g., 0 = initial, 1 = halfway, etc.). 6 STAGES PER PLANT
         /// </summary>
         public int stage { get; set; } = 0;
 
@@ -161,94 +161,9 @@ namespace Domain
         public List<QuestionnairesHistory> questionnairesHistory { get; set; } = new List<QuestionnairesHistory>();
     }
 
-    /// <summary>
-    /// Represents a questionnaire assigned to a patient.
-    /// </summary>
-    public class QuestionnaireForUser
-    {
-        [Key]
-        public int questionnaireForUserId { get; set; }
 
-        /// <summary>
-        /// The ID of the questionnaire.
-        /// </summary>
-        public int questionnaireId { get; set; }
-    }
 
-    /// <summary>
-    /// Represents the user interface settings for a patient.
-    /// </summary>
-    public class UserInterface
-    {
-        [Key]
-        public int userInterfaceId { get; set; }
+    
 
-        /// <summary>
-        /// A list of flowers assigned to the user.
-        /// </summary>
-        public List<UserFlower> userFlowers { get; set; } = new List<UserFlower>();
-
-        /// <summary>
-        /// A list of stickers assigned to the user.
-        /// </summary>
-        public List<UserSticker> userStickers { get; set; } = new List<UserSticker>();
-
-        /// <summary>
-        /// Background image URL or ID for the user interface.
-        /// </summary>
-        public int backgroundUrl { get; set; }
-
-        /// <summary>
-        /// The ID of the theme used by the patient.
-        /// </summary>
-        public int themeId { get; set; }
-    }
-
-    /// <summary>
-    /// Represents a flower assigned to the user in their interface.
-    /// </summary>
-    public class UserFlower
-    {
-        [Key]
-        public int userFlowerId { get; set; }
-
-        /// <summary>
-        /// The flower object assigned to the user.
-        /// </summary>
-        public Flower flower { get; set; } = new Flower();
-
-        /// <summary>
-        /// The state of the flower (e.g., active, blooming, etc.).
-        /// </summary>
-        public int state { get; set; }
-
-        /// <summary>
-        /// Whether the flower is active (true/false).
-        /// </summary>
-        public bool active { get; set; } = false;
-
-        /// <summary>
-        /// The position of the flower (nullable, for UI arrangement).
-        /// </summary>
-        public int? position { get; set; }
-    }
-
-    /// <summary>
-    /// Represents a sticker assigned to the user in their interface.
-    /// </summary>
-    public class UserSticker
-    {
-        [Key]
-        public int userStickerId { get; set; }
-
-        /// <summary>
-        /// The sticker object assigned to the user.
-        /// </summary>
-        public Sticker sticker { get; set; } = new Sticker();
-
-        /// <summary>
-        /// The position of the sticker (nullable, for UI arrangement).
-        /// </summary>
-        public int? position { get; set; }
-    }
+    
 }

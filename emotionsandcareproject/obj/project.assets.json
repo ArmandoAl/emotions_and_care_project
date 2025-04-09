@@ -2448,19 +2448,19 @@
     ]
   },
   "packageFolders": {
-    "/Users/armandoalvarado/.nuget/packages/": {}
+    "/Users/martinortiz/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/emotions_and_care_project/emotionsandcareproject/emotionsandcareproject.csproj",
+      "projectUniqueName": "/Users/martinortiz/Desktop/EandC/emotions_and_care_project/emotionsandcareproject/emotionsandcareproject.csproj",
       "projectName": "emotionsandcareproject",
-      "projectPath": "/Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/emotions_and_care_project/emotionsandcareproject/emotionsandcareproject.csproj",
-      "packagesPath": "/Users/armandoalvarado/.nuget/packages/",
-      "outputPath": "/Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/emotions_and_care_project/emotionsandcareproject/obj/",
+      "projectPath": "/Users/martinortiz/Desktop/EandC/emotions_and_care_project/emotionsandcareproject/emotionsandcareproject.csproj",
+      "packagesPath": "/Users/martinortiz/.nuget/packages/",
+      "outputPath": "/Users/martinortiz/Desktop/EandC/emotions_and_care_project/emotionsandcareproject/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/armandoalvarado/.nuget/NuGet/NuGet.Config"
+        "/Users/martinortiz/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net6.0"
@@ -2472,14 +2472,14 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "/Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/emotions_and_care_project/Business/Business.csproj": {
-              "projectPath": "/Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/emotions_and_care_project/Business/Business.csproj"
+            "/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Business/Business.csproj": {
+              "projectPath": "/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Business/Business.csproj"
             },
-            "/Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/emotions_and_care_project/Data/Data.csproj": {
-              "projectPath": "/Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/emotions_and_care_project/Data/Data.csproj"
+            "/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Data/Data.csproj": {
+              "projectPath": "/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Data/Data.csproj"
             },
-            "/Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/emotions_and_care_project/Domain/Domain.csproj": {
-              "projectPath": "/Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/emotions_and_care_project/Domain/Domain.csproj"
+            "/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Domain/Domain.csproj": {
+              "projectPath": "/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Domain/Domain.csproj"
             }
           }
         }

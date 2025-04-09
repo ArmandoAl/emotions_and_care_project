@@ -68,6 +68,15 @@ namespace API.Controllers
             return Task.FromResult<ActionResult>(Ok(result));
         }
 
+        [HttpPost("{idNotificacion}/postpone")]
+        public Task<ActionResult> Postpone([FromRoute] int idNotificacion)
+        {
+            if (idNotificacion < 1) return Task.FromResult<ActionResult>(BadRequest());
+            var result = _service.postponeNotification(idNotificacion);
+            if (!result) return Task.FromResult<ActionResult>(BadRequest());
+            return Task.FromResult<ActionResult>(Ok(result));
+        }
+
         [HttpPut]
         public Task<ActionResult> Update(NotificationModel notificacion)
         {

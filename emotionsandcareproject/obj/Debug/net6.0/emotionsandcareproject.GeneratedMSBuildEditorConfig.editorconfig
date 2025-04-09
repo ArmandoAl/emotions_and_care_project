@@ -8,37 +8,37 @@ build_property.PlatformNeutralAssembly =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = emotionsandcareproject
 build_property.RootNamespace = emotionsandcareproject
-build_property.ProjectDir = /Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/emotions_and_care_project/emotionsandcareproject/
+build_property.ProjectDir = /Users/martinortiz/Desktop/EandC/emotions_and_care_project/emotionsandcareproject/
 build_property.RazorLangVersion = 6.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = /Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/emotions_and_care_project/emotionsandcareproject
+build_property.MSBuildProjectDirectory = /Users/martinortiz/Desktop/EandC/emotions_and_care_project/emotionsandcareproject
 build_property._RazorSourceGeneratorDebug = 
 
-[/Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/emotions_and_care_project/emotionsandcareproject/Views/Home/Index.cshtml]
+[/Users/martinortiz/Desktop/EandC/emotions_and_care_project/emotionsandcareproject/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9JbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/emotions_and_care_project/emotionsandcareproject/Views/Home/Privacy.cshtml]
+[/Users/martinortiz/Desktop/EandC/emotions_and_care_project/emotionsandcareproject/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9Qcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/emotions_and_care_project/emotionsandcareproject/Views/Shared/Error.cshtml]
+[/Users/martinortiz/Desktop/EandC/emotions_and_care_project/emotionsandcareproject/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL0Vycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/emotions_and_care_project/emotionsandcareproject/Views/Shared/_ValidationScriptsPartial.cshtml]
+[/Users/martinortiz/Desktop/EandC/emotions_and_care_project/emotionsandcareproject/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/emotions_and_care_project/emotionsandcareproject/Views/_ViewImports.cshtml]
+[/Users/martinortiz/Desktop/EandC/emotions_and_care_project/emotionsandcareproject/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/emotions_and_care_project/emotionsandcareproject/Views/_ViewStart.cshtml]
+[/Users/martinortiz/Desktop/EandC/emotions_and_care_project/emotionsandcareproject/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/emotions_and_care_project/emotionsandcareproject/Views/Shared/_Layout.cshtml]
+[/Users/martinortiz/Desktop/EandC/emotions_and_care_project/emotionsandcareproject/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-dkxmkd7yns
