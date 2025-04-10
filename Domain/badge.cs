@@ -50,29 +50,19 @@ namespace Domain
         /// </summary>
         public Badge badge { get; set; } = new Badge();
 
-        public DateTime dateEarned { get; set; } = DateTime.Now;
-
-        public List<BadgeProgress> badgeProgress { get; set; } = new List<BadgeProgress>();
-
-
-    }
-
-    public class BadgeProgress
-    {
-        /// <summary>
-        /// Gets or sets the unique identifier for the badge progress.
-        /// </summary>
-        [Key]
-        public int badgeProgressId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the user badge associated with the progress.
-        /// </summary>
-        public UserBadge userBadge { get; set; } = new UserBadge();
-
         public int progress { get; set; } = 0;
 
+        public DateTime? dateEarned { get; set; }
+
         public DateTime dateCreated { get; set; } = DateTime.Now;
-        public DateTime dateModified { get; set; } = DateTime.Now;
+
+
     }
 }
+
+/*
+
+
+
+
+*/

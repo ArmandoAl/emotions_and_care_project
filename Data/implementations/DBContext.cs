@@ -77,6 +77,8 @@ namespace Data.Implementations
 
             public DbSet<InAppText> inAppTexts { get; set; } = null!;
 
+            public DbSet<Badge> badges { get; set; } = null!;
+
 
             public DBContext(DbContextOptions<DBContext> options) : base(options) { }
 
