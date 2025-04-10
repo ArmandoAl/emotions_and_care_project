@@ -37,6 +37,13 @@ namespace Domain
         public DateTime dateModified { get; set; } = DateTime.Now;
     }
 
+    public class BadgeCollection
+    {
+        [Key]
+        public int badgeCollectionId { get; set; }
+        public List<Badge> userBadges { get; set; } = new List<Badge>();
+    }
+
     public class UserBadge
     {
         /// <summary>
