@@ -56,6 +56,9 @@ builder.Services.AddScoped<ITextRepository, TextRepository>();
 builder.Services.AddScoped<IBadgeService, BadgeService>();
 builder.Services.AddScoped<IBadgeRepository, BadgeRepository>();
 
+builder.Services.AddScoped<IDummyUserRepository, DummyUserRepository>();
+builder.Services.AddScoped<IDummyUserService, DummyUserService>();
+
 builder.Services.AddScoped<IDBRepository, DBReporitory>();
 
 
