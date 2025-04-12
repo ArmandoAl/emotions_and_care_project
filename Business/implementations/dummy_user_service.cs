@@ -69,5 +69,15 @@ namespace Business.Implementations
         {
             return _dummyUserRepository.AddAllBadgesToDummies();
         }
+
+        /// <summary>
+        /// Validates the growth of user badges.
+        /// </summary>
+        /// <param name="userId">The ID of the user to check.</param>
+        /// <returns>A list of booleans indicating whether the userBadge "isEarned" </returns>
+        public List<bool> CheckBadges(int userId)
+        {
+            return _dummyUserRepository.CheckBadges(userId);
+        }
     }
 } 

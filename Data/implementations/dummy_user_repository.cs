@@ -1,3 +1,4 @@
+using System.Runtime;
 using Data.Contracts;
 using Data.Helpers;
 using Domain;
@@ -186,5 +187,155 @@ namespace Data.Implementations
                 return true;
             }
         }
+
+        public List<bool> CheckBadges(int userId)
+        {
+            Console.WriteLine($"Checking badges for user {userId}");
+            if (userId <= 0) return new List<bool>();
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var user = db.dummyUsers
+                    .Include(u => u.badgeCollection)
+                        .ThenInclude(bc => bc.userBadges)
+                            .ThenInclude(ub => ub.badge)
+                    .FirstOrDefault(u => u.BuserId == userId);
+
+                if (user == null || user.badgeCollection == null)
+                    return new List<bool>();
+
+                List<bool> results = new();
+
+                foreach (var userBadge in user.badgeCollection.userBadges)
+                {
+                    if (_badgeFunctions.TryGetValue(userBadge.badge.progressMap, out var badgeFunction))
+                    {
+                        Console.WriteLine($"Executing function for badge {userBadge.badgeId}");
+                        Console.WriteLine($"Function name: {userBadge.badge.progressMap}");
+                        bool result = badgeFunction(userId, userBadge.badgeId);
+                        results.Add(result);
+                    }
+                }
+
+                return results;
+            }
+        }
+
+
+        // based on each badge's functionMap, I need a Dictionary to get the function name, 
+        // and "assign it a function" the functions will receive the userId, and badgeId
+        // and return true or false, depending on the function and update the UserBadge progress
+
+        private readonly Dictionary<string, Func<int, int, bool>> _badgeFunctions = new()
+        {
+            { "EsaFueLaCuestion", CheckBadge_EsaEsLaCuestion },
+            { "validateFirstUser", CheckBadge_2 },
+            { "validateMeself", CheckBadge_3 },
+            { "ElCaminoALaMejora", CheckBadge_ElCaminoALaMejora}
+
+
+            // Add more functions as needed
+        };
+
+        //Badge: 1 = Esa Es La Cuestion: 
+        private static bool CheckBadge_EsaEsLaCuestion(int userId, int badgeId)
+{
+    var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+        .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+        .Options;
+
+    using (var db = new DBContext(options: connectionOptions))
+    {
+        int ProgressTarget = 1;
+
+        // Get the user with badgeCollection and badges
+        var user = db.dummyUsers
+            .Include(u => u.badgeCollection)
+                .ThenInclude(bc => bc.userBadges)
+                    .ThenInclude(ub => ub.badge)
+            .FirstOrDefault(u => u.BuserId == userId);
+
+        if (user == null || user.badgeCollection == null)
+        {
+            Console.WriteLine("User or badge collection not found.");
+            return false;
+        }
+
+        var userBadge = user.badgeCollection.userBadges
+            .FirstOrDefault(ub => ub.badgeId == badgeId);
+
+        if (userBadge == null)
+        {
+            Console.WriteLine("Badge not found for user.");
+            return false;
+        }
+
+        // Using test patient (id 63)
+        var patient = db.patients
+            .Include(p => p.test)
+                .ThenInclude(t => t.completeQuestionnaires)
+            .FirstOrDefault(p => p.userId == 63);
+
+        if (patient == null || patient.test == null)
+        {
+            Console.WriteLine("Test patient not found or has no test data.");
+            return false;
+        }
+
+        var questionnaires = patient.test.completeQuestionnaires ?? new List<CompleteQuestionnaires>();
+
+        userBadge.progress = questionnaires.Count;
+
+        Console.WriteLine($"Patient name: {patient.name} (Testing UserId: 63)");
+        Console.WriteLine($"User {user.BuserId} has completed {userBadge.progress} questionnaires.");
+
+        bool isBadgeEarned = userBadge.progress >= ProgressTarget;
+        Console.WriteLine($"User {user.BuserId} has earned the badge: {isBadgeEarned}");
+
+        if (isBadgeEarned)
+        {
+            userBadge.dateEarned = DateTime.Now;
+        }
+
+        db.SaveChanges();
+        return isBadgeEarned;
+    }
+}
+
+
+
+        //Badge: 2 = validateFirstUser
+        private static bool CheckBadge_2(int userId, int badgeId)
+        {
+            // Implement the logic for this badge
+            // For example, check if the user is the first user in the database
+            // Return true or false based on the condition
+            return false; // Placeholder
+        }
+
+        //Badge: 3 = validateMeself
+        private static bool CheckBadge_3(int userId, int badgeId)
+        {
+            // Implement the logic for this badge
+            // For example, check if the user has completed a specific task
+            // Return true or false based on the condition
+            return false; // Placeholder
+        }
+
+        //Badge: 4 = El Camino A La Mejora
+        private static bool CheckBadge_ElCaminoALaMejora(int userId, int badgeId)
+        {
+            // Implement the logic for this badge
+            // For example, check if the user has completed a specific task
+            // Return true or false based on the condition
+            return false; // Placeholder
+        }
+
+
+
     }
 } 

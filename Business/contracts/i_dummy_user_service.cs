@@ -41,5 +41,12 @@ namespace Business.Contracts
         /// </summary>
         /// <returns>True if all badges were added successfully, false otherwise.</returns>
         bool AddAllBadgesToDummies();
+
+        /// <summary>
+        /// Validates the growth of user badges.
+        /// </summary>
+        /// <param name="userId">The ID of the user to check.</param>
+        /// <returns>A list of booleans indicating whether the userBadge "isEarned" </returns>
+        List<bool> CheckBadges(int userId);
     }
 } 

@@ -8,6 +8,17 @@ using System.Threading.Tasks;
 namespace Domain
 {
 
+    public enum BadgeCategory
+    {
+        Cuestionarios,
+        Recomendaciones,
+        Planta,
+        Comunidad,
+        SeguimientoConEspecialista,
+        Otros
+
+    }
+
     
 
     public class Badge
@@ -27,6 +38,11 @@ namespace Domain
         /// Gets or sets the description of the badge.
         /// </summary>
         public string description { get; set; } = "";
+
+        /// <summary>
+        /// Gets or sets the category of the badge.
+        /// </summary>
+        public BadgeCategory category { get; set; } = BadgeCategory.Otros;
 
         /// <summary>
         /// Gets or sets the image URL of the badge.
@@ -103,6 +119,8 @@ namespace Domain
     public class DummyUser : BUser
     {
         public string favoritePlayer { get; set; } = "Saka";
+
+        public int patientId { get; set; } = 0;
         public string favoriteTeam { get; set; } = "Arsenal";
         public string favoriteStadium { get; set; } = "Emirates Stadium";
 

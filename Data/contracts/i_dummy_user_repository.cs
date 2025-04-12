@@ -41,5 +41,13 @@ namespace Data.Contracts
         /// </summary>
         /// <returns>True if all badges were added successfully, false otherwise.</returns>
         bool AddAllBadgesToDummies();
+
+        /// <summary>
+        /// Checks if a user has any badges.
+        /// </summary>
+        /// <param name="userId">The ID of the user to check.</param>
+        /// <returns>A list of booleans indicating whether the user has each badge.</returns>
+        /// <remarks>
+        List<bool> CheckBadges(int userId);
     }
 } 

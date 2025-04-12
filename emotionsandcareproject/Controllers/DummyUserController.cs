@@ -79,5 +79,19 @@ namespace API.Controllers
             var result = _dummyUserService.AddAllBadgesToDummies();
             return result ? Ok() : BadRequest("Failed to add badges to dummy users");
         }
+
+        /// <summary>
+        /// Validates the growth of user badges.
+        /// </summary>
+        /// <param name="userId">The ID of the user to check.</param>
+        /// <returns>A list of booleans indicating whether the userBadge "isEarned" </returns>
+        /// 
+
+        [HttpGet("{userId}/badges/check")]
+        public IActionResult CheckBadges(int userId)
+        {
+            var result = _dummyUserService.CheckBadges(userId);
+            return result != null ? Ok(result) : NotFound();
+        }
     }
 } 
