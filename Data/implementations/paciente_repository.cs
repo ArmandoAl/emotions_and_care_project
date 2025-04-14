@@ -379,9 +379,9 @@ db.diaries.RemoveRange(diariesToDelete);
 
 
 
-        public bool Update(Patient patient)
+        public int Update(Patient patient)
         {
-            if (patient == null) return false;
+            if (patient == null) return 0;
 
             var connectionOptions = new DbContextOptionsBuilder<DBContext>()
               .UseSqlServer(Data.Helpers.Constants.ConnectionString)
@@ -389,7 +389,33 @@ db.diaries.RemoveRange(diariesToDelete);
             using (var db = new DBContext(options: connectionOptions))
             {
                 var thisPaciente = db.patients.FirstOrDefault(x => x.userId == patient.userId);
-                if (thisPaciente == null) return false;
+                if (thisPaciente == null) return 0;
+
+
+                var thisEmailExist = db.patients.FirstOrDefault(x => x.mail == patient.mail && x.userId != patient.userId);
+
+                if (thisEmailExist != null) {
+                    return -1;
+                } else {
+                    var spacialistEmail = db.specialists.Any(x => x.mail == patient.mail);
+
+                    if (spacialistEmail) {
+                        return -1;
+                    }
+                }
+
+                var phoneExist = db.patients.FirstOrDefault(x => x.phone == patient.phone && x.userId != patient.userId);
+
+                if (phoneExist != null) {
+                    return -2;
+                } else {
+
+                    var spacialistPhone = db.specialists.Any(x => x.phone == patient.phone);
+
+                    if (spacialistPhone) {
+                        return -2;
+                    }
+                }
 
                 thisPaciente.name = patient.name;
                 thisPaciente.age = patient.age;
@@ -400,7 +426,7 @@ db.diaries.RemoveRange(diariesToDelete);
 
                 db.patients.Update(thisPaciente);
                 db.SaveChanges();
-                return true;
+                return 1;
             }
         }
 
@@ -585,7 +611,11 @@ db.diaries.RemoveRange(diariesToDelete);
             using (var db = new DBContext(options: connectionOptions))
             {
                 // Find the patient with the provided userId (id)
-                var thisPaciente = db.patients.FirstOrDefault(x => x.userId == id);
+                var patients = db.patients;
+
+                var thisPaciente = patients
+                    .Where(x => x.userId == id).Include(x => x.settings)
+                    .FirstOrDefault();
 
                 // If the patient doesn't exist, return false
                 if (thisPaciente == null) return false;
@@ -849,6 +879,60 @@ db.diaries.RemoveRange(diariesToDelete);
                 return userSticker.userStickerId;
             }
         }
+
+        public bool removeStickerInInterface(
+            int idPatient,
+            int position
+        )
+        {
+            // Validate the patient ID to ensure it's greater than 0
+            if (idPatient <= 0) return false;
+
+            // Set up the connection to the database using the DbContext
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
+            // Open the database context and perform the update inside a 'using' block to ensure resources are properly disposed of
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                // Find the patient and their user interface, including the list of stickers
+                var thisPaciente = db.patients
+                    .Where(x => x.userId == idPatient)
+                    .Include(x => x.userInterface)
+                    .ThenInclude(x => x.userStickers)
+                    .ThenInclude(x => x.sticker)
+                    .FirstOrDefault();
+
+                // If the patient is not found, return false indicating failure
+                if (thisPaciente == null) return false;
+
+                // Find the sticker to be removed based on its position
+                var userSticker = thisPaciente.userInterface.userStickers
+                    .FirstOrDefault(x => x.position == position);
+
+                // If the sticker is not found, return false indicating failure
+                if (userSticker == null) return false;
+
+                // Remove the sticker from the user's interface
+
+                //fid the sticker and set the position to null
+                var stickerToRemove = thisPaciente.userInterface.userStickers
+                    .FirstOrDefault(x => x.sticker.stickerId == userSticker.sticker.stickerId);
+
+                if (stickerToRemove != null)
+                {
+                    stickerToRemove.position = null;
+                }           
+
+                // Save the changes to the database
+                db.SaveChanges();
+
+                // Return true indicating success
+                return true;
+            }
+        }
+
 
         public int putFlowerInInterface(int idPatient, int idFlower, int position)
         {
@@ -1406,6 +1490,8 @@ db.diaries.RemoveRange(diariesToDelete);
 
         public bool actualizarThemeId(int idPatient, int themeId)
         {
+
+        
             if (idPatient <= 0) return false;
 
             var connectionOptions = new DbContextOptionsBuilder<DBContext>()
@@ -1413,6 +1499,8 @@ db.diaries.RemoveRange(diariesToDelete);
             .Options;
             using (var db = new DBContext(options: connectionOptions))
             {
+            
+
                 var thisPaciente = db.patients.Where(x => x.userId == idPatient).Include(x => x.userInterface).FirstOrDefault();
 
                 if (thisPaciente == null) return false;
@@ -1423,6 +1511,48 @@ db.diaries.RemoveRange(diariesToDelete);
 
                 return true;
             }
+        }
+
+        public bool actualizarBackgroundId(int idPatient, int backgroundId)
+        {
+            if (idPatient <= 0) return false;
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+            .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+            .Options;
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var thisPaciente = db.patients.Where(x => x.userId == idPatient).Include(x => x.userInterface).FirstOrDefault();
+                if (thisPaciente == null) return false;
+
+                thisPaciente.userInterface.backgroundUrl = backgroundId;
+
+                db.SaveChanges();
+
+                return true;
+            }
+        }
+
+        //SoftDelete, solo cambia el email a ""
+        public bool SoftDelete(int idPatient)
+        {
+            if (idPatient <= 0) return false;
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+            .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+            .Options;
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var thisPaciente = db.patients.Where(x => x.userId == idPatient).FirstOrDefault();
+                if (thisPaciente == null) return false;
+
+                thisPaciente.mail = "";
+
+                db.SaveChanges();
+
+                return true;
+            }
+
         }
     }
    

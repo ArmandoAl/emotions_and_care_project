@@ -16,7 +16,7 @@ namespace Business.Contracts
 
         bool Delete(int id);
 
-        bool Update(Specialist especialist);
+        int Update(Specialist especialist);
 
         Specialist? GetByToken(string relatedToken);
 

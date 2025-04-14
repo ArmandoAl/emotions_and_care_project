@@ -2387,11 +2387,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/emotions_and_care_project/Domain/Domain.csproj",
+      "projectUniqueName": "/Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/Projects/emotions_and_care_project/Domain/Domain.csproj",
       "projectName": "Domain",
-      "projectPath": "/Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/emotions_and_care_project/Domain/Domain.csproj",
+      "projectPath": "/Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/Projects/emotions_and_care_project/Domain/Domain.csproj",
       "packagesPath": "/Users/armandoalvarado/.nuget/packages/",
-      "outputPath": "/Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/emotions_and_care_project/Domain/obj/",
+      "outputPath": "/Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/Projects/emotions_and_care_project/Domain/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/armandoalvarado/.nuget/NuGet/NuGet.Config"

@@ -384,7 +384,6 @@ namespace Data.Implementations
              .Options;
 
             using (var db = new DBContext(options: connectionOptions))
-
             {
                 var solicitudCita = db.dateRequests.FirstOrDefault(x => x.dateRequestId == idCita);
                 if (solicitudCita == null) return false;

@@ -15,7 +15,7 @@ namespace Data.Contracts
 
         bool Delete(int id);
 
-        bool Update(Patient paciente);
+        int Update(Patient paciente);
         bool VincularEspecialista(int id, string tokenEspecialista);
 
         string? GetByToken(int idPaciente);
@@ -31,6 +31,8 @@ namespace Data.Contracts
 
 
         int putStickeriInInterface(int idPatient, int idUserSticker, int position);
+
+        bool removeStickerInInterface(int idPatient, int position);
 
         int putFlowerInInterface(int idPatient, int idUserFlower, int position);
 
@@ -48,6 +50,10 @@ namespace Data.Contracts
          bool VincularDirecto(int id, string tokenEspecialista);
 
          bool actualizarThemeId(int id, int themeId);
+
+         bool actualizarBackgroundId(int id, int backgroundId);
+
+         bool SoftDelete(int id);
 
     }
 }

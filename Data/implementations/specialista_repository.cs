@@ -159,9 +159,9 @@ namespace Data.Implementations
             }
         }
 
-        public bool Update(Specialist specialist)
+        public int Update(Specialist specialist)
         {
-            if (specialist == null) return false;
+            if (specialist == null) return 0;
 
             var connectionOptions = new DbContextOptionsBuilder<DBContext>()
               .UseSqlServer(Data.Helpers.Constants.ConnectionString)
@@ -169,7 +169,38 @@ namespace Data.Implementations
             using (var db = new DBContext(options: connectionOptions))
             {
                 var thisEspecialista = db.specialists.FirstOrDefault(x => x.userId == specialist.userId);
-                if (thisEspecialista == null) return false;
+                if (thisEspecialista == null) return 0;
+
+                var emailExist = db.specialists.FirstOrDefault(x => x.mail == specialist.mail && x.userId != thisEspecialista.userId);
+
+                if (emailExist != null) {
+                    return -1;
+                } else {
+
+                   var patientEmailExist = db.patients.Any(x => x.mail == specialist.mail);
+
+                    if (patientEmailExist) {
+                        return -1;
+                    }
+                }
+
+                var phoneExist = db.specialists.FirstOrDefault(x => x.phone == specialist.phone && x.userId != thisEspecialista.userId);
+
+                if (phoneExist != null) {
+                    return -2;
+                } else {
+                    var patientPhoneExist = db.patients.Any(x => x.phone == specialist.phone);
+
+                    if (patientPhoneExist) {
+                        return -2;
+                    }
+                }
+
+                var licenseExist = db.specialists.FirstOrDefault(x => x.license == specialist.license && x.userId != thisEspecialista.userId);
+
+                if (licenseExist != null) {
+                    return -3;
+                } 
 
                 thisEspecialista.name = specialist.name;
                 thisEspecialista.age = specialist.age;
@@ -177,11 +208,15 @@ namespace Data.Implementations
                 thisEspecialista.phone = specialist.phone;
                 thisEspecialista.password = specialist.password;
                 thisEspecialista.license = specialist.license;
+                thisEspecialista.adress = specialist.adress;
+                thisEspecialista.institution = specialist.institution;
+                thisEspecialista.focus = specialist.focus;
+                thisEspecialista.presentation = specialist.presentation;
                 thisEspecialista.modifiedDate = DateTime.Now;
 
                 db.specialists.Update(thisEspecialista);
                 db.SaveChanges();
-                return true;
+                return 1;
             }
         }
 

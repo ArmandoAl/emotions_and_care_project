@@ -54,7 +54,6 @@ namespace API.Controllers
         {
             if (paciente == null) return Task.FromResult<ActionResult>(BadRequest());
             var result = _service.Update(paciente);
-            if (!result) return Task.FromResult<ActionResult>(BadRequest());
             return Task.FromResult<ActionResult>(Ok(result));
         }
 
@@ -141,6 +140,17 @@ namespace API.Controllers
             return Task.FromResult<ActionResult>(Ok(result));
         }
 
+        //removeStickerInInterface
+        [HttpPut("{id}/removeStickerInInterface/{position}")]
+        public Task<ActionResult> removeStickerInInterface(int id, int position)
+        {
+            if (id < 1) return Task.FromResult<ActionResult>(BadRequest());
+            var result = _service.removeStickerInInterface(id, position);
+
+            if (result == false) return Task.FromResult<ActionResult>(BadRequest());
+            return Task.FromResult<ActionResult>(Ok(result));
+        }
+
         //putFlowerInInterface
         [HttpPut("{id}/putFlowerInInterface/{idFlower}/{position}")]
         public Task<ActionResult> putFlowerInInterface(int id, int idFlower, int position)
@@ -193,12 +203,34 @@ namespace API.Controllers
 
 
 
-        //bool actualizarThemeId(int idPatient, int themeId)
+        //bool actualizarThemeId(intactualizarThemeId idPatient, int themeId)
         [HttpPut("{id}/actualizarThemeId/{themeId}")]
         public Task<ActionResult> actualizarThemeId(int id, int themeId)
         {
             if (id < 1) return Task.FromResult<ActionResult>(BadRequest());
             var result = _service.actualizarThemeId(id, themeId);
+            Console.WriteLine(result);
+
+            if (!result) return Task.FromResult<ActionResult>(BadRequest());
+            return Task.FromResult<ActionResult>(Ok(result));
+        }
+
+        //actualizar backgroundUrl
+        [HttpPut("{id}/actualizarBackgroundUrl/{backgroundId}")]
+        public Task<ActionResult> actualizarBackgroundUrl(int id, int backgroundId)
+        {
+            if (id < 1) return Task.FromResult<ActionResult>(BadRequest());
+            var result = _service.actualizarBackgroundId(id, backgroundId);
+            if (!result) return Task.FromResult<ActionResult>(BadRequest());
+            return Task.FromResult<ActionResult>(Ok(result));
+        }
+
+        //newDeletePatient
+        [HttpDelete("{id}/delete")]
+        public Task<ActionResult> DeletePatient(int id)
+        {
+            if (id < 1) return Task.FromResult<ActionResult>(BadRequest());
+            var result = _service.SoftDelete(id);
             if (!result) return Task.FromResult<ActionResult>(BadRequest());
             return Task.FromResult<ActionResult>(Ok(result));
         }

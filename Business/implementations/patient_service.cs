@@ -68,9 +68,9 @@ namespace Business.Implementations
             return _service.Get(id);
         }
 
-        public bool Update(Patient paciente)
+        public int Update(Patient paciente)
         {
-            if(paciente == null) { return false; };
+            if(paciente == null) { return 0; };
             return _service.Update(paciente);
         }
 
@@ -114,6 +114,12 @@ namespace Business.Implementations
             return _service.putStickeriInInterface(idPatient, idUserSticker, position);
             
          }
+
+        public bool removeStickerInInterface(int idPatient, int position) {
+            if (idPatient < 1 || position < 1) { return false; }
+            return _service.removeStickerInInterface(idPatient, position);
+        }
+
 
         public int putFlowerInInterface(int idPatient, int idFlower, int position) {
             if (idPatient < 1 || idFlower < 1 || position < 1) { return 0; }
@@ -203,12 +209,22 @@ namespace Business.Implementations
 
         }
 
-        //growFlowerStage
-
         public bool actualizarThemeId(int idPatient, int themeId)
         {
-            if (idPatient < 1 || themeId < 1) { return false; }
+            if (idPatient < 1 || themeId < 0) { return false; }
             return _service.actualizarThemeId(idPatient, themeId);
+        }
+
+        public bool actualizarBackgroundId(int idPatient, int backgroundId)
+        {
+            if (idPatient < 1 || backgroundId < 0) { return false; }
+            return _service.actualizarBackgroundId(idPatient, backgroundId);
+        }
+
+        public bool SoftDelete(int id)
+        {
+            if (id < 1) { return false; }
+            return _service.SoftDelete(id);
         }
     }
 }

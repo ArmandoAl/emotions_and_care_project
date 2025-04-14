@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "kUBCOsO3YOWEWv+XU4NLliss4KzqM+liXensRUQtELqORtgm46RoYkyWorLdoHgYveyqXA0tRqG9Sd0mq8+NKQ==",
+  "dgSpecHash": "kl/+q3yG5P+U6UqeEPp+ak2Kj+Bidv4GIgIyIFlLyqhPQAKJM435wUN3fL6auJSiomq3Nw7kDQ3a5ZAS02Z3jQ==",
   "success": true,
-  "projectFilePath": "/Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/emotions_and_care_project/emotionsandcareproject/emotionsandcareproject.csproj",
+  "projectFilePath": "/Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/Projects/emotions_and_care_project/emotionsandcareproject/emotionsandcareproject.csproj",
   "expectedPackageFiles": [
     "/Users/armandoalvarado/.nuget/packages/firebaseadmin/3.0.0/firebaseadmin.3.0.0.nupkg.sha512",
     "/Users/armandoalvarado/.nuget/packages/google.api.gax/4.8.0/google.api.gax.4.8.0.nupkg.sha512",
