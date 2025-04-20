@@ -48,6 +48,6 @@ namespace Data.Contracts
         /// <param name="userId">The ID of the user to check.</param>
         /// <returns>A list of booleans indicating whether the user has each badge.</returns>
         /// <remarks>
-        List<bool> CheckBadges(int userId);
+        List<progressBool> CheckBadges(int userId);
     }
 } 

@@ -129,6 +129,18 @@ namespace Domain
         /// </summary>
         public BadgeCollection badgeCollection { get; set; } = new BadgeCollection();
     }
+
+    public enum progreesBoolType
+    {
+        Badges,
+        Plant
+    }
+
+    public class progressBool
+    {
+        public int EntityId { get; set; }
+        public progreesBoolType type { get; set; } //0 = badges, 1 = plant
+    }
 }
 
 /*

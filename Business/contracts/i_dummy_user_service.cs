@@ -47,6 +47,6 @@ namespace Business.Contracts
         /// </summary>
         /// <param name="userId">The ID of the user to check.</param>
         /// <returns>A list of booleans indicating whether the userBadge "isEarned" </returns>
-        List<bool> CheckBadges(int userId);
+        List<progressBool> CheckBadges(int userId);
     }
 } 

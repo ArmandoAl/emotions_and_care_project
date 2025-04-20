@@ -188,42 +188,54 @@ namespace Data.Implementations
             }
         }
 
-        public List<bool> CheckBadges(int userId)
+public List<progressBool> CheckBadges(int userId)
+{
+    Console.WriteLine($"Checking badges for user {userId}");
+    if (userId <= 0) return new List<progressBool>();
+
+    var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+        .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+        .Options;
+
+    using (var db = new DBContext(options: connectionOptions))
+    {
+        var user = db.dummyUsers
+            .Include(u => u.badgeCollection)
+                .ThenInclude(bc => bc.userBadges)
+                    .ThenInclude(ub => ub.badge)
+            .FirstOrDefault(u => u.BuserId == userId);
+
+        if (user == null || user.badgeCollection == null)
+            return new List<progressBool>();
+
+        List<progressBool> results = new();
+
+        foreach (var userBadge in user.badgeCollection.userBadges
+                     .Where(ub => ub.dateEarned == null)) // 👈 Only not-yet-earned badges
         {
-            Console.WriteLine($"Checking badges for user {userId}");
-            if (userId <= 0) return new List<bool>();
-
-            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
-                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
-                .Options;
-
-            using (var db = new DBContext(options: connectionOptions))
+            if (_badgeFunctions.TryGetValue(userBadge.badge.progressMap, out var badgeFunction))
             {
-                var user = db.dummyUsers
-                    .Include(u => u.badgeCollection)
-                        .ThenInclude(bc => bc.userBadges)
-                            .ThenInclude(ub => ub.badge)
-                    .FirstOrDefault(u => u.BuserId == userId);
+                Console.WriteLine($"Checking badge {userBadge.badgeId} - {userBadge.badge.name}");
+                Console.WriteLine($"Function: {userBadge.badge.progressMap}");
 
-                if (user == null || user.badgeCollection == null)
-                    return new List<bool>();
+                bool result = badgeFunction(userId, userBadge.badgeId);
 
-                List<bool> results = new();
-
-                foreach (var userBadge in user.badgeCollection.userBadges)
+                if (result)
                 {
-                    if (_badgeFunctions.TryGetValue(userBadge.badge.progressMap, out var badgeFunction))
+                    results.Add(new progressBool
                     {
-                        Console.WriteLine($"Executing function for badge {userBadge.badgeId}");
-                        Console.WriteLine($"Function name: {userBadge.badge.progressMap}");
-                        bool result = badgeFunction(userId, userBadge.badgeId);
-                        results.Add(result);
-                    }
+                        EntityId = userBadge.badgeId,
+                        type = progreesBoolType.Badges
+                    });
                 }
-
-                return results;
             }
         }
+
+        return results;
+    }
+}
+
+
 
 
         // based on each badge's functionMap, I need a Dictionary to get the function name, 
@@ -314,7 +326,7 @@ namespace Data.Implementations
             // Implement the logic for this badge
             // For example, check if the user is the first user in the database
             // Return true or false based on the condition
-            return false; // Placeholder
+            return true; // Placeholder
         }
 
         //Badge: 3 = validateMeself
