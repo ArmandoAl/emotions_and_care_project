@@ -86,6 +86,8 @@ namespace Data.Implementations
             public DbSet<UserBadge> userBadges { get; set; } = null!;
 
             public DbSet<Achievement> achievements { get; set; } = null!;
+            public DbSet<UserAchievement> userAchievements { get; set; } = null!;
+            public DbSet<AchievementCollection> achievementCollections { get; set; } = null!;
 
             public DBContext(DbContextOptions<DBContext> options) : base(options) { }
 
