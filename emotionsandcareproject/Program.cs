@@ -52,6 +52,8 @@ builder.Services.AddScoped<IOppsService, OppsService>();
 builder.Services.AddScoped<IOppsRepository, OppsRepository>();
 builder.Services.AddScoped<ITextService, TextService>();
 builder.Services.AddScoped<ITextRepository, TextRepository>();
+builder.Services.AddScoped<IAchievementService, AchievementService>();
+builder.Services.AddScoped<IAchievementRepository, AchievementRepository>();
 
 builder.Services.AddScoped<IBadgeService, BadgeService>();
 builder.Services.AddScoped<IBadgeRepository, BadgeRepository>();

@@ -47,6 +47,6 @@ namespace Domain
         public List<PatientRequest> patientsRequests { get; set; } = new List<PatientRequest>();
 
         // BadgeCollection
-        public BadgeCollection badgeCollection { get; set; } = new BadgeCollection();
+        //public Patient_BadgeCollection collection { get; set; } = new Patient_BadgeCollection();
     }
 }

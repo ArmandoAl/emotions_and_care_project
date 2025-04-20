@@ -55,32 +55,6 @@ namespace Domain
         public DateTime dateModified { get; set; } = DateTime.Now;
     }
 
-    public class BadgeCollection
-    {
-        [Key]
-        public int badgeCollectionId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the user ID associated with this badge collection.
-        /// </summary>
-        public int userId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the list of user badges in this collection.
-        /// </summary>
-        public List<UserBadge>? userBadges { get; set; } = new List<UserBadge>();
-
-        /// <summary>
-        /// Gets or sets the date when this collection was created.
-        /// </summary>
-        public DateTime dateCreated { get; set; } = DateTime.Now;
-
-        /// <summary>
-        /// Gets or sets the date when this collection was last modified.
-        /// </summary>
-        public DateTime dateModified { get; set; } = DateTime.Now;
-    }
-
     public class UserBadge
     {
         /// <summary>
@@ -115,6 +89,34 @@ namespace Domain
         /// </summary>
         public DateTime dateModified { get; set; } = DateTime.Now;
     }
+
+    public class BadgeCollection
+    {
+        [Key]
+        public int badgeCollectionId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the user ID associated with this badge collection.
+        /// </summary>
+        public int userId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the list of user badges in this collection.
+        /// </summary>
+        public List<UserBadge>? userBadges { get; set; } = new List<UserBadge>();
+
+        /// <summary>
+        /// Gets or sets the date when this collection was created.
+        /// </summary>
+        public DateTime dateCreated { get; set; } = DateTime.Now;
+
+        /// <summary>
+        /// Gets or sets the date when this collection was last modified.
+        /// </summary>
+        public DateTime dateModified { get; set; } = DateTime.Now;
+    }
+
+
 
     public class DummyUser : BUser
     {
