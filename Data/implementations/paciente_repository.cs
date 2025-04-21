@@ -1424,6 +1424,8 @@ db.diaries.RemoveRange(diariesToDelete);
                 return true;
             }
         }
+
+        
     }
    
 }

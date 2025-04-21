@@ -39,7 +39,7 @@ namespace Domain
         /// </summary>
         public Diary diary { get; set; } = new Diary();
 
-        public AchievementCollection achievementCollection { get; set; } = new AchievementCollection();
+        public AchievementCollection? achievementCollection { get; set; }
 
         /// <summary>
         /// A list of carts associated with the patient (e.g., shopping carts, action items).
