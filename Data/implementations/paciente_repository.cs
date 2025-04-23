@@ -1554,6 +1554,114 @@ db.diaries.RemoveRange(diariesToDelete);
             }
 
         }
+
+        public bool ConfirmarUsuario(int id)
+        {
+            if (id <= 0) return false;
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+            .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+            .Options;
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var thisPaciente = db.patients.Where(x => x.userId == id).FirstOrDefault();
+                if (thisPaciente == null) return false;
+
+                thisPaciente.confirmed = true;
+
+                db.SaveChanges();
+
+                return true;
+            }
+        }
+
+        public Patient? GetByEmail(string email)
+        {
+            if (string.IsNullOrEmpty(email)) return null;
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+            .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+            .Options;
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var thisPaciente = db.patients.Where(x => x.mail == email).FirstOrDefault();
+                if (thisPaciente == null) return null;
+
+                return thisPaciente;
+            }
+        }
+
+        public string GetForgotPassword(int idPatient)
+        {
+            if (idPatient <= 0) return "";
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+            .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+            .Options;
+            using (var db = new DBContext(options: connectionOptions))
+            {
+              //primero encuentras el paciente, despues crear un codigo aleatorio de 6 digitos
+                var thisPaciente = db.patients.Where(x => x.userId == idPatient).FirstOrDefault();
+                if (thisPaciente == null) return "";
+
+                //crea un codigo aleatorio de 6 digitos
+                Random random = new Random();
+                int code = random.Next(100000, 999999);
+
+                //actualiza el paciente con el nuevo codigo
+                thisPaciente.codeHelper = code.ToString();
+
+                db.SaveChanges();
+
+                //retorna el codigo
+                return code.ToString();
+            }
+        }
+
+        public bool ValidarCodigo(int idPatient, string code)
+        {
+            if (idPatient <= 0 || string.IsNullOrEmpty(code)) return false;
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+            .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+            .Options;
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var thisPaciente = db.patients.Where(x => x.userId == idPatient).FirstOrDefault();
+                if (thisPaciente == null) return false;
+
+                //compara el codigo del paciente con el codigo que le pasas
+                if (thisPaciente.codeHelper != code) return false;
+
+                //si son iguales, actualiza el paciente con el nuevo codigo
+                thisPaciente.codeHelper = "";
+
+                db.SaveChanges();
+
+                return true;
+            }
+        }
+
+        public bool ModificarContraseña(int idPatient, string password)
+        {
+            if (idPatient <= 0 || string.IsNullOrEmpty(password)) return false;
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+            .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+            .Options;
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var thisPaciente = db.patients.Where(x => x.userId == idPatient).FirstOrDefault();
+                if (thisPaciente == null) return false;
+
+                //actualiza el paciente con el nuevo codigo
+                thisPaciente.password = password;
+
+                db.SaveChanges();
+
+                return true;
+            }
+        }
     }
    
 }

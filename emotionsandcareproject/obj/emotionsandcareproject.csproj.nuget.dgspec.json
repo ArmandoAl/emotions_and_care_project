@@ -49,6 +49,10 @@
               "target": "Package",
               "version": "[3.0.0, )"
             },
+            "MailKit": {
+              "target": "Package",
+              "version": "[4.11.0, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[6.0.25, )"
@@ -126,6 +130,10 @@
               "target": "Package",
               "version": "[3.0.0, )"
             },
+            "MailKit": {
+              "target": "Package",
+              "version": "[4.11.0, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[6.0.25, )"
@@ -198,6 +206,10 @@
             "FirebaseAdmin": {
               "target": "Package",
               "version": "[3.0.0, )"
+            },
+            "MailKit": {
+              "target": "Package",
+              "version": "[4.11.0, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
@@ -281,6 +293,10 @@
             "FirebaseAdmin": {
               "target": "Package",
               "version": "[3.0.0, )"
+            },
+            "MailKit": {
+              "target": "Package",
+              "version": "[4.11.0, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",

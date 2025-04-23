@@ -55,5 +55,16 @@ namespace Data.Contracts
 
          bool SoftDelete(int id);
 
+         bool ConfirmarUsuario(int id);
+
+
+        Patient? GetByEmail(string email);
+
+        string GetForgotPassword(int idPatient);
+
+        bool ValidarCodigo(int idPatient, string code);
+
+        bool ModificarContraseña(int idPatient, string password);
+
     }
 }

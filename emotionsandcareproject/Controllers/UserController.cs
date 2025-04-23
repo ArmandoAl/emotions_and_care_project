@@ -51,7 +51,6 @@ namespace API.Controllers
         [HttpPut("refreshToken/{id}/{token}")]
         public ActionResult RefreshToken(int id, string token)
         {
-            return Ok("Hola");
             if (id == 0 || token == null) return BadRequest();
             var isPaciente = _pacienteService.Get(id);
 

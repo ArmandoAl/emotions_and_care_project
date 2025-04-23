@@ -1,26 +1,31 @@
 ﻿using Business.Contracts;
+using Business.Implementations;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Net.Mail;
 using System.Threading.Tasks;
 
 namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-
     public class PacienteController : Controller
     {
         private readonly IPatientService _service;
         private readonly ISpecialistService _specialistService;
         private readonly PushNotificationService _pushNotificationService;
-        public PacienteController(IPatientService service, PushNotificationService pushNotificationService, ISpecialistService specialistService)
+
+        private readonly IEmailService _emailService;
+        public PacienteController(IPatientService service, IEmailService emailService, PushNotificationService pushNotificationService, ISpecialistService specialistService)
         {
             _service = service;
+            _emailService = emailService;
             _pushNotificationService = pushNotificationService;
             _specialistService = specialistService;
         }
+
 
         [HttpPost]
         public Task<ActionResult> Add(AddPatient paciente)
@@ -28,8 +33,102 @@ namespace API.Controllers
             if (paciente == null) return Task.FromResult<ActionResult>(BadRequest());
             var result = _service.Add(paciente);
             if (result == 0) return Task.FromResult<ActionResult>(BadRequest());
+
+            var patient = _service.Get(result);
+
+            if (patient == null) return Task.FromResult<ActionResult>(BadRequest());
+
+
+            string confirmationLink = $"https://tudominio.com/api/auth/confirm-email?token={patient.userId}";
+            string subject = "Confirma tu registro";
+            string body = $"<p>Hola {patient!.name},</p><p>Por favor <a href='{confirmationLink}'>confirma tu cuenta aquí</a>.</p>";
+            
+            try {
+                var res = _emailService.sendMail(result, new EmailClass
+                {
+                    To = paciente.mail,
+                    Subject = subject,
+                    Body = body
+                });
+
+                if (!res)
+                {
+                    Console.WriteLine("Error al enviar el correo electrónico.");
+                }
+            } catch (Exception e) {
+                Console.WriteLine(e.Message);
+            }
+            
+
             return Task.FromResult<ActionResult>(Ok(result));
         }
+
+        //confirmar usuario put
+        [HttpPut("confirmarUsuario/{id}")]
+        public Task<ActionResult> ConfirmarUsuario(int id)
+        {
+            if (id < 1) return Task.FromResult<ActionResult>(BadRequest());
+            var result = _service.ConfirmarUsuario(id);
+            if (!result) return Task.FromResult<ActionResult>(BadRequest());
+            return Task.FromResult<ActionResult>(Ok(result));
+        }
+
+        //olvidar contraseña
+        [HttpPut("olvidarContraseña/{email}")]
+        public Task<ActionResult> OlvidarContraseña(int id, string email)
+        {
+            if (id < 1 || email == null) return Task.FromResult<ActionResult>(BadRequest());
+            var patient = _service.GetByEmail(email);
+            if (patient == null) return Task.FromResult<ActionResult>(BadRequest());
+
+            var code = _service.GetForgotPassword(patient.userId);
+            if (code == "") return Task.FromResult<ActionResult>(BadRequest());
+
+            string codeText = code.ToString();
+
+            string subject = "Recupera tu contraseña";
+            //muestra el código en el correo, el usuario lo pondra en la misma app
+            string body = $"<p>Hola,</p><p>Tu código de recuperación es: {codeText}</p>";
+            try {
+                var res = _emailService.sendMail(id, new EmailClass
+                {
+                    To = email,
+                    Subject = subject,
+                    Body = body
+                });
+
+                if (!res)
+                {
+                    Console.WriteLine("Error al enviar el correo electrónico.");
+                }
+            } catch (Exception e) {
+                Console.WriteLine(e.Message);
+            }
+
+            return Task.FromResult<ActionResult>(Ok());
+        }
+
+        //validar codigo
+        [HttpPut("validarCodigo/{id}/{codigo}")]
+        public Task<ActionResult> ValidarCodigo(int id, string codigo)
+        {
+            if (id < 1 || codigo == null) return Task.FromResult<ActionResult>(BadRequest());
+            var result = _service.ValidarCodigo(id, codigo);
+            if (!result) return Task.FromResult<ActionResult>(BadRequest());
+            return Task.FromResult<ActionResult>(Ok(result));
+        }
+
+        //modificar contraseña
+        [HttpPut("modificarContraseña/{id}/{nuevaContraseña}")]
+        public Task<ActionResult> ModificarContraseña(int id, string nuevaContraseña)
+        {
+            if (id < 1 || nuevaContraseña == null) return Task.FromResult<ActionResult>(BadRequest());
+            var result = _service.ModificarContraseña(id, nuevaContraseña);
+            if (!result) return Task.FromResult<ActionResult>(BadRequest());
+            return Task.FromResult<ActionResult>(Ok(result));
+        }
+
+
 
         [HttpGet("{id}")]
         public Task<ActionResult> Get(int id)
