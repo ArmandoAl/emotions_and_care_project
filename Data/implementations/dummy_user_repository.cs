@@ -245,12 +245,18 @@ public List<progressBool> CheckBadges(int userId)
         private readonly Dictionary<string, Func<int, int, bool>> _badgeFunctions = new()
         {
             { "EsaFueLaCuestion", CheckBadge_EsaEsLaCuestion },
-            { "validateFirstUser", CheckBadge_2 },
-            { "validateMeself", CheckBadge_3 },
-            { "ElCaminoALaMejora", CheckBadge_ElCaminoALaMejora}
-
-
-            // Add more functions as needed
+            { "validateFirstUser", CheckBadge_ValidateDejaVu },
+            { "validateMeself", CheckBadge_BuenCamino },
+            { "ElCaminoALaMejora", CheckBadge_ElCaminoALaMejora},
+            { "validateFirstSpecialist", CheckBadge_PocoAyuda },
+            { "validateFirstAppointment", CheckBadge_HoraDeLaVerdad },
+            { "validateFirstDate", CheckBadge_EsoFueMasFacil },
+            { "validateThreeDates", CheckBadge_AsistenciaProfesional },
+            { "validateFirstLetter", CheckBadge_Consejos },
+            { "validateFirstLetterAnswer", CheckBadge_Consejero },
+            { "validateThreeLetters", CheckBadge_SacandoMisEmociones },
+            { "validateFlowerGrowth", CheckBadge_Crecimiento},
+            { "validateFullFlower", CheckBadge_CrecimientoCompleto}
         };
 
         //Badge: 1 = Esa Es La Cuestion: 
@@ -320,34 +326,799 @@ public List<progressBool> CheckBadges(int userId)
 
 
 
-        //Badge: 2 = validateFirstUser
-        private static bool CheckBadge_2(int userId, int badgeId)
+        //Badge: 2 = DejaVu
+        // The second time the user answers an individual questionnaire
+        private static bool CheckBadge_ValidateDejaVu(int userId, int badgeId)
         {
-            // Implement the logic for this badge
-            // For example, check if the user is the first user in the database
-            // Return true or false based on the condition
-            return true; // Placeholder
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                // Get the user with badgeCollection and badges
+                var user = db.dummyUsers
+                    .Include(u => u.badgeCollection)
+                        .ThenInclude(bc => bc.userBadges)
+                            .ThenInclude(ub => ub.badge)
+                    .FirstOrDefault(u => u.BuserId == userId);
+
+                if (user == null || user.badgeCollection == null)
+                {
+                    Console.WriteLine("User or badge collection not found.");
+                    return false;
+                }
+
+                var userBadge = user.badgeCollection.userBadges
+                    .FirstOrDefault(ub => ub.badgeId == badgeId);
+
+                if (userBadge == null)
+                {
+                    Console.WriteLine("Badge not found for user.");
+                    return false;
+                }
+
+                // Using test patient (id 63)
+                var patient = db.patients
+                    .Include(p => p.test)
+                        .ThenInclude(t => t.completeQuestionnaires)
+                    .FirstOrDefault(p => p.userId == 63);
+
+                if (patient == null || patient.test == null)
+                {
+                    Console.WriteLine("Test patient not found or has no test data.");
+                    return false;
+                }
+
+                var questionnaires = patient.test.completeQuestionnaires ?? new List<CompleteQuestionnaires>();
+
+                userBadge.progress = questionnaires.Count;
+
+                Console.WriteLine($"Patient name: {patient.name} (Testing UserId: 63)");
+                Console.WriteLine($"User {user.BuserId} has completed {userBadge.progress} questionnaires.");
+
+                bool isBadgeEarned = userBadge.progress >= 2; // Assuming the badge is earned after the second questionnaire
+                Console.WriteLine($"User {user.BuserId} has earned the badge: {isBadgeEarned}");
+
+                if (isBadgeEarned)
+                {
+                    userBadge.dateEarned = DateTime.Now;
+                }
+
+                db.SaveChanges();
+                return isBadgeEarned;
+            }
         }
 
-        //Badge: 3 = validateMeself
-        private static bool CheckBadge_3(int userId, int badgeId)
+        //Badge: 3 = BuenCamnio
+        // The user improves their score in the questionnaire
+        // This function should compare the current score with the previous score
+        // and return true if the current score is higher
+        private static bool CheckBadge_BuenCamino(int userId, int badgeId)
         {
-            // Implement the logic for this badge
-            // For example, check if the user has completed a specific task
-            // Return true or false based on the condition
-            return false; // Placeholder
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                // Get the user with badgeCollection and badges
+                var user = db.dummyUsers
+                    .Include(u => u.badgeCollection)
+                        .ThenInclude(bc => bc.userBadges)
+                            .ThenInclude(ub => ub.badge)
+                    .FirstOrDefault(u => u.BuserId == userId);
+
+                if (user == null || user.badgeCollection == null)
+                {
+                    Console.WriteLine("User or badge collection not found.");
+                    return false;
+                }
+
+                var userBadge = user.badgeCollection.userBadges
+                    .FirstOrDefault(ub => ub.badgeId == badgeId);
+
+                if (userBadge == null)
+                {
+                    Console.WriteLine("Badge not found for user.");
+                    return false;
+                }
+
+                // Using test patient (id 63)
+                var patient = db.patients
+                    .Include(p => p.test)
+                        .ThenInclude(t => t.completeQuestionnaires)
+                    .FirstOrDefault(p => p.userId == 63);
+
+                if (patient == null || patient.test == null)
+                {
+                    Console.WriteLine("Test patient not found or has no test data.");
+                    return false;
+                }
+
+                var questionnaires = patient.test.completeQuestionnaires ?? new List<CompleteQuestionnaires>();
+
+                // Assuming the last two questionnaires are the ones to compare
+                if (questionnaires.Count < 2) return false;
+
+                var lastQuestionnaire = questionnaires[questionnaires.Count - 1];
+                var previousQuestionnaire = questionnaires[questionnaires.Count - 2];
+
+                // Compare scores (assuming they have a Score property)
+                //bool isImproved = lastQuestionnaire. > previousQuestionnaire.Score;
+                bool isImproved = true; // Placeholder for actual score comparison logic
+
+                Console.WriteLine($"User {user.BuserId} has improved their score: {isImproved}");
+
+                if (isImproved)
+                {
+                    userBadge.progress = 1; // Assuming full progress for improvement
+                    userBadge.dateEarned = DateTime.Now;
+                    db.SaveChanges();
+                    return true;
+                }
+
+                return false;
+            }
+            
         }
 
         //Badge: 4 = El Camino A La Mejora
+        // The third time the user completes a questionnaire
+        // This function should check if the user has completed 3 questionnaires
         private static bool CheckBadge_ElCaminoALaMejora(int userId, int badgeId)
         {
-            // Implement the logic for this badge
-            // For example, check if the user has completed a specific task
-            // Return true or false based on the condition
-            return false; // Placeholder
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                // Get the user with badgeCollection and badges
+                var user = db.dummyUsers
+                    .Include(u => u.badgeCollection)
+                        .ThenInclude(bc => bc.userBadges)
+                            .ThenInclude(ub => ub.badge)
+                    .FirstOrDefault(u => u.BuserId == userId);
+
+                if (user == null || user.badgeCollection == null)
+                {
+                    Console.WriteLine("User or badge collection not found.");
+                    return false;
+                }
+
+                var userBadge = user.badgeCollection.userBadges
+                    .FirstOrDefault(ub => ub.badgeId == badgeId);
+
+                if (userBadge == null)
+                {
+                    Console.WriteLine("Badge not found for user.");
+                    return false;
+                }
+
+                // Using test patient (id 63)
+                var patient = db.patients
+                    .Include(p => p.test)
+                        .ThenInclude(t => t.completeQuestionnaires)
+                    .FirstOrDefault(p => p.userId == 63);
+
+                if (patient == null || patient.test == null)
+                {
+                    Console.WriteLine("Test patient not found or has no test data.");
+                    return false;
+                }
+
+                var questionnaires = patient.test.completeQuestionnaires ?? new List<CompleteQuestionnaires>();
+
+                userBadge.progress = questionnaires.Count;
+
+                Console.WriteLine($"Patient name: {patient.name} (Testing UserId: 63)");
+                Console.WriteLine($"User {user.BuserId} has completed {userBadge.progress} questionnaires.");
+
+                bool isBadgeEarned = userBadge.progress >= 3; // Assuming the badge is earned after the third questionnaire
+                Console.WriteLine($"User {user.BuserId} has earned the badge: {isBadgeEarned}");
+
+                if (isBadgeEarned)
+                {
+                    userBadge.dateEarned = DateTime.Now;
+                }
+
+                db.SaveChanges();
+                return isBadgeEarned;
+            }
         }
+
+        //badge: 5 = Un Poco Ayuda
+        // The first time the user links their account with a specialist
+        // This function should check if the user has linked their account with a specialist
+
+        private static bool CheckBadge_PocoAyuda(int userId, int badgeId)
+        {
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                // Get the user with badgeCollection and badges
+                var user = db.dummyUsers
+                    .Include(u => u.badgeCollection)
+                        .ThenInclude(bc => bc.userBadges)
+                            .ThenInclude(ub => ub.badge)
+                    .FirstOrDefault(u => u.BuserId == userId);
+
+                if (user == null || user.badgeCollection == null)
+                {
+                    Console.WriteLine("User or badge collection not found.");
+                    return false;
+                }
+
+                var userBadge = user.badgeCollection.userBadges
+                    .FirstOrDefault(ub => ub.badgeId == badgeId);
+
+                if (userBadge == null)
+                {
+                    Console.WriteLine("Badge not found for user.");
+                    return false;
+                }
+
+                // Using test patient (id 63)
+
+                var patient = db.patients
+                    .Include(p => p.specialist)
+                    .FirstOrDefault(p => p.userId == 63);
+
+                if (patient == null || patient.test == null)
+                {
+                    Console.WriteLine("Test patient not found or has no test data.");
+                    return false;
+                }
+
+                 bool isLinkedWithSpecialist = patient.specialist != null;
+
+                Console.WriteLine($"User {user.BuserId} has linked their account with a specialist: {isLinkedWithSpecialist}");
+
+                if (isLinkedWithSpecialist)
+                {
+                    userBadge.progress = 1; // Assuming full progress for linking
+                    userBadge.dateEarned = DateTime.Now;
+                    db.SaveChanges();
+                    return true;
+                }
+
+                return false;
+            }
+            
+        }
+
+        //Badge 6: La Hora de la Verdad
+        // The first time the user confirms (or is confirmed) an appointment (date)
+        private static bool CheckBadge_HoraDeLaVerdad(int userId, int badgeId)
+        {
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                // Get the user with badgeCollection and badges
+                var user = db.dummyUsers
+                    .Include(u => u.badgeCollection)
+                        .ThenInclude(bc => bc.userBadges)
+                            .ThenInclude(ub => ub.badge)
+                    .FirstOrDefault(u => u.BuserId == userId);
+
+                if (user == null || user.badgeCollection == null)
+                {
+                    Console.WriteLine("User or badge collection not found.");
+                    return false;
+                }
+
+                var userBadge = user.badgeCollection.userBadges
+                    .FirstOrDefault(ub => ub.badgeId == badgeId);
+
+                if (userBadge == null)
+                {
+                    Console.WriteLine("Badge not found for user.");
+                    return false;
+                }
+
+                // Using test patient (id 63)
+
+                var patient = db.patients
+                    .Include(p => p.dates)
+                    .FirstOrDefault(p => p.userId == 63);
+
+                if (patient == null || patient.test == null)
+                {
+                    Console.WriteLine("Test patient not found or has no test data.");
+                    return false;
+                }
+
+                bool isConfirmedAppointment = patient.dates.Any(d => d.patientConfirm == true || d.specialistConfirm == true);
+
+                Console.WriteLine($"User {user.BuserId} has confirmed an appointment: {isConfirmedAppointment}");
+
+                if (isConfirmedAppointment)
+                {
+                    userBadge.progress = 1; // Assuming full progress for confirming
+                    userBadge.dateEarned = DateTime.Now;
+                    db.SaveChanges();
+                    return true;
+                }
+
+                return false;
+            }
+            
+        }
+
+        //Badge 7: Eso fue más fácil de lo que creí
+        // The first time the user attends an appointment (date)
+        private static bool CheckBadge_EsoFueMasFacil(int userId, int badgeId)
+        {
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                // Get the user with badgeCollection and badges
+                var user = db.dummyUsers
+                    .Include(u => u.badgeCollection)
+                        .ThenInclude(bc => bc.userBadges)
+                            .ThenInclude(ub => ub.badge)
+                    .FirstOrDefault(u => u.BuserId == userId);
+
+                if (user == null || user.badgeCollection == null)
+                {
+                    Console.WriteLine("User or badge collection not found.");
+                    return false;
+                }
+
+                var userBadge = user.badgeCollection.userBadges
+                    .FirstOrDefault(ub => ub.badgeId == badgeId);
+
+                if (userBadge == null)
+                {
+                    Console.WriteLine("Badge not found for user.");
+                    return false;
+                }
+
+                // Using test patient (id 63)
+
+                var patient = db.patients
+                    .Include(p => p.dates)
+                    .FirstOrDefault(p => p.userId == 63);
+
+                if (patient == null || patient.test == null)
+                {
+                    Console.WriteLine("Test patient not found or has no test data.");
+                    return false;
+                }
+
+                bool isAttendedAppointment = patient.dates.Any(d => d.done == true);
+
+                Console.WriteLine($"User {user.BuserId} has attended an appointment: {isAttendedAppointment}");
+
+                if (isAttendedAppointment)
+                {
+                    userBadge.progress = 1; // Assuming full progress for attending
+                    userBadge.dateEarned = DateTime.Now;
+                    db.SaveChanges();
+                    return true;
+                }
+
+                return false;
+            }
+            
+        }
+
+        //Badge 8: Asistencia profesional, siempre bienvenida
+        // Every time the user attends 3 appointments (dates)
+        // This function should check if the user has attended 3 appointments
+        private static bool CheckBadge_AsistenciaProfesional(int userId, int badgeId)
+        {
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                // Get the user with badgeCollection and badges
+                var user = db.dummyUsers
+                    .Include(u => u.badgeCollection)
+                        .ThenInclude(bc => bc.userBadges)
+                            .ThenInclude(ub => ub.badge)
+                    .FirstOrDefault(u => u.BuserId == userId);
+
+                if (user == null || user.badgeCollection == null)
+                {
+                    Console.WriteLine("User or badge collection not found.");
+                    return false;
+                }
+
+                var userBadge = user.badgeCollection.userBadges
+                    .FirstOrDefault(ub => ub.badgeId == badgeId);
+
+                if (userBadge == null)
+                {
+                    Console.WriteLine("Badge not found for user.");
+                    return false;
+                }
+
+                // Using test patient (id 63)
+
+                var patient = db.patients
+                    .Include(p => p.dates)
+                    .FirstOrDefault(p => p.userId == 63);
+
+                if (patient == null || patient.test == null)
+                {
+                    Console.WriteLine("Test patient not found or has no test data.");
+                    return false;
+                }
+
+                int attendedCount = patient.dates.Count(d => d.done == true);
+
+                Console.WriteLine($"User {user.BuserId} has attended {attendedCount} appointments.");
+
+                if (attendedCount >= 3)
+                {
+                    userBadge.progress += 1; // Increment progress for every 3 appointments attended
+                    userBadge.dateEarned = DateTime.Now;
+                    db.SaveChanges();
+                    return true;
+                }
+
+                return false;
+            }
+            
+        }
+
+        //Badge 9: ¿Consejos?
+        // The first time the user creates a letter (cart)
+        private static bool CheckBadge_Consejos(int userId, int badgeId)
+        {
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                // Get the user with badgeCollection and badges
+                var user = db.dummyUsers
+                    .Include(u => u.badgeCollection)
+                        .ThenInclude(bc => bc.userBadges)
+                            .ThenInclude(ub => ub.badge)
+                    .FirstOrDefault(u => u.BuserId == userId);
+
+                if (user == null || user.badgeCollection == null)
+                {
+                    Console.WriteLine("User or badge collection not found.");
+                    return false;
+                }
+
+                var userBadge = user.badgeCollection.userBadges
+                    .FirstOrDefault(ub => ub.badgeId == badgeId);
+
+                if (userBadge == null)
+                {
+                    Console.WriteLine("Badge not found for user.");
+                    return false;
+                }
+
+                // Using test patient (id 63)
+
+                var patient = db.patients
+                    .Include(p => p.carts)
+                    .FirstOrDefault(p => p.userId == 63);
+
+                if (patient == null || patient.test == null)
+                {
+                    Console.WriteLine("Test patient not found or has no test data.");
+                    return false;
+                }
+
+                //letters are called carts
+                bool hasCreatedLetter = patient.carts.Any(c => c.transmitterId == 63);
+
+                Console.WriteLine($"User {user.BuserId} has created a letter: {hasCreatedLetter}");
+
+                if (hasCreatedLetter)
+                {
+                    userBadge.progress = 1; // Assuming full progress for creating a letter
+                    userBadge.dateEarned = DateTime.Now;
+                    db.SaveChanges();
+                    return true;
+                }
+
+                return false;
+            }
+            
+        }
+
+        //Badge 10: Me dicen, el consejero
+        // The first time the user answers a letter (cart)
+        // 
+        private static bool CheckBadge_Consejero(int userId, int badgeId)
+        {
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                // Get the user with badgeCollection and badges
+                var user = db.dummyUsers
+                    .Include(u => u.badgeCollection)
+                        .ThenInclude(bc => bc.userBadges)
+                            .ThenInclude(ub => ub.badge)
+                    .FirstOrDefault(u => u.BuserId == userId);
+
+                if (user == null || user.badgeCollection == null)
+                {
+                    Console.WriteLine("User or badge collection not found.");
+                    return false;
+                }
+
+                var userBadge = user.badgeCollection.userBadges
+                    .FirstOrDefault(ub => ub.badgeId == badgeId);
+
+                if (userBadge == null)
+                {
+                    Console.WriteLine("Badge not found for user.");
+                    return false;
+                }
+
+                // Using test patient (id 63)
+
+                var patient = db.patients
+                    .Include(p => p.carts)
+                    .FirstOrDefault(p => p.userId == 63);
+
+                if (patient == null || patient.test == null)
+                {
+                    Console.WriteLine("Test patient not found or has no test data.");
+                    return false;
+                }
+
+                //letters are called carts
+                bool hasAnsweredLetter = true;
+
+                Console.WriteLine($"User {user.BuserId} has answered a letter: {hasAnsweredLetter}");
+
+                if (hasAnsweredLetter)
+                {
+                    userBadge.progress = 1; // Assuming full progress for answering a letter
+                    userBadge.dateEarned = DateTime.Now;
+                    db.SaveChanges();
+                    return true;
+                }
+
+                return false;
+            }
+            
+        }
+        
+
+        //Badge 11: Sacando mis emociones, una carta a la vez
+        // The third time the user creates a letter (cart)
+        private static bool CheckBadge_SacandoMisEmociones(int userId, int badgeId)
+        {
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                // Get the user with badgeCollection and badges
+                var user = db.dummyUsers
+                    .Include(u => u.badgeCollection)
+                        .ThenInclude(bc => bc.userBadges)
+                            .ThenInclude(ub => ub.badge)
+                    .FirstOrDefault(u => u.BuserId == userId);
+
+                if (user == null || user.badgeCollection == null)
+                {
+                    Console.WriteLine("User or badge collection not found.");
+                    return false;
+                }
+
+                var userBadge = user.badgeCollection.userBadges
+                    .FirstOrDefault(ub => ub.badgeId == badgeId);
+
+                if (userBadge == null)
+                {
+                    Console.WriteLine("Badge not found for user.");
+                    return false;
+                }
+
+                // Using test patient (id 63)
+
+                var patient = db.patients
+                    .Include(p => p.carts)
+                    .FirstOrDefault(p => p.userId == 63);
+
+                if (patient == null || patient.test == null)
+                {
+                    Console.WriteLine("Test patient not found or has no test data.");
+                    return false;
+                }
+
+                //letters are called carts
+                int letterCount = patient.carts.Count(c => c.transmitterId == 63);
+                Console.WriteLine($"User {user.BuserId} has created {letterCount} letters.");
+                if (letterCount >= 3)
+                {
+                    userBadge.progress = 1; // Assuming full progress for creating a letter
+                    userBadge.dateEarned = DateTime.Now;
+                    db.SaveChanges();
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        //Badge 12: Qué rápido crece…
+        // The first time a plant advances a stage, we are going to use a user's progress for that
+        private static bool CheckBadge_Crecimiento(int userId, int badgeId)
+        {
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                // Get the user with badgeCollection and badges
+                var user = db.dummyUsers
+                    .Include(u => u.badgeCollection)
+                        .ThenInclude(bc => bc.userBadges)
+                            .ThenInclude(ub => ub.badge)
+                    .FirstOrDefault(u => u.BuserId == userId);
+
+                if (user == null || user.badgeCollection == null)
+                {
+                    Console.WriteLine("User or badge collection not found.");
+                    return false;
+                }
+
+                var userBadge = user.badgeCollection.userBadges
+                    .FirstOrDefault(ub => ub.badgeId == badgeId);
+
+                if (userBadge == null)
+                {
+                    Console.WriteLine("Badge not found for user.");
+                    return false;
+                }
+
+                // Using test patient (id 63)
+
+                var patient = db.patients
+                    .Include(p => p.progress)
+                    .FirstOrDefault(p => p.userId == 63);
+
+                if (patient == null || patient.test == null)
+                {
+                    Console.WriteLine("Test patient not found or has no test data.");
+                    return false;
+                }
+
+                // Assuming the progress stage is the one that indicates growth
+                bool hasAdvancedStage = patient.progress.stage > 0;
+
+                Console.WriteLine($"User {user.BuserId} has advanced a stage: {hasAdvancedStage}");
+
+                if (hasAdvancedStage)
+                {
+                    userBadge.progress = 1; // Assuming full progress for advancing a stage
+                    userBadge.dateEarned = DateTime.Now;
+                    db.SaveChanges();
+                    return true;
+                }
+
+                return false;
+            }
+            
+        }
+
+        //Badge 13: Juro que cabía en mi bolsillo la última vez que la vi.
+        // The first time a plant grows completely, stage 6
+        private static bool CheckBadge_CrecimientoCompleto(int userId, int badgeId)
+        {
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                // Get the user with badgeCollection and badges
+                var user = db.dummyUsers
+                    .Include(u => u.badgeCollection)
+                        .ThenInclude(bc => bc.userBadges)
+                            .ThenInclude(ub => ub.badge)
+                    .FirstOrDefault(u => u.BuserId == userId);
+
+                if (user == null || user.badgeCollection == null)
+                {
+                    Console.WriteLine("User or badge collection not found.");
+                    return false;
+                }
+
+                var userBadge = user.badgeCollection.userBadges
+                    .FirstOrDefault(ub => ub.badgeId == badgeId);
+
+                if (userBadge == null)
+                {
+                    Console.WriteLine("Badge not found for user.");
+                    return false;
+                }
+
+                // Using test patient (id 63)
+
+                var patient = db.patients
+                    .Include(p => p.progress)
+                    .FirstOrDefault(p => p.userId == 63);
+
+                if (patient == null || patient.test == null)
+                {
+                    Console.WriteLine("Test patient not found or has no test data.");
+                    return false;
+                }
+
+                // Assuming the progress stage is the one that indicates growth
+                bool hasGrownCompletely = patient.progress.stage >= 6;
+
+                Console.WriteLine($"User {user.BuserId} has grown completely: {hasGrownCompletely}");
+
+                if (hasGrownCompletely)
+                {
+                    userBadge.progress = 1; // Assuming full progress for growing completely
+                    userBadge.dateEarned = DateTime.Now;
+                    db.SaveChanges();
+                    return true;
+                }
+
+                return false;
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+        
 
 
 
     }
 } 
+
+/*
+
+
+| Badge Name                                                  | How to Get It                                                                                 |
+| ----------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| **Esa fue la cuestión**                                     | Primera vez que haces el cuestionario  -o                                                       |
+| **Deja Vu**                                                 | Segunda vez que respondes un cuestionario    -o                                                 |
+| **Vamos por buen camino**                                   | Mejora de resultado en cuestionario       -1/2                                                    |
+| **El camino a la mejora es la frecuencia**                  | Cada vez que completas 3 cuestionarios        -o                                    |
+| **Un poco de ayuda profesional nunca sobra**                | Primera vez que vinculas tu cuenta con un especialista    -o                                    |
+| **La hora de la verdad**                                    | Primera vez que confirmas (o te confirman) una cita          -o                                 |
+| **Eso fue más fácil de lo que creí**                        | Primera vez que asistes a una cita             -o                                               |
+| **Asistencia profesional, siempre bienvenida**              | Cada vez que asistes a 3 citas    -o                                         |
+| **¿Consejos?**                                              | Primera vez que creas una carta      -o                                                         |
+| **Me dicen, el consejero**                                  | Primera vez que respondes una carta    -1/2x                                                      |
+| **Sacando mis emociones, una carta a la vez**               | Tercera vez que creas una carta     -o                                                          |
+| **Qué rápido crece…**                                       | Primera vez que una planta avanza una etapa      -o                                             |
+| **Juro que cabía en mi bolsillo la última vez que la vi.** | Primera vez que una planta crece completamente  -o                                               |
+| **Un nuevo comienzo.**                                      | Por primera vez plantas un retoño de una nueva planta                                          |
+| **Mi invernadero personal.**                                | Cada vez que 3 plantas completan su crecimiento (repetible cada 3)                            |
+
+
+
+*/
