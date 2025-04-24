@@ -333,6 +333,23 @@ namespace API.Controllers
             if (!result) return Task.FromResult<ActionResult>(BadRequest());
             return Task.FromResult<ActionResult>(Ok(result));
         }
+
+
+        //mandar correo 
+        [HttpPost("{id}/sendEmail/{email}/subject}/{body}")]
+        public Task<ActionResult> SendEmail(int id, string email, string subject, string body)
+        {
+            if (id < 1 || email == null || subject == null || body == null) return Task.FromResult<ActionResult>(BadRequest());
+            var result = _emailService.sendMail(id, new EmailClass
+            {
+                To = email,
+                Subject = subject,
+                Body = body
+            });
+
+            if (!result) return Task.FromResult<ActionResult>(BadRequest());
+            return Task.FromResult<ActionResult>(Ok(result));
+        }
     }       
 }
 

@@ -727,3 +727,11 @@ C:/Users/alvar/OneDrive/Documents/projects/emotions_and_care_project/emotionsand
 /Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/Projects/emotions_and_care_project/emotionsandcareproject/obj/Release/net6.0/emotionsandcareproject.pdb
 /Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/Projects/emotions_and_care_project/emotionsandcareproject/obj/Release/net6.0/emotionsandcareproject.genruntimeconfig.cache
 /Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/Projects/emotions_and_care_project/emotionsandcareproject/obj/Release/net6.0/ref/emotionsandcareproject.dll
+/Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/Projects/emotions_and_care_project/emotionsandcareproject/bin/Release/net6.0/BouncyCastle.Cryptography.dll
+/Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/Projects/emotions_and_care_project/emotionsandcareproject/bin/Release/net6.0/MailKit.dll
+/Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/Projects/emotions_and_care_project/emotionsandcareproject/bin/Release/net6.0/MimeKit.dll
+/Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/Projects/emotions_and_care_project/emotionsandcareproject/bin/Release/net6.0/System.Formats.Asn1.dll
+/Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/Projects/emotions_and_care_project/emotionsandcareproject/bin/Release/net6.0/System.Security.Cryptography.Pkcs.dll
+/Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/Projects/emotions_and_care_project/emotionsandcareproject/bin/Release/net6.0/System.Text.Encoding.CodePages.dll
+/Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/Projects/emotions_and_care_project/emotionsandcareproject/bin/Release/net6.0/runtimes/win/lib/net6.0/System.Security.Cryptography.Pkcs.dll
+/Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/Projects/emotions_and_care_project/emotionsandcareproject/bin/Release/net6.0/runtimes/win/lib/net6.0/System.Text.Encoding.CodePages.dll
