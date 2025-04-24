@@ -45,7 +45,7 @@ namespace Business.Implementations
 
                 var email  = new MimeMessage();
 
-                email.From.Add(MailboxAddress.Parse(_configuration.GetSection("EmailSettings:From").Value));
+                email.From.Add(MailboxAddress.Parse(_configuration.GetSection("EmailSettings:UserName").Value));
                 email.To.Add(MailboxAddress.Parse(emailClass.To));
                 email.Subject = emailClass.Subject;
                 email.Body = new TextPart(TextFormat.Html)
@@ -58,7 +58,7 @@ namespace Business.Implementations
                 smtp.Connect(_configuration.GetSection("EmailSettings:Host").Value, int.Parse(_configuration.GetSection("EmailSettings:Port").Value), MailKit.Security.SecureSocketOptions.StartTls);
                 
 
-                smtp.Authenticate(_configuration.GetSection("EmailSettings:From").Value, _configuration.GetSection("EmailSettings:Password").Value);
+                smtp.Authenticate(_configuration.GetSection("EmailSettings:UserName").Value, _configuration.GetSection("EmailSettings:PassWord").Value);
 
                 smtp.Send(email);
                 return true;

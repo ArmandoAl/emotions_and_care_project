@@ -39,7 +39,7 @@ namespace API.Controllers
             if (patient == null) return Task.FromResult<ActionResult>(BadRequest());
 
 
-            string confirmationLink = $"https://tudominio.com/api/auth/confirm-email?token={patient.userId}";
+            string confirmationLink = $"https://emotionsandcare-erffhse3f7aecnb0.eastus-01.azurewebsites.net/Api/Paciente/confirmarUsuario/{patient.userId}";
             string subject = "Confirma tu registro";
             string body = $"<p>Hola {patient!.name},</p><p>Por favor <a href='{confirmationLink}'>confirma tu cuenta aquí</a>.</p>";
             
@@ -75,13 +75,18 @@ namespace API.Controllers
 
         //olvidar contraseña
         [HttpPut("olvidarContraseña/{email}")]
-        public Task<ActionResult> OlvidarContraseña(int id, string email)
+        public Task<ActionResult> OlvidarContraseña(string email)
         {
-            if (id < 1 || email == null) return Task.FromResult<ActionResult>(BadRequest());
+            if (email == null) return Task.FromResult<ActionResult>(BadRequest());
             var patient = _service.GetByEmail(email);
+            Console.WriteLine("patient: " + patient);
+
+
             if (patient == null) return Task.FromResult<ActionResult>(BadRequest());
 
             var code = _service.GetForgotPassword(patient.userId);
+            Console.WriteLine(code);
+
             if (code == "") return Task.FromResult<ActionResult>(BadRequest());
 
             string codeText = code.ToString();
@@ -90,7 +95,7 @@ namespace API.Controllers
             //muestra el código en el correo, el usuario lo pondra en la misma app
             string body = $"<p>Hola,</p><p>Tu código de recuperación es: {codeText}</p>";
             try {
-                var res = _emailService.sendMail(id, new EmailClass
+                var res = _emailService.sendMail(patient.userId, new EmailClass
                 {
                     To = email,
                     Subject = subject,
@@ -109,26 +114,33 @@ namespace API.Controllers
         }
 
         //validar codigo
-        [HttpPut("validarCodigo/{id}/{codigo}")]
-        public Task<ActionResult> ValidarCodigo(int id, string codigo)
+        [HttpPut("validarCodigo/{gmail}/{codigo}")]
+        public Task<ActionResult> ValidarCodigo(string gmail, string codigo)
         {
-            if (id < 1 || codigo == null) return Task.FromResult<ActionResult>(BadRequest());
-            var result = _service.ValidarCodigo(id, codigo);
+            if (gmail == "" || codigo == null) return Task.FromResult<ActionResult>(BadRequest());
+
+            var patient = _service.GetByEmail(gmail);
+
+            if(patient == null) return Task.FromResult<ActionResult>(BadRequest());
+
+            var result = _service.ValidarCodigo(patient.userId, codigo);
             if (!result) return Task.FromResult<ActionResult>(BadRequest());
             return Task.FromResult<ActionResult>(Ok(result));
         }
 
         //modificar contraseña
-        [HttpPut("modificarContraseña/{id}/{nuevaContraseña}")]
-        public Task<ActionResult> ModificarContraseña(int id, string nuevaContraseña)
+        [HttpPut("modificarContraseña/{gmail}/{nuevaContraseña}")]
+        public Task<ActionResult> ModificarContraseña(string gmail, string nuevaContraseña)
         {
-            if (id < 1 || nuevaContraseña == null) return Task.FromResult<ActionResult>(BadRequest());
-            var result = _service.ModificarContraseña(id, nuevaContraseña);
+            if (gmail == "" || nuevaContraseña == null) return Task.FromResult<ActionResult>(BadRequest());
+            var patient = _service.GetByEmail(gmail);
+            if (patient == null) return Task.FromResult<ActionResult>(BadRequest());
+
+            
+            var result = _service.ModificarContraseña(patient.userId, nuevaContraseña);
             if (!result) return Task.FromResult<ActionResult>(BadRequest());
             return Task.FromResult<ActionResult>(Ok(result));
         }
-
-
 
         [HttpGet("{id}")]
         public Task<ActionResult> Get(int id)
@@ -336,7 +348,7 @@ namespace API.Controllers
 
 
         //mandar correo 
-        [HttpPost("{id}/sendEmail/{email}/subject}/{body}")]
+        [HttpPost("{id}/sendEmail/{email}/{subject}/{body}")]
         public Task<ActionResult> SendEmail(int id, string email, string subject, string body)
         {
             if (id < 1 || email == null || subject == null || body == null) return Task.FromResult<ActionResult>(BadRequest());

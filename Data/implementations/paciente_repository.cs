@@ -1585,6 +1585,11 @@ db.diaries.RemoveRange(diariesToDelete);
             using (var db = new DBContext(options: connectionOptions))
             {
                 var thisPaciente = db.patients.Where(x => x.mail == email).FirstOrDefault();
+
+                Console.WriteLine("thisPaciente: " + thisPaciente);
+
+
+
                 if (thisPaciente == null) return null;
 
                 return thisPaciente;

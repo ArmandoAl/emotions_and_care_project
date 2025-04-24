@@ -56,7 +56,6 @@ builder.Services.AddScoped<IDBRepository, DBReporitory>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 
 
-
 var app = builder.Build();
 FirebaseApp.Create(new AppOptions()
 {
