@@ -40,10 +40,9 @@ namespace Domain
         public Diary diary { get; set; } = new Diary();
 
         public AchievementCollection? achievementCollection { get; set; } = new AchievementCollection{
-            userId = 0,
             userAchievements = new List<UserAchievement>(),
             dateCreated = DateTime.Now,
-            dateModified = DateTime.Now
+            dateModified = DateTime.Now,
         };
 
         /// <summary>

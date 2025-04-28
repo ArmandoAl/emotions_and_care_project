@@ -1425,6 +1425,114 @@ db.diaries.RemoveRange(diariesToDelete);
             }
         }
 
+        public bool addAchievementToPatient(int idPatient, int achievementId)
+        {
+            if (idPatient <= 0 || achievementId <= 0) return false;
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var thisPaciente = db.patients
+                    .Include(u => u.achievementCollection)
+                    .ThenInclude(bc => bc.userAchievements)
+                    .FirstOrDefault(u => u.userId == idPatient);
+
+                if (thisPaciente == null)
+                    return false;
+
+                var achievement = db.achievements.Find(achievementId);
+
+                Console.WriteLine("Achievement: " + achievement.name);
+                if (achievement == null)
+                    return false;
+                // Check if the user already has this achievement
+                if (thisPaciente.achievementCollection.userAchievements.Any(ub => ub.achievementId == achievementId))
+                    return false; // User already has this achievement
+                
+                var userAchievement = new UserAchievement
+                {
+                    achievementId = achievementId,
+                    progress = 0, // Assuming the achievement is earned immediately
+                    achievement = achievement,
+                    dateCreated = DateTime.Now,
+                };
+
+                Console.WriteLine("UserAchievement: " + userAchievement.achievementId);
+                Console.WriteLine("UserAchievement: " + userAchievement.progress);
+                Console.WriteLine("UserAchievement: " + userAchievement.achievement.name);
+                thisPaciente.achievementCollection.userAchievements.Add(userAchievement);
+                db.SaveChanges();
+                return true;
+        }
+        }
+
+        public AchievementCollection? getAllAchievements(int idPatient)
+        {
+            if (idPatient <= 0) return null;
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var thisPaciente = db.patients
+                    .Include(u => u.achievementCollection)
+                    .ThenInclude(bc => bc.userAchievements)
+                    .ThenInclude(ua => ua.achievement)
+                    .FirstOrDefault(u => u.userId == idPatient);
+
+                Console.WriteLine("thisPaciente: " + thisPaciente.name);
+                Console.WriteLine("AchievementCollection:" + thisPaciente.achievementCollection.dateModified);
+                Console.WriteLine("AchievementCount: " + thisPaciente.achievementCollection.userAchievements.Count);
+
+                if (thisPaciente == null)
+                    return null;
+
+                return thisPaciente.achievementCollection;
+            }
+
+        }
+
+        //If a patient doesn't have an achievement collection, create one
+        public bool createAchievementCollection(int idPatient)
+        {
+            if (idPatient <= 0) return false;
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var thisPaciente = db.patients
+                    .Include(u => u.achievementCollection)
+                    .FirstOrDefault(u => u.userId == idPatient);
+
+                if (thisPaciente == null)
+                    return false;
+
+                if (thisPaciente.achievementCollection != null)
+                    return true;
+
+                var achievementCollection = new AchievementCollection
+                {
+                    //userId = idPatient,
+                    dateCreated = DateTime.Now,
+                    dateModified = DateTime.Now,
+                };
+
+                thisPaciente.achievementCollection = achievementCollection;
+                db.SaveChanges();
+                return true;
+            }
+        }
+
+
+
         
     }
    
@@ -1438,3 +1546,44 @@ db.diaries.RemoveRange(diariesToDelete);
 
 
  
+ /*
+
+ public bool AddBadgeToDummy(int dummyUserId, int badgeId)
+        {
+            if (dummyUserId <= 0 || badgeId <= 0) return false;
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var dummyUser = db.dummyUsers
+                    .Include(u => u.badgeCollection)
+                    .ThenInclude(bc => bc.userBadges)
+                    .FirstOrDefault(u => u.BuserId == dummyUserId);
+
+                if (dummyUser == null)
+                    return false;
+
+                var badge = db.badges.Find(badgeId);
+                if (badge == null)
+                    return false;
+
+                // Check if the user already has this badge
+                if (dummyUser.badgeCollection.userBadges.Any(ub => ub.badgeId == badgeId))
+                    return true; // User already has this badge
+
+                var userBadge = new UserBadge
+                {
+                    badgeId = badgeId,
+                    progress = 100, // Assuming the badge is earned immediately
+                    dateEarned = DateTime.Now
+                };
+
+                dummyUser.badgeCollection.userBadges.Add(userBadge);
+                db.SaveChanges();
+                return true;
+            }
+        }
+ */

@@ -60,7 +60,7 @@ namespace Domain
         /// <summary>
         /// Gets or sets the user ID associated with this badge collection.
         /// </summary>
-        public int userId { get; set; }
+        //public int userId { get; set; }
 
         /// <summary>
         /// Gets or sets the list of user badges in this collection.

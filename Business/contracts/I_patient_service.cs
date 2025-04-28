@@ -43,5 +43,10 @@ namespace Business.Contracts
 
         bool actualizarThemeId(int idPatient, int themeId);
 
+        bool addAchievementToPatient(int idPatient, int idAchievement);
+        AchievementCollection? getAllAchievements(int idPatient);
+
+        bool createAchievementCollection(int idPatient);
+
     }
 }
