@@ -1531,6 +1531,49 @@ db.diaries.RemoveRange(diariesToDelete);
             }
         }
 
+        public bool AddAllAchievementsToPatient(int idPatient)
+        {
+            if (idPatient <= 0) return false;
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var thisPaciente = db.patients
+                    .Include(u => u.achievementCollection)
+                    .ThenInclude(bc => bc.userAchievements)
+                    .FirstOrDefault(u => u.userId == idPatient);
+
+                if (thisPaciente == null)
+                    return false;
+
+                var achievements = db.achievements.ToList();
+
+                foreach (var achievement in achievements)
+                {
+                    // Check if the user already has this achievement
+                    if (thisPaciente.achievementCollection.userAchievements.Any(ub => ub.achievementId == achievement.achievementId))
+                        continue; // User already has this achievement
+                    // Create a new UserAchievement object
+                    var userAchievement = new UserAchievement
+                    {
+                        achievementId = achievement.achievementId,
+                        progress = 0, // Assuming the achievement is earned immediately
+                        achievement = achievement,
+                        dateCreated = DateTime.Now,
+                    };
+                    Console.WriteLine("UserAchievement: " + userAchievement.achievementId);
+
+                    thisPaciente.achievementCollection.userAchievements.Add(userAchievement);
+                }
+
+                db.SaveChanges();
+                return true;
+            }
+        }
+
 
 
         

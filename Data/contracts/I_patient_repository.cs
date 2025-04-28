@@ -55,6 +55,8 @@ namespace Data.Contracts
 
          bool createAchievementCollection(int idPatient);
 
+         bool AddAllAchievementsToPatient(int idPatient);
+
 
     }
 }

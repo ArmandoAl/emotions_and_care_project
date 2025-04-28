@@ -228,6 +228,13 @@ namespace Business.Implementations
             return _service.createAchievementCollection(idPatient);
         }
 
+        public bool AddAllAchievementsToPatient(int idPatient)
+        {
+            if (idPatient < 1) { return false; }
+            return _service.AddAllAchievementsToPatient(idPatient);
+
+        }
+
 
     }
 }

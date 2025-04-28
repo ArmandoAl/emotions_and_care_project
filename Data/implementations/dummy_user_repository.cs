@@ -245,8 +245,8 @@ public List<progressBool> CheckBadges(int userId)
         private readonly Dictionary<string, Func<int, int, bool>> _badgeFunctions = new()
         {
             { "EsaFueLaCuestion", CheckBadge_EsaEsLaCuestion },
-            { "validateFirstUser", CheckBadge_ValidateDejaVu },
-            { "validateMeself", CheckBadge_BuenCamino },
+            { "DejaVu", CheckBadge_ValidateDejaVu },
+            { "BuenCamino", CheckBadge_BuenCamino },
             { "ElCaminoALaMejora", CheckBadge_ElCaminoALaMejora},
             { "validateFirstSpecialist", CheckBadge_PocoAyuda },
             { "validateFirstAppointment", CheckBadge_HoraDeLaVerdad },
