@@ -57,6 +57,8 @@ namespace Data.Contracts
 
          bool AddAllAchievementsToPatient(int idPatient);
 
+         List<progressBool> CheckAchievements(int idPatient);
+
 
     }
 }

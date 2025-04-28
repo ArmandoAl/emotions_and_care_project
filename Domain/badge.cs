@@ -134,7 +134,7 @@ namespace Domain
 
     public enum progreesBoolType
     {
-        Badges,
+        Achievement,
         Plant
     }
 

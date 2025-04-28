@@ -235,6 +235,12 @@ namespace Business.Implementations
 
         }
 
+        public List<progressBool> CheckAchievements(int idPatient)
+        {
+            if (idPatient < 1) { return null; }
+            return _service.CheckAchievements(idPatient);
+        }
+
 
     }
 }

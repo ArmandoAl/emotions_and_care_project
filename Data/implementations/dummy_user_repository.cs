@@ -225,7 +225,7 @@ public List<progressBool> CheckBadges(int userId)
                     results.Add(new progressBool
                     {
                         EntityId = userBadge.badgeId,
-                        type = progreesBoolType.Badges
+                        type = progreesBoolType.Achievement
                     });
                 }
             }

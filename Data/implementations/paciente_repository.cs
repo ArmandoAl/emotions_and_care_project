@@ -1574,6 +1574,185 @@ db.diaries.RemoveRange(diariesToDelete);
             }
         }
 
+        //Dictionary
+        private readonly Dictionary<string, Func<int, int, bool>> _achievementFunctions = new()
+        {
+            { "EsaFueLaCuestion", CheckBadge_EsaEsLaCuestion },
+            { "DejaVu", CheckBadge },
+            { "BuenCamino", CheckBadge },
+            { "ElCaminoALaMejora", CheckBadge},
+            { "validateFirstSpecialist", CheckBadge },
+            { "validateFirstAppointment", CheckBadge },
+            { "validateFirstDate", CheckBadge },
+            { "validateThreeDates", CheckBadge },
+            { "validateFirstLetter", CheckBadge },
+            { "validateFirstLetterAnswer", CheckBadge },
+            { "validateThreeLetters", CheckBadge },
+            { "validateFlowerGrowth", CheckBadge},
+            { "validateFullFlower", CheckBadge},
+            //{ "validateQuestionnaires", CheckBadge_Questionnaires}
+        };
+
+        private static bool CheckBadge(int userId, int badgeId)
+        {
+            // Implement the logic to check if the user has the badge "EsaEsLaCuestion"
+            // This is just a placeholder implementation
+            return false;
+        }
+
+        public List<progressBool> CheckAchievements(int idPatient)
+        {
+            Console.WriteLine("- CheckAchievements -");
+            if (idPatient <= 0) return null;
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
+            using (var db = new DBContext(options: connectionOptions))
+            {
+
+                var thisPaciente = db.patients
+                    .Include(u => u.achievementCollection)
+                        .ThenInclude(ac => ac.userAchievements)
+                        .ThenInclude(ua => ua.achievement)
+                    .FirstOrDefault(u => u.userId == idPatient);
+
+                if (thisPaciente == null)
+                    return null;
+                
+                Console.WriteLine("thisPaciente: " + thisPaciente.name);
+                Console.WriteLine("AchievementCollection:" + thisPaciente.achievementCollection.dateModified);
+                Console.WriteLine("AchievementCount: " + thisPaciente.achievementCollection.userAchievements.Count);
+
+                List<progressBool> progressBools = new List<progressBool>();
+
+                foreach (var userAchievement in thisPaciente.achievementCollection.userAchievements
+                             .Where(ua => ua.dateEarned == null)) // 👈 Only not-yet-earned badges
+                {
+                    Console.WriteLine("UserAchievement: " + userAchievement.achievementId);
+                    Console.WriteLine("UserAchievement: " + userAchievement.achievement.name);
+                    Console.WriteLine("UserAchievement ProgressMap:" + userAchievement.achievement.progressMap);
+
+                    if (_achievementFunctions.TryGetValue(userAchievement.achievement.progressMap, out var achievementFunction))
+                    {
+                        Console.WriteLine($"Checking achievement {userAchievement.achievementId} - {userAchievement.achievement.name}");
+                        Console.WriteLine($"Function: {userAchievement.achievement.progressMap}");
+                        bool result = achievementFunction(idPatient, userAchievement.achievementId);
+                        if (result)
+                        {
+                            progressBools.Add(new progressBool
+                            {
+                                EntityId = userAchievement.achievementId,
+                                type = progreesBoolType.Achievement
+                            });
+                        }
+
+                    }
+                }
+
+                return progressBools;
+
+            }
+        }
+
+        // Achievement 1: EsaEsLaCuestion: First time the user answers a question
+        private static bool CheckBadge_EsaEsLaCuestion(int userId, int badgeId)
+        {
+             var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var thisPaciente = db.patients
+                    .Include(u => u.achievementCollection)
+                        .ThenInclude(ac => ac.userAchievements)
+                    .Include(p => p.test)
+                        .ThenInclude(t => t.completeQuestionnaires)
+                    .FirstOrDefault(u => u.userId == userId);
+
+                if (thisPaciente == null)
+                    return false;
+
+                var userAchievement = thisPaciente.achievementCollection.userAchievements
+                    .FirstOrDefault(ua => ua.achievementId == badgeId);
+
+                
+                if (userAchievement == null)
+                    return false;
+
+                var questionnaires = thisPaciente.test.completeQuestionnaires ?? new List<CompleteQuestionnaires>();
+
+                userAchievement.progress = questionnaires.Count;
+
+                Console.WriteLine("Esa es la Cuestion: " + userAchievement.progress);
+
+
+                bool isBadgeEarned = userAchievement.progress >= 1;
+
+                if (isBadgeEarned)
+                {
+                    //userAchievement.dateEarned = DateTime.Now;
+                }
+                Console.WriteLine("Esa es la Cuestion - Badge: " + isBadgeEarned);
+                //db.SaveChanges();
+                return isBadgeEarned;
+
+            }
+        }
+
+
+        /*
+        private static bool CheckBadge_Questionnaires(int userId, int badgeId)
+        {
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var thisPaciente = db.patients
+                    .Include(u => u.achievementCollection)
+                        .ThenInclude(ac => ac.userAchievements)
+                    .Include(p => p.test)
+                        .ThenInclude(t => t.completeQuestionnaires)
+                    
+
+            }
+
+        }
+        */
+        /*
+
+        foreach (var userBadge in user.badgeCollection.userBadges
+                     .Where(ub => ub.dateEarned == null)) // 👈 Only not-yet-earned badges
+        {
+            if (_badgeFunctions.TryGetValue(userBadge.badge.progressMap, out var badgeFunction))
+            {
+                Console.WriteLine($"Checking badge {userBadge.badgeId} - {userBadge.badge.name}");
+                Console.WriteLine($"Function: {userBadge.badge.progressMap}");
+
+                bool result = badgeFunction(userId, userBadge.badgeId);
+
+                if (result)
+                {
+                    results.Add(new progressBool
+                    {
+                        EntityId = userBadge.badgeId,
+                        type = progreesBoolType.Badges
+                    });
+                }
+            }
+        }
+
+        */
+
+        
+
+
+
 
 
         
