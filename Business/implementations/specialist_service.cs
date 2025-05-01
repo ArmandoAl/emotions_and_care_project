@@ -49,9 +49,9 @@ namespace Business.Implementations
             return _service.Get(id);
         }
 
-        public int Update(Specialist especialista)
+        public bool Update(Specialist especialista)
         {
-            if (especialista == null) { return 0; }
+            if (especialista == null) { return false; }
             return _service.Update(especialista);
         }
 
@@ -134,12 +134,7 @@ namespace Business.Implementations
         {
             if(id < 1 || idCita < 1) { return false; }
 
-            DateRequest? solicitudCita = _citaRepository.GetSolicitudCita(idCita);
-
-            if (solicitudCita == null) { 
-                return false; }
-
-            bool res = _citaRepository.eliminarSolicitudCita(solicitudCita.dateRequestId);
+            bool res = _citaRepository.eliminarSolicitudCita(idCita);
 
             if(res)
             {

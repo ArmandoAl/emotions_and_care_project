@@ -2653,7 +2653,6 @@
     "net6.0": [
       "Domain >= 1.0.0",
       "FirebaseAdmin >= 3.0.0",
-      "MailKit >= 4.11.0",
       "Microsoft.EntityFrameworkCore >= 6.0.25",
       "Microsoft.EntityFrameworkCore.Design >= 6.0.25",
       "Microsoft.EntityFrameworkCore.SqlServer >= 6.0.25"
@@ -2703,10 +2702,6 @@
           "FirebaseAdmin": {
             "target": "Package",
             "version": "[3.0.0, )"
-          },
-          "MailKit": {
-            "target": "Package",
-            "version": "[4.11.0, )"
           },
           "Microsoft.EntityFrameworkCore": {
             "target": "Package",

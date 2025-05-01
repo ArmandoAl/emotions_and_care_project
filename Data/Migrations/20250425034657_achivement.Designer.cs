@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20250423230849_resetPasswordConfig")]
-    partial class resetPasswordConfig
+    [Migration("20250425034657_achivement")]
+    partial class achivement
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,6 +23,66 @@ namespace Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("Domain.Achievement", b =>
+                {
+                    b.Property<int>("achievementId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("achievementId"), 1L, 1);
+
+                    b.Property<int>("category")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("dateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("dateModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("imageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("progressMap")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("achievementId");
+
+                    b.ToTable("achievements");
+                });
+
+            modelBuilder.Entity("Domain.AchievementCollection", b =>
+                {
+                    b.Property<int>("achievementCollectionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("achievementCollectionId"), 1L, 1);
+
+                    b.Property<DateTime>("dateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("dateModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("userId")
+                        .HasColumnType("int");
+
+                    b.HasKey("achievementCollectionId");
+
+                    b.ToTable("achievementCollections");
+                });
 
             modelBuilder.Entity("Domain.Answer", b =>
                 {
@@ -53,6 +113,66 @@ namespace Data.Migrations
                     b.HasIndex("questionId");
 
                     b.ToTable("Answer");
+                });
+
+            modelBuilder.Entity("Domain.Badge", b =>
+                {
+                    b.Property<int>("badgeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("badgeId"), 1L, 1);
+
+                    b.Property<int>("category")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("dateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("dateModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("imageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("progressMap")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("badgeId");
+
+                    b.ToTable("badges");
+                });
+
+            modelBuilder.Entity("Domain.BadgeCollection", b =>
+                {
+                    b.Property<int>("badgeCollectionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("badgeCollectionId"), 1L, 1);
+
+                    b.Property<DateTime>("dateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("dateModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("userId")
+                        .HasColumnType("int");
+
+                    b.HasKey("badgeCollectionId");
+
+                    b.ToTable("badgeCollections");
                 });
 
             modelBuilder.Entity("Domain.Bukayo", b =>
@@ -276,6 +396,79 @@ namespace Data.Migrations
                     b.HasKey("diaryId");
 
                     b.ToTable("diaries");
+                });
+
+            modelBuilder.Entity("Domain.DummyUser", b =>
+                {
+                    b.Property<int>("BuserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BuserId"), 1L, 1);
+
+                    b.Property<int>("age")
+                        .HasColumnType("int");
+
+                    b.Property<int>("badgeCollectionId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("bornDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("dateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("favoritePlayer")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("favoriteStadium")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("favoriteTeam")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("mail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("modifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("patientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("relationalToken")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("sex")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("BuserId");
+
+                    b.HasIndex("badgeCollectionId");
+
+                    b.ToTable("dummyUsers");
                 });
 
             modelBuilder.Entity("Domain.Emotion", b =>
@@ -566,18 +759,14 @@ namespace Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("userId"), 1L, 1);
 
+                    b.Property<int?>("achievementCollectionId")
+                        .HasColumnType("int");
+
                     b.Property<int>("age")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("bornDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("codeHelper")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("confirmed")
-                        .HasColumnType("bit");
 
                     b.Property<DateTime>("dateCreated")
                         .HasColumnType("datetime2");
@@ -642,6 +831,8 @@ namespace Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("userId");
+
+                    b.HasIndex("achievementCollectionId");
 
                     b.HasIndex("diaryId");
 
@@ -1179,6 +1370,76 @@ namespace Data.Migrations
                     b.ToTable("TestQuestionWithAnswer");
                 });
 
+            modelBuilder.Entity("Domain.UserAchievement", b =>
+                {
+                    b.Property<int>("userAchievementId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("userAchievementId"), 1L, 1);
+
+                    b.Property<int?>("achievementCollectionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("achievementId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("dateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("dateEarned")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("dateModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("progress")
+                        .HasColumnType("int");
+
+                    b.HasKey("userAchievementId");
+
+                    b.HasIndex("achievementCollectionId");
+
+                    b.HasIndex("achievementId");
+
+                    b.ToTable("userAchievements");
+                });
+
+            modelBuilder.Entity("Domain.UserBadge", b =>
+                {
+                    b.Property<int>("userBadgeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("userBadgeId"), 1L, 1);
+
+                    b.Property<int?>("badgeCollectionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("badgeId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("dateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("dateEarned")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("dateModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("progress")
+                        .HasColumnType("int");
+
+                    b.HasKey("userBadgeId");
+
+                    b.HasIndex("badgeCollectionId");
+
+                    b.HasIndex("badgeId");
+
+                    b.ToTable("userBadges");
+                });
+
             modelBuilder.Entity("Domain.UserFlower", b =>
                 {
                     b.Property<int>("userFlowerId")
@@ -1238,10 +1499,19 @@ namespace Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("userStickerId"), 1L, 1);
 
+                    b.Property<DateTime>("dayGiven")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("latestUpdate")
+                        .HasColumnType("datetime2");
+
                     b.Property<int?>("position")
                         .HasColumnType("int");
 
                     b.Property<int>("stickerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("timesEarned")
                         .HasColumnType("int");
 
                     b.Property<int?>("userInterfaceId")
@@ -1316,6 +1586,17 @@ namespace Data.Migrations
                     b.Navigation("Cita");
                 });
 
+            modelBuilder.Entity("Domain.DummyUser", b =>
+                {
+                    b.HasOne("Domain.BadgeCollection", "badgeCollection")
+                        .WithMany()
+                        .HasForeignKey("badgeCollectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("badgeCollection");
+                });
+
             modelBuilder.Entity("Domain.Goal", b =>
                 {
                     b.HasOne("Domain.Patient", null)
@@ -1365,6 +1646,10 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Domain.Patient", b =>
                 {
+                    b.HasOne("Domain.AchievementCollection", "achievementCollection")
+                        .WithMany()
+                        .HasForeignKey("achievementCollectionId");
+
                     b.HasOne("Domain.Diary", "diary")
                         .WithMany()
                         .HasForeignKey("diaryId")
@@ -1402,6 +1687,8 @@ namespace Data.Migrations
                         .HasForeignKey("userInterfaceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("achievementCollection");
 
                     b.Navigation("diary");
 
@@ -1509,6 +1796,36 @@ namespace Data.Migrations
                         .HasForeignKey("testInfoModelId");
                 });
 
+            modelBuilder.Entity("Domain.UserAchievement", b =>
+                {
+                    b.HasOne("Domain.AchievementCollection", null)
+                        .WithMany("userAchievements")
+                        .HasForeignKey("achievementCollectionId");
+
+                    b.HasOne("Domain.Achievement", "achievement")
+                        .WithMany()
+                        .HasForeignKey("achievementId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("achievement");
+                });
+
+            modelBuilder.Entity("Domain.UserBadge", b =>
+                {
+                    b.HasOne("Domain.BadgeCollection", null)
+                        .WithMany("userBadges")
+                        .HasForeignKey("badgeCollectionId");
+
+                    b.HasOne("Domain.Badge", "badge")
+                        .WithMany()
+                        .HasForeignKey("badgeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("badge");
+                });
+
             modelBuilder.Entity("Domain.UserFlower", b =>
                 {
                     b.HasOne("Domain.Flower", "flower")
@@ -1537,6 +1854,16 @@ namespace Data.Migrations
                         .HasForeignKey("userInterfaceId");
 
                     b.Navigation("sticker");
+                });
+
+            modelBuilder.Entity("Domain.AchievementCollection", b =>
+                {
+                    b.Navigation("userAchievements");
+                });
+
+            modelBuilder.Entity("Domain.BadgeCollection", b =>
+                {
+                    b.Navigation("userBadges");
                 });
 
             modelBuilder.Entity("Domain.Bukayo", b =>

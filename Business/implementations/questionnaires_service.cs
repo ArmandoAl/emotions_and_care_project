@@ -65,14 +65,8 @@ namespace Business.Implementations
 
                         bool addStickerResult = _itemsRepository.addStickerToPatient(5, idPaciente);
 
-                        var patient = _patientRepository.Get(idPaciente);
+                        _patientRepository.registerSet(idPaciente, "firstTestCompleted");
 
-                        if (patient == null) return null;
-
-                        if(patient.registerState != "registerSuccess") {
-                           
-                            _patientRepository.registerSet(idPaciente, "firstTestCompleted");
-                        }
 
                         if (addStickerResult == false) return null;
 

@@ -16,7 +16,7 @@ namespace Business.Contracts
 
         bool Delete(int id);
 
-        int Update(Patient paciente);
+        bool Update(Patient paciente);
 
         bool VincularEspecialista(int id, string tokenEspecialista);
 
@@ -31,8 +31,6 @@ namespace Business.Contracts
 
         int putStickeriInInterface(int idPatient, int idUserSticker, int position);
 
-        bool removeStickerInInterface(int idPatient, int position);
-
         bool canGrowFlower(int idPatient);
 
         bool growStage(int idPatient);
@@ -45,19 +43,5 @@ namespace Business.Contracts
 
         bool actualizarThemeId(int idPatient, int themeId);
 
-        bool actualizarBackgroundId(int idPatient, int backgroundId);
-
-        bool SoftDelete(int idPatient);
-
-        bool ConfirmarUsuario(int id);
-
-        Patient? GetByEmail(string email);
-
-        string GetForgotPassword(int idPatient);
-
-
-        bool ValidarCodigo(int idPatient, string code);
-
-        bool ModificarContraseña(int idPatient, string password);
     }
 }
