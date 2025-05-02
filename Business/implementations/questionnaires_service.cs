@@ -59,44 +59,38 @@ namespace Business.Implementations
 
                 if (idHistoralCuestionario >= 0)
                 {
-                 
-                    
                     if(isFirstTime) {
-                        var idLogro = _patientRepository.giveAchievementToPatient(idPaciente, 5);
-
-                        //bool addStickerResult = _itemsRepository.addStickerToPatient(5, idPaciente);
-
                         _patientRepository.registerSet(idPaciente, "firstTestCompleted");
+                    }
+                    var idLogro = _patientRepository.checkAchievement_Questionnaires(idPaciente);
 
-
-                        //if (addStickerResult == false) return null;
-
-                        if (idLogro <= 0) return null;
-
-                        return new AchievementWithTestInfoModel
-                        {
-                        TestInfoModel = _cuestionarioService.GetTestInfoModel(
-                            idPaciente,
-                            idCuestionario,
-                            idHistoralCuestionario)!,
-
-                        achievementId = idLogro
-                        };
-                    } else {
-
+                    if (idLogro > 0)
+                    {
                         return new AchievementWithTestInfoModel
                         {
                             TestInfoModel = _cuestionarioService.GetTestInfoModel(
                                 idPaciente,
                                 idCuestionario,
-                                idHistoralCuestionario
-                                )!,
+                                idHistoralCuestionario)!,
+
+                            achievementId = idLogro
+                        };
+                    } 
+                    else {
+                        return new AchievementWithTestInfoModel
+                        {
+                            TestInfoModel = _cuestionarioService.GetTestInfoModel(
+                                idPaciente,
+                                idCuestionario,
+                                idHistoralCuestionario)!,
 
                             achievementId = null
                         };
+                    }
 
-                    }   
-                }
+                 
+                   
+            }
             }
 
             return null;

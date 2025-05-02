@@ -51,6 +51,17 @@ namespace Domain
         public int cartAnswerId { get; set; }
     }
 
+    public class AchievementWithCartAnswer
+    {
+        // The unique identifier for the achievement (nullable)
+        public int? achievementId { get; set; }
+
+        // The cart answer associated with the achievement
+        public int cartAnswerId { get; set; }
+    }
+
+    
+
     public class GoalWithSticker
     {
         public int cartAnswerId { get; set; }

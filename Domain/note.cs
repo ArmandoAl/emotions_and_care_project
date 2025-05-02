@@ -45,13 +45,13 @@ namespace Domain
         public int noteId { get; set; }
     }
 
-    public class NoteWithAchivment 
+    public class AchievementWithNote
     {
         // A reference to a 'Note' associated with this achievement. Defaults to a new 'Note' instance.
         public int noteId { get; set; }
 
         // The unique identifier for the associated achievement.
-        public int? achivmentId { get; set; }
+        public int? achievementId { get; set; }
     }
 }
 

@@ -16,15 +16,18 @@ namespace Business.Implementations
       private readonly IGoalRepository _logroRepository;
 
       private readonly IItemsRepository _itemsRepository;
+      private readonly IPatientRepository _patientRepository;
 
-        public DateService(IDateRepository DateRepository, IGoalRepository logroRepositor, IItemsRepository itemsRepository)
+        public DateService(IDateRepository DateRepository, IGoalRepository logroRepositor, IItemsRepository itemsRepository, 
+            IPatientRepository patientRepository)
         {
             _DateRepository = DateRepository;
             _logroRepository = logroRepositor;
             _itemsRepository = itemsRepository;
+            _patientRepository = patientRepository;
         }
 
-        public goalWithDate? AddDate(Date date, int idPaciente, int idEspecialista)
+        public AchievementWithDate? AddDate(Date date, int idPaciente, int idEspecialista)
         {
             if (date == null) return null;
 
@@ -54,29 +57,21 @@ namespace Business.Implementations
                     }
 
 
-                    var isFirtTime = _DateRepository.isFirstTime(idPaciente);
+                    var idLogro = _patientRepository.checkAchievement_Agenda(idPaciente);
 
-                    if(isFirtTime)
+                    if (idLogro > 0)
                     {
-                        var idLogro = _logroRepository.AddGoalPatient(idPaciente, 6);
-
-                        _itemsRepository.addStickerToPatient(6, idPaciente);
-                        if (idLogro <= 0)
+                        return new AchievementWithDate
                         {
-                            _DateRepository.DeleteCita(idDate);
-                            return null;
-                        }
-
-                        return new goalWithDate
-                        {
-                            goal = _logroRepository.GetGoal(idLogro),
+                            achievementId = idLogro,
                             dateId = idDate
                         };
-
-                    } else {
-                        return new goalWithDate
+                    }
+                    else
+                    {
+                        return new AchievementWithDate
                         {
-                            goal = null,
+                            achievementId = 0,
                             dateId = idDate
                         };
                     }   

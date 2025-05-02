@@ -65,6 +65,6 @@ namespace Domain
         public int cartId { get; set; }
 
         // The unique identifier of the achievement associated with the cart
-        public int? achivmentId { get; set; }
+        public int? achievementId { get; set; }
     }
 }

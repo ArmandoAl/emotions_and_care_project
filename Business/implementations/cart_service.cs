@@ -17,16 +17,19 @@ namespace Business.Implementations
 
         private readonly IItemsRepository _itemsRepository;
 
+        private readonly IPatientRepository _patientRepository;
+
         public CartService(ICartRepository cartRepository, IGoalRepository logroRepository, 
-            IItemsRepository itemsRepository
+            IItemsRepository itemsRepository, IPatientRepository patientRepository
         )
         {
             _cartRepository = cartRepository;
             _logroRepository = logroRepository;
             _itemsRepository = itemsRepository;
+            _patientRepository = patientRepository;
         }
 
-        public GoalWithCart? Add(Cart cart, int idUsuario, bool isPatient)
+        public AchievementWithCart? Add(Cart cart, int idUsuario, bool isPatient)
         {
             if(cart == null || idUsuario <= 0) return null;
 
@@ -43,26 +46,29 @@ namespace Business.Implementations
                      return null;
                 }
 
-                bool isFirtTime = _cartRepository.isFirstTime(idUsuario);
-
-                if(isFirtTime && isPatient)
+                if(isPatient)
                 {
-                    var idLogro = _logroRepository.AddGoalPatient(idUsuario, 1);
-
-                    _itemsRepository.addStickerToPatient(1, idUsuario);
-
-     
-                    
-                    return new GoalWithCart
+                    var idLogro = _patientRepository.checkAchievement_Community(idUsuario);
+                    if (idLogro > 0)
                     {
-                        goal = _logroRepository.GetGoal(idLogro),
-                        cartId = idCart
-                    };
+                        return new AchievementWithCart
+                        {
+                            achievementId = idLogro,
+                            cartId = idCart
+                        };
+                    } else
+                    {
+                        return new AchievementWithCart
+                        {
+                            achievementId = null,
+                            cartId = idCart
+                        };
+                    }
                 } else {
                     
-                    return new GoalWithCart
+                    return new AchievementWithCart
                     {
-                        goal = null,
+                        achievementId = null,
                         cartId = idCart
                     };
                 }
@@ -70,39 +76,31 @@ namespace Business.Implementations
             return null;
         }
 
-        public GoalWithCartAnswer? AddRespuesta(CartAnswer respuesta, int idCart)
+        public AchievementWithCartAnswer? AddRespuesta(CartAnswer respuesta, int idCart)
         {
             if (respuesta == null || idCart <= 0) return null;
             bool res = _cartRepository.AddRespuesta(respuesta, idCart);
 
             if (res)
             {
-
-                 bool isFirtTime = _cartRepository.isFirstTimeAnswer(respuesta.receiverId);
-
-                if(isFirtTime) {
-                var idLogro = _logroRepository.AddGoalPatient(respuesta.receiverId, 2);
-
-                _itemsRepository.addStickerToPatient(2, respuesta.receiverId);
-
+                var idLogro = _patientRepository.checkAchievement_Community(respuesta.receiverId);
                 if (idLogro > 0)
                 {
-                return new GoalWithCartAnswer
-                {
-                    goal = _logroRepository.GetGoal(idLogro),
-                    cartAnswerId = respuesta.cartId
-                };
-
-                }
-
-                } else {
-                    return new GoalWithCartAnswer
+                    return new AchievementWithCartAnswer
                     {
-                        goal = null,
-                        cartAnswerId = respuesta.cartId
+                        achievementId = idLogro,
+                        cartAnswerId = respuesta.cartAnswerId
+                    };
+                } else
+                {
+                    return new AchievementWithCartAnswer
+                    {
+                        achievementId = null,
+                        cartAnswerId = respuesta.cartAnswerId
                     };
                 }
-            }
+            } 
+
             return null;
         }
 

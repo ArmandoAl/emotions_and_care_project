@@ -59,7 +59,15 @@ namespace Data.Contracts
 
          List<progressBool> CheckAchievements(int idPatient);
          
-         int? giveAchievementToPatient(int idPatient, int achievementId);
+        int? giveAchievementToPatient(int idPatient, int achievementId);
+
+        int? checkAchievement_Questionnaires(int idUsuario);
+
+        int? checkAchievement_Community(int idUsuario);
+
+        int? checkAchievement_Diary(int idUsuario);
+
+        int? checkAchievement_Agenda(int idUsuario);
 
 
     }

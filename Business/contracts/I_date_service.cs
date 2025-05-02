@@ -9,7 +9,7 @@ namespace Business.Contracts
 {
     public interface IDateService
     {
-        goalWithDate? AddDate(Date Date, int idPaciente, int idEspacialista);
+        AchievementWithDate? AddDate(Date Date, int idPaciente, int idEspacialista);
 
         bool UpdateDate(Date Date);
 
