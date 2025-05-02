@@ -1575,6 +1575,10 @@ db.diaries.RemoveRange(diariesToDelete);
             }
         }
 
+
+
+
+
         //Dictionary
         private readonly Dictionary<string, Func<int, int, bool>> _achievementFunctions = new()
         {
@@ -2121,6 +2125,41 @@ db.diaries.RemoveRange(diariesToDelete);
         }
         
 
+        public int? giveAchievementToPatient(int idPatient, int achievementId)
+        {
+            if (idPatient <= 0 || achievementId <= 0) return null;
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var thisPaciente = db.patients
+                    .Include(u => u.achievementCollection)
+                        .ThenInclude(bc => bc.userAchievements)
+                    .FirstOrDefault(u => u.userId == idPatient);
+
+                Console.WriteLine("thisPaciente: " + thisPaciente.name);
+                Console.WriteLine("AchievementCollection:" + thisPaciente.achievementCollection.dateModified);
+
+                if (thisPaciente == null)
+                    return null;
+
+                var userAchievement = thisPaciente.achievementCollection.userAchievements
+                    .FirstOrDefault(ua => ua.achievementId == achievementId);
+
+                if (userAchievement == null)
+                    return null;
+
+                userAchievement.dateEarned = DateTime.Now;
+                userAchievement.progress = 1; // Assuming the achievement is earned immediately
+                db.SaveChanges();
+                return achievementId;
+            }
+        }
+        
+
 
 
 
@@ -2174,15 +2213,10 @@ db.diaries.RemoveRange(diariesToDelete);
         */
 
         
-
-
-
-
-
-        
-    }
-   
 }
+}
+
+
 
 
 //crea un mapa que retorne funciones, me explico, si el name es firstDiary, lo que retornas es la funcion validateFirstDiary, y asi con todos los nombres de los stageRequest
