@@ -148,15 +148,18 @@ namespace Data.Implementations
             // Return the patient with all their related information
             return db.patients.Where(x => x.userId == id)
                 .Include(x => x.specialist)
-                .Include(x => x.achievementCollection)
-                    .ThenInclude(ac => ac.userAchievements)
-                        .ThenInclude(ua => ua.achievement)
+             
                 .Include(x => x.goals)
                 .Include(x => x.userInterface)
                 .Include(x => x.userInterface.userFlowers)
                 .Include(x => x.userInterface.userStickers)
                 .Include(x => x.settings)
                 .Include(x => x.termsAndConditions)
+                .Include(x => x.achievementCollection)
+                .Include(x => x.achievementCollection!.userAchievements)
+                .Include(x => x.achievementCollection!.userAchievements!.Select(y => y.achievement))
+
+                    
                 .Select(x => new Patient
                 {
                     userId = x.userId,
@@ -174,7 +177,7 @@ namespace Data.Implementations
                         achievementCollectionId = x.achievementCollection.achievementCollectionId,
                         dateCreated = x.achievementCollection.dateCreated,
                         dateModified = x.achievementCollection.dateModified,
-                        userAchievements = x.achievementCollection.userAchievements.Select(ua => new UserAchievement
+                        userAchievements = x.achievementCollection.userAchievements!.Select(ua => new UserAchievement
                         {
                             userAchievementId = ua.userAchievementId,
                             achievementId = ua.achievementId,
@@ -1468,7 +1471,7 @@ db.diaries.RemoveRange(diariesToDelete);
             {
                 var thisPaciente = db.patients
                     .Include(u => u.achievementCollection)
-                    .ThenInclude(bc => bc.userAchievements)
+                    .ThenInclude(bc => bc!.userAchievements)
                     .FirstOrDefault(u => u.userId == idPatient);
 
                 if (thisPaciente == null)
@@ -1476,11 +1479,11 @@ db.diaries.RemoveRange(diariesToDelete);
 
                 var achievement = db.achievements.Find(achievementId);
 
-                Console.WriteLine("Achievement: " + achievement.name);
+              
                 if (achievement == null)
                     return false;
                 // Check if the user already has this achievement
-                if (thisPaciente.achievementCollection.userAchievements.Any(ub => ub.achievementId == achievementId))
+                if (thisPaciente.achievementCollection!.userAchievements!.Any(ub => ub.achievementId == achievementId))
                     return false; // User already has this achievement
                 
                 var userAchievement = new UserAchievement
@@ -1491,10 +1494,8 @@ db.diaries.RemoveRange(diariesToDelete);
                     dateCreated = DateTime.Now,
                 };
 
-                Console.WriteLine("UserAchievement: " + userAchievement.achievementId);
-                Console.WriteLine("UserAchievement: " + userAchievement.progress);
-                Console.WriteLine("UserAchievement: " + userAchievement.achievement.name);
-                thisPaciente.achievementCollection.userAchievements.Add(userAchievement);
+            
+                thisPaciente.achievementCollection!.userAchievements!.Add(userAchievement);
                 db.SaveChanges();
                 return true;
         }
@@ -1511,14 +1512,11 @@ db.diaries.RemoveRange(diariesToDelete);
             using (var db = new DBContext(options: connectionOptions))
             {
                 var thisPaciente = db.patients
-                    .Include(u => u.achievementCollection)
-                    .ThenInclude(bc => bc.userAchievements)
+                    .Include(u => u.achievementCollection!)
+                    .ThenInclude(bc => bc.userAchievements!)
                     .ThenInclude(ua => ua.achievement)
                     .FirstOrDefault(u => u.userId == idPatient);
 
-                Console.WriteLine("thisPaciente: " + thisPaciente.name);
-                Console.WriteLine("AchievementCollection:" + thisPaciente.achievementCollection.dateModified);
-                Console.WriteLine("AchievementCount: " + thisPaciente.achievementCollection.userAchievements.Count);
 
                 if (thisPaciente == null)
                     return null;
@@ -1574,7 +1572,7 @@ db.diaries.RemoveRange(diariesToDelete);
             {
                 var thisPaciente = db.patients
                     .Include(u => u.achievementCollection)
-                    .ThenInclude(bc => bc.userAchievements)
+                    .ThenInclude(bc => bc!.userAchievements)
                     .FirstOrDefault(u => u.userId == idPatient);
 
                 if (thisPaciente == null)
@@ -1585,7 +1583,7 @@ db.diaries.RemoveRange(diariesToDelete);
                 foreach (var achievement in achievements)
                 {
                     // Check if the user already has this achievement
-                    if (thisPaciente.achievementCollection.userAchievements.Any(ub => ub.achievementId == achievement.achievementId))
+                    if (thisPaciente.achievementCollection!.userAchievements!.Any(ub => ub.achievementId == achievement.achievementId))
                         continue; // User already has this achievement
                     // Create a new UserAchievement object
                     var userAchievement = new UserAchievement
@@ -1595,9 +1593,8 @@ db.diaries.RemoveRange(diariesToDelete);
                         achievement = achievement,
                         dateCreated = DateTime.Now,
                     };
-                    Console.WriteLine("UserAchievement: " + userAchievement.achievementId);
-
-                    thisPaciente.achievementCollection.userAchievements.Add(userAchievement);
+                   
+                    thisPaciente.achievementCollection!.userAchievements!.Add(userAchievement);
                 }
 
                 db.SaveChanges();
@@ -1635,9 +1632,8 @@ db.diaries.RemoveRange(diariesToDelete);
             return false;
         }
 
-        public List<progressBool> CheckAchievements(int idPatient)
+        public List<progressBool>? CheckAchievements(int idPatient)
         {
-            Console.WriteLine("- CheckAchievements -");
             if (idPatient <= 0) return null;
 
             var connectionOptions = new DbContextOptionsBuilder<DBContext>()
@@ -1648,31 +1644,22 @@ db.diaries.RemoveRange(diariesToDelete);
             {
 
                 var thisPaciente = db.patients
-                    .Include(u => u.achievementCollection)
-                        .ThenInclude(ac => ac.userAchievements)
+                    .Include(u => u.achievementCollection!)
+                        .ThenInclude(ac => ac.userAchievements!)
                         .ThenInclude(ua => ua.achievement)
                     .FirstOrDefault(u => u.userId == idPatient);
 
                 if (thisPaciente == null)
                     return null;
-                
-                Console.WriteLine("thisPaciente: " + thisPaciente.name);
-                Console.WriteLine("AchievementCollection:" + thisPaciente.achievementCollection.dateModified);
-                Console.WriteLine("AchievementCount: " + thisPaciente.achievementCollection.userAchievements.Count);
 
                 List<progressBool> progressBools = new List<progressBool>();
 
-                foreach (var userAchievement in thisPaciente.achievementCollection.userAchievements
+                foreach (var userAchievement in thisPaciente.achievementCollection!.userAchievements!
                              .Where(ua => ua.dateEarned == null)) // 👈 Only not-yet-earned badges
                 {
-                    //Console.WriteLine("UserAchievement: " + userAchievement.achievementId);
-                    //Console.WriteLine("UserAchievement: " + userAchievement.achievement.name);
-                    //Console.WriteLine("UserAchievement ProgressMap:" + userAchievement.achievement.progressMap);
 
                     if (_achievementFunctions.TryGetValue(userAchievement.achievement.progressMap, out var achievementFunction))
                     {
-                        Console.WriteLine($"Checking achievement {userAchievement.achievementId} - {userAchievement.achievement.name}");
-                        //Console.WriteLine($"Function: {userAchievement.achievement.progressMap}");
                         bool result = achievementFunction(idPatient, userAchievement.achievementId);
                         if (result)
                         {
@@ -1702,7 +1689,7 @@ db.diaries.RemoveRange(diariesToDelete);
             {
                 var thisPaciente = db.patients
                     .Include(u => u.achievementCollection)
-                        .ThenInclude(ac => ac.userAchievements)
+                        .ThenInclude(ac => ac!.userAchievements!)
                     .Include(p => p.test)
                         .ThenInclude(t => t.completeQuestionnaires)
                     .FirstOrDefault(u => u.userId == userId);
@@ -1710,7 +1697,7 @@ db.diaries.RemoveRange(diariesToDelete);
                 if (thisPaciente == null)
                     return false;
 
-                var userAchievement = thisPaciente.achievementCollection.userAchievements
+                var userAchievement = thisPaciente.achievementCollection!.userAchievements!
                     .FirstOrDefault(ua => ua.achievementId == badgeId);
 
                 
@@ -1721,8 +1708,6 @@ db.diaries.RemoveRange(diariesToDelete);
 
                 userAchievement.progress = questionnaires.Count;
 
-                Console.WriteLine("Esa es la Cuestion: " + userAchievement.progress);
-
 
                 bool isBadgeEarned = userAchievement.progress >= 1;
 
@@ -1730,7 +1715,6 @@ db.diaries.RemoveRange(diariesToDelete);
                 {
                     userAchievement.dateEarned = DateTime.Now;
                 }
-                Console.WriteLine("Esa es la Cuestion - Badge: " + isBadgeEarned);
                 //db.SaveChanges();
                 return isBadgeEarned;
 
@@ -1746,7 +1730,7 @@ db.diaries.RemoveRange(diariesToDelete);
             {
                 var thisPaciente = db.patients
                     .Include(u => u.achievementCollection)
-                        .ThenInclude(ac => ac.userAchievements)
+                        .ThenInclude(ac => ac!.userAchievements)
                     .Include(p => p.test)
                         .ThenInclude(t => t.completeQuestionnaires)
                     .FirstOrDefault(u => u.userId == userId);
@@ -1754,7 +1738,7 @@ db.diaries.RemoveRange(diariesToDelete);
                 if (thisPaciente == null)
                     return false;
 
-                var userAchievement = thisPaciente.achievementCollection.userAchievements
+                var userAchievement = thisPaciente.achievementCollection!.userAchievements!
                     .FirstOrDefault(ua => ua.achievementId == badgeId);
 
                 if (userAchievement == null)
@@ -1764,13 +1748,11 @@ db.diaries.RemoveRange(diariesToDelete);
 
                 userAchievement.progress = questionnaires.Count;
 
-                Console.WriteLine("Deja Vu: " + userAchievement.progress);
                 bool isBadgeEarned = userAchievement.progress >= 2;
                 if (isBadgeEarned)
                 {
                     userAchievement.dateEarned = DateTime.Now;
                 }
-                Console.WriteLine("Deja Vu - Badge: " + isBadgeEarned);
                 //db.SaveChanges();
                 return isBadgeEarned;
             }
@@ -1787,7 +1769,7 @@ db.diaries.RemoveRange(diariesToDelete);
             {
                 var thisPaciente = db.patients
                     .Include(u => u.achievementCollection)
-                        .ThenInclude(ac => ac.userAchievements)
+                        .ThenInclude(ac => ac!.userAchievements)
                     .Include(p => p.test)
                         .ThenInclude(t => t.completeQuestionnaires)
                     .FirstOrDefault(u => u.userId == userId);
@@ -1795,21 +1777,17 @@ db.diaries.RemoveRange(diariesToDelete);
                 if (thisPaciente == null)
                     return false;
 
-                var userAchievement = thisPaciente.achievementCollection.userAchievements
+                var userAchievement = thisPaciente.achievementCollection!.userAchievements!
                     .FirstOrDefault(ua => ua.achievementId == badgeId);
 
                 if (userAchievement == null)
                     return false;
 
-                
-
-                Console.WriteLine("Buen Camino: " + userAchievement.progress);
                 bool isBadgeEarned = userAchievement.progress >= 3;
                 if (isBadgeEarned)
                 {
                     //userAchievement.dateEarned = DateTime.Now;
                 }
-                Console.WriteLine("Buen Camino - Badge: " + isBadgeEarned);
                 //db.SaveChanges();
                 return isBadgeEarned;
             }
@@ -1825,7 +1803,7 @@ db.diaries.RemoveRange(diariesToDelete);
             {
                 var thisPaciente = db.patients
                     .Include(u => u.achievementCollection)
-                        .ThenInclude(ac => ac.userAchievements)
+                        .ThenInclude(ac => ac!.userAchievements)
                     .Include(p => p.test)
                         .ThenInclude(t => t.completeQuestionnaires)
                     .FirstOrDefault(u => u.userId == userId);
@@ -1833,7 +1811,7 @@ db.diaries.RemoveRange(diariesToDelete);
                 if (thisPaciente == null)
                     return false;
 
-                var userAchievement = thisPaciente.achievementCollection.userAchievements
+                var userAchievement = thisPaciente.achievementCollection!.userAchievements!
                     .FirstOrDefault(ua => ua.achievementId == badgeId);
 
                 if (userAchievement == null)
@@ -1843,13 +1821,11 @@ db.diaries.RemoveRange(diariesToDelete);
 
                 userAchievement.progress = questionnaires.Count;
 
-                Console.WriteLine("El Camino a la Mejora: " + userAchievement.progress);
                 bool isBadgeEarned = userAchievement.progress >= 3;
                 if (isBadgeEarned)
                 {
                     userAchievement.dateEarned = DateTime.Now;
                 }
-                Console.WriteLine("El Camino a la Mejora - Badge: " + isBadgeEarned);
                 //db.SaveChanges();
                 return isBadgeEarned;
             }
@@ -1864,14 +1840,14 @@ db.diaries.RemoveRange(diariesToDelete);
             {
                 var thisPaciente = db.patients
                     .Include(u => u.achievementCollection)
-                        .ThenInclude(ac => ac.userAchievements)
+                        .ThenInclude(ac => ac!.userAchievements)
                     .Include(p => p.specialist)
                     .FirstOrDefault(u => u.userId == userId);
 
                 if (thisPaciente == null)
                     return false;
 
-                var userAchievement = thisPaciente.achievementCollection.userAchievements
+                var userAchievement = thisPaciente.achievementCollection!.userAchievements!
                     .FirstOrDefault(ua => ua.achievementId == badgeId);
 
                 if (userAchievement == null)
@@ -1883,7 +1859,6 @@ db.diaries.RemoveRange(diariesToDelete);
                 {
                     //userAchievement.dateEarned = DateTime.Now;
                 }
-                Console.WriteLine("Validate First Specialist - Badge: " + isBadgeEarned);
                 //db.SaveChanges();
                 return isBadgeEarned;
             }
@@ -1898,14 +1873,14 @@ db.diaries.RemoveRange(diariesToDelete);
             {
                 var thisPaciente = db.patients
                     .Include(u => u.achievementCollection)
-                        .ThenInclude(ac=> ac.userAchievements)
+                        .ThenInclude(ac=> ac!.userAchievements)
                     .Include(p => p.dates)
                     .FirstOrDefault(u => u.userId == userId);
 
                 if (thisPaciente == null || thisPaciente.dates == null)
                     return false;
 
-                var userAchievement = thisPaciente.achievementCollection.userAchievements
+                var userAchievement = thisPaciente.achievementCollection!.userAchievements!
                     .FirstOrDefault(ua => ua.achievementId == badgeId);
 
                 bool isConfirmedAppointment = thisPaciente.dates.Any(d => d.patientConfirm == true || d.specialistConfirm == true);
@@ -1930,14 +1905,14 @@ db.diaries.RemoveRange(diariesToDelete);
             {
                 var thisPaciente = db.patients
                     .Include(u => u.achievementCollection)
-                        .ThenInclude(ac => ac.userAchievements)
+                        .ThenInclude(ac => ac!.userAchievements)
                     .Include(p => p.dates)
                     .FirstOrDefault(u => u.userId == userId);
 
                 if (thisPaciente == null || thisPaciente.dates == null)
                     return false;
 
-                var userAchievement = thisPaciente.achievementCollection.userAchievements
+                var userAchievement = thisPaciente.achievementCollection!.userAchievements!
                     .FirstOrDefault(ua => ua.achievementId == badgeId);
 
                 bool hasAttendedAppointment = thisPaciente.dates.Any(d => d.done == true);
@@ -1963,14 +1938,14 @@ db.diaries.RemoveRange(diariesToDelete);
             {
                 var thisPaciente = db.patients
                     .Include(u => u.achievementCollection)
-                        .ThenInclude(ac => ac.userAchievements)
+                        .ThenInclude(ac => ac!.userAchievements)
                     .Include(p => p.dates)
                     .FirstOrDefault(u => u.userId == userId);
 
                 if (thisPaciente == null || thisPaciente.dates == null)
                     return false;
 
-                var userAchievement = thisPaciente.achievementCollection.userAchievements
+                var userAchievement = thisPaciente.achievementCollection!.userAchievements!
                     .FirstOrDefault(ua => ua.achievementId == badgeId);
 
                 bool hasAttended3Appointments = thisPaciente.dates.Count(d => d.done == true) >= 3;
@@ -1997,14 +1972,14 @@ db.diaries.RemoveRange(diariesToDelete);
             {
                 var thisPaciente = db.patients
                     .Include(u => u.achievementCollection)
-                        .ThenInclude(ac => ac.userAchievements)
+                        .ThenInclude(ac => ac!.userAchievements)
                     .Include(p => p.carts)
                     .FirstOrDefault(u => u.userId == userId);
 
                 if (thisPaciente == null || thisPaciente.carts == null)
                     return false;
 
-                var userAchievement = thisPaciente.achievementCollection.userAchievements
+                var userAchievement = thisPaciente.achievementCollection!.userAchievements!
                     .FirstOrDefault(ua => ua.achievementId == badgeId);
 
                 bool hasCreatedLetter = thisPaciente.carts.Any(c => c.transmitterId == userId);
@@ -2029,18 +2004,17 @@ db.diaries.RemoveRange(diariesToDelete);
             {
                 var thisPaciente = db.patients
                     .Include(u => u.achievementCollection)
-                        .ThenInclude(ac => ac.userAchievements)
+                        .ThenInclude(ac => ac!.userAchievements)
                     .FirstOrDefault(u => u.userId == userId);
 
                 if (thisPaciente == null || thisPaciente.carts == null)
                     return false;
 
-                var userAchievement = thisPaciente.achievementCollection.userAchievements
+                var userAchievement = thisPaciente.achievementCollection!.userAchievements!
                     .FirstOrDefault(ua => ua.achievementId == badgeId);
 
                 var hasAnsweredLetter = db.cartAnswers.Any(c => c.receiverId == userId);
 
-                Console.WriteLine("-> Has answered letter: " + hasAnsweredLetter);
 
                 if (hasAnsweredLetter)
                 {
@@ -2063,14 +2037,14 @@ db.diaries.RemoveRange(diariesToDelete);
             {
                 var thisPaciente = db.patients
                     .Include(u => u.achievementCollection)
-                        .ThenInclude(ac => ac.userAchievements)
+                        .ThenInclude(ac => ac!.userAchievements)
                     .Include(p => p.carts)
                     .FirstOrDefault(u => u.userId == userId);
 
                 if (thisPaciente == null || thisPaciente.carts == null)
                     return false;
 
-                var userAchievement = thisPaciente.achievementCollection.userAchievements
+                var userAchievement = thisPaciente.achievementCollection!.userAchievements!
                     .FirstOrDefault(ua => ua.achievementId == badgeId);
 
                 bool hasWritten3Letters = thisPaciente.carts.Count(c => c.transmitterId == userId) >= 3;
@@ -2096,14 +2070,14 @@ db.diaries.RemoveRange(diariesToDelete);
             {
                 var thisPaciente = db.patients
                     .Include(u => u.achievementCollection)
-                        .ThenInclude(ac => ac.userAchievements)
+                        .ThenInclude(ac => ac!.userAchievements)
                     .Include(u=>u.progress)
                     .FirstOrDefault(u => u.userId == userId);
 
                 if (thisPaciente == null || thisPaciente.progress == null)
                     return false;
 
-                var userAchievement = thisPaciente.achievementCollection.userAchievements
+                var userAchievement = thisPaciente.achievementCollection!.userAchievements!
                     .FirstOrDefault(ua => ua.achievementId == badgeId);
 
                 //if progress.stage is bigger than 1
@@ -2130,14 +2104,14 @@ db.diaries.RemoveRange(diariesToDelete);
             {
                 var thisPaciente = db.patients
                     .Include(u => u.achievementCollection)
-                        .ThenInclude(ac => ac.userAchievements)
+                        .ThenInclude(ac => ac!.userAchievements)
                     .Include(u => u.progress)
                     .FirstOrDefault(u => u.userId == userId);
 
                 if (thisPaciente == null || thisPaciente.progress == null)
                     return false;
 
-                var userAchievement = thisPaciente.achievementCollection.userAchievements
+                var userAchievement = thisPaciente.achievementCollection!.userAchievements!
                     .FirstOrDefault(ua => ua.achievementId == badgeId);
 
                 //if progress.stage is bigger than 1
@@ -2167,16 +2141,14 @@ db.diaries.RemoveRange(diariesToDelete);
             {
                 var thisPaciente = db.patients
                     .Include(u => u.achievementCollection)
-                        .ThenInclude(bc => bc.userAchievements)
+                        .ThenInclude(bc => bc!.userAchievements)
                     .FirstOrDefault(u => u.userId == idPatient);
 
-                Console.WriteLine("thisPaciente: " + thisPaciente.name);
-                Console.WriteLine("AchievementCollection:" + thisPaciente.achievementCollection.dateModified);
 
                 if (thisPaciente == null)
                     return null;
 
-                var userAchievement = thisPaciente.achievementCollection.userAchievements
+                var userAchievement = thisPaciente.achievementCollection!.userAchievements!
                     .FirstOrDefault(ua => ua.achievementId == achievementId);
 
                 if (userAchievement == null)
@@ -2200,15 +2172,15 @@ db.diaries.RemoveRange(diariesToDelete);
             using (var db = new DBContext(options: connectionOptions))
             {
                 var thisPaciente = db.patients
-                    .Include(u => u.achievementCollection)
-                        .ThenInclude(ac => ac.userAchievements)
+                    .Include(u => u.achievementCollection!)
+                        .ThenInclude(ac => ac.userAchievements!)
                             .ThenInclude(ua => ua.achievement)
                     .FirstOrDefault(u => u.userId == idUsuario);
 
                 if (thisPaciente == null)
                     return null;
 
-                var userAchievements = thisPaciente.achievementCollection.userAchievements;
+                var userAchievements = thisPaciente.achievementCollection!.userAchievements;
 
                 // Define which functions are related to questionnaires
                 var questionnaireAchievementFunctions = new List<string>
@@ -2223,14 +2195,13 @@ db.diaries.RemoveRange(diariesToDelete);
                 {
                     if (_achievementFunctions.TryGetValue(funcName, out var func))
                     {
-                        var ua = userAchievements.FirstOrDefault(ua =>
+                        var ua = userAchievements!.FirstOrDefault(ua =>
                             ua.achievement != null &&
                             ua.achievement.progressMap == funcName &&
                             ua.dateEarned == null);
 
                         if (ua != null)
                         {
-                            Console.WriteLine($"Checking achievement {ua.achievementId} - {ua.achievement.name}");
                             bool isCompleted = func(idUsuario, ua.achievementId);
                             if (isCompleted)
                             {
@@ -2255,15 +2226,15 @@ db.diaries.RemoveRange(diariesToDelete);
             using (var db = new DBContext(options: connectionOptions))
             {
                 var thisPaciente = db.patients
-                    .Include(u => u.achievementCollection)
-                        .ThenInclude(ac => ac.userAchievements)
+                    .Include(u => u.achievementCollection!)
+                        .ThenInclude(ac => ac.userAchievements!)
                             .ThenInclude(ua => ua.achievement)
                     .FirstOrDefault(u => u.userId == idUsuario);
 
                 if (thisPaciente == null)
                     return null;
 
-                var userAchievements = thisPaciente.achievementCollection.userAchievements;
+                var userAchievements = thisPaciente.achievementCollection!.userAchievements;
 
                 // Define which functions are related to community
                 var communityAchievementFunctions = new List<string>
@@ -2277,14 +2248,14 @@ db.diaries.RemoveRange(diariesToDelete);
                 {
                     if (_achievementFunctions.TryGetValue(funcName, out var func))
                     {
-                        var ua = userAchievements.FirstOrDefault(ua =>
+                        var ua = userAchievements!.FirstOrDefault(ua =>
                             ua.achievement != null &&
                             ua.achievement.progressMap == funcName &&
                             ua.dateEarned == null);
 
                         if (ua != null)
                         {
-                            Console.WriteLine($"Checking achievement {ua.achievementId} - {ua.achievement.name}");
+                           
                             bool isCompleted = func(idUsuario, ua.achievementId);
                             if (isCompleted)
                             {
@@ -2316,15 +2287,15 @@ db.diaries.RemoveRange(diariesToDelete);
             using (var db = new DBContext(options: connectionOptions))
             {
                 var thisPaciente = db.patients
-                    .Include(u => u.achievementCollection)
-                        .ThenInclude(ac => ac.userAchievements)
+                    .Include(u => u.achievementCollection!)
+                        .ThenInclude(ac => ac.userAchievements!)
                             .ThenInclude(ua => ua.achievement)
                     .FirstOrDefault(u => u.userId == idUsuario);
 
                 if (thisPaciente == null)
                     return null;
 
-                var userAchievements = thisPaciente.achievementCollection.userAchievements;
+                var userAchievements = thisPaciente.achievementCollection!.userAchievements;
 
                 // Define which functions are related to agenda
                 var agendaAchievementFunctions = new List<string>
@@ -2340,7 +2311,7 @@ db.diaries.RemoveRange(diariesToDelete);
                 {
                     if (_achievementFunctions.TryGetValue(funcName, out var func))
                     {
-                        var ua = userAchievements.FirstOrDefault(ua =>
+                        var ua = userAchievements!.FirstOrDefault(ua =>
                             ua.achievement != null &&
                             ua.achievement.progressMap == funcName &&
                             ua.dateEarned == null);
