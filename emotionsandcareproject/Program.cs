@@ -52,6 +52,18 @@ builder.Services.AddScoped<IOppsService, OppsService>();
 builder.Services.AddScoped<IOppsRepository, OppsRepository>();
 builder.Services.AddScoped<ITextService, TextService>();
 builder.Services.AddScoped<ITextRepository, TextRepository>();
+<<<<<<< HEAD
+=======
+builder.Services.AddScoped<IAchievementService, AchievementService>();
+builder.Services.AddScoped<IAchievementRepository, AchievementRepository>();
+
+builder.Services.AddScoped<IBadgeService, BadgeService>();
+builder.Services.AddScoped<IBadgeRepository, BadgeRepository>();
+
+builder.Services.AddScoped<IDummyUserRepository, DummyUserRepository>();
+builder.Services.AddScoped<IDummyUserService, DummyUserService>();
+
+>>>>>>> martin-1
 builder.Services.AddScoped<IDBRepository, DBReporitory>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 

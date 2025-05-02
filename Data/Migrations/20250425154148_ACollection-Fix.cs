@@ -4,7 +4,7 @@
 
 namespace Data.Migrations
 {
-    public partial class achivement2 : Migration
+    public partial class ACollectionFix : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

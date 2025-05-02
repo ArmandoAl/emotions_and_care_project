@@ -2659,19 +2659,27 @@
     ]
   },
   "packageFolders": {
-    "/Users/armandoalvarado/.nuget/packages/": {}
+    "/Users/martinortiz/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
+<<<<<<< HEAD
       "projectUniqueName": "/Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/Projects/emotions_and_care_project/Data/Data.csproj",
       "projectName": "Data",
       "projectPath": "/Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/Projects/emotions_and_care_project/Data/Data.csproj",
       "packagesPath": "/Users/armandoalvarado/.nuget/packages/",
       "outputPath": "/Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/Projects/emotions_and_care_project/Data/obj/",
+=======
+      "projectUniqueName": "/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Data/Data.csproj",
+      "projectName": "Data",
+      "projectPath": "/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Data/Data.csproj",
+      "packagesPath": "/Users/martinortiz/.nuget/packages/",
+      "outputPath": "/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Data/obj/",
+>>>>>>> martin-1
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/armandoalvarado/.nuget/NuGet/NuGet.Config"
+        "/Users/martinortiz/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net6.0"
@@ -2683,8 +2691,13 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
+<<<<<<< HEAD
             "/Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/Projects/emotions_and_care_project/Domain/Domain.csproj": {
               "projectPath": "/Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/Projects/emotions_and_care_project/Domain/Domain.csproj"
+=======
+            "/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Domain/Domain.csproj": {
+              "projectPath": "/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Domain/Domain.csproj"
+>>>>>>> martin-1
             }
           }
         }

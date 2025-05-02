@@ -153,13 +153,23 @@ namespace Data.Implementations
                 var hasSticker = patient.userInterface.userStickers
                     .Any(us => us.sticker.stickerId == stickerId);
 
-                if (hasSticker) return false;
+                if (hasSticker) {
+                    // Increment the timesEarned if the sticker is already present
+                    var userSticker = patient.userInterface.userStickers
+                        .FirstOrDefault(us => us.sticker.stickerId == stickerId);
+                    if (userSticker != null) {
+                        userSticker.timesEarned++;
+                    }
+                    db.SaveChanges();
+                    return true;
+                }
 
                 // Add the sticker if not already present
                 patient.userInterface.userStickers.Add(new UserSticker
                 {
                     sticker = sticker,
-                    position = null
+                    position = null,
+                    timesEarned = 1 // Set to 1 when the sticker is given for the first time
                 });
 
                 db.SaveChanges();

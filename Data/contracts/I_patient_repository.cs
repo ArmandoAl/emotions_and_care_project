@@ -51,6 +51,7 @@ namespace Data.Contracts
 
          bool actualizarThemeId(int id, int themeId);
 
+<<<<<<< HEAD
          bool actualizarBackgroundId(int id, int backgroundId);
 
          bool SoftDelete(int id);
@@ -66,5 +67,18 @@ namespace Data.Contracts
 
         bool ModificarContraseña(int idPatient, string password);
 
+=======
+         bool addAchievementToPatient(int idPatient, int idAchievement);
+
+         AchievementCollection? getAllAchievements(int idPatient);
+
+         bool createAchievementCollection(int idPatient);
+
+         bool AddAllAchievementsToPatient(int idPatient);
+
+         List<progressBool> CheckAchievements(int idPatient);
+
+
+>>>>>>> martin-1
     }
 }

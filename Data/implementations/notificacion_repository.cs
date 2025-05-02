@@ -77,10 +77,12 @@ namespace Data.Implementations
 
             using (var db = new DBContext(options: connectionOptions))
             {
+                var now = DateTime.UtcNow;
+
                 var notifications = db.patients
                     .Where(x => x.userId == idPaciente)
                     .SelectMany(x => x.notifications)
-                    .Where(n => n.PostponeUntil == null || n.PostponeUntil <= DateTime.Now)
+                    .Where(n => n.PostponeUntil == null || n.PostponeUntil <= now)
                     .ToList();
 
                 // Orden personalizado:
@@ -93,7 +95,7 @@ namespace Data.Implementations
 
 
 
-        public bool PostponeNotification(int notificationId)
+        public bool postponeNotification(int notificationId)
         {
             var connectionOptions = new DbContextOptionsBuilder<DBContext>()
                 .UseSqlServer(Data.Helpers.Constants.ConnectionString)
@@ -104,7 +106,7 @@ namespace Data.Implementations
                 var notification = db.notifications.FirstOrDefault(n => n.notificationId == notificationId);
                 if (notification == null) return false;
 
-                notification.PostponeUntil = DateTime.Now.AddHours(6);
+                notification.PostponeUntil = DateTime.Now.AddMinutes(1); // Cambia a la fecha que desees
                 notification.FechaModificacion = DateTime.Now;
 
                 db.SaveChanges();

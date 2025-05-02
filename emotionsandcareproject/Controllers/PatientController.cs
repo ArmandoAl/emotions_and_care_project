@@ -362,6 +362,51 @@ namespace API.Controllers
             if (!result) return Task.FromResult<ActionResult>(BadRequest());
             return Task.FromResult<ActionResult>(Ok(result));
         }
+
+        [HttpPost("{id}/addAchievementToPatient/{idAchievement}")]
+        public Task<ActionResult> addAchievementToPatient(int id, int idAchievement)
+        {
+            Console.WriteLine("id: " + id);
+            Console.WriteLine("idAchievement: " + idAchievement);
+            if (id < 1 || idAchievement < 1) return Task.FromResult<ActionResult>(BadRequest());
+            var result = _service.addAchievementToPatient(id, idAchievement);
+            if (!result) return Task.FromResult<ActionResult>(BadRequest());
+            return Task.FromResult<ActionResult>(Ok(result));
+        }
+        [HttpGet("{id}/getAllAchievements")]
+        public Task<ActionResult> getAllAchievements(int id)
+        {
+            if (id < 1) return Task.FromResult<ActionResult>(BadRequest());
+            var result = _service.getAllAchievements(id);
+            if (result == null) return Task.FromResult<ActionResult>(NotFound());
+            return Task.FromResult<ActionResult>(Ok(result));
+        }
+        [HttpPost("{id}/createAchievementCollection")]
+        public Task<ActionResult> createAchievementCollection(int id)
+        {
+            if (id < 1) return Task.FromResult<ActionResult>(BadRequest());
+            var result = _service.createAchievementCollection(id);
+            if (!result) return Task.FromResult<ActionResult>(BadRequest());
+            return Task.FromResult<ActionResult>(Ok(result));
+        }
+
+        [HttpPost("{id}/AddAllAchievementsToPatient")]
+        public Task<ActionResult> AddAllAchievementsToPatient(int id)
+        {
+            if (id < 1) return Task.FromResult<ActionResult>(BadRequest());
+            var result = _service.AddAllAchievementsToPatient(id);
+            if (!result) return Task.FromResult<ActionResult>(BadRequest());
+            return Task.FromResult<ActionResult>(Ok(result));
+        }
+
+        [HttpGet("{id}/CheckAchievements")]
+        public Task<ActionResult> CheckAchievements(int id)
+        {
+            if (id < 1) return Task.FromResult<ActionResult>(BadRequest());
+            var result = _service.CheckAchievements(id);
+            if (result == null) return Task.FromResult<ActionResult>(NotFound());
+            return Task.FromResult<ActionResult>(Ok(result));
+        }
     }       
 }
 

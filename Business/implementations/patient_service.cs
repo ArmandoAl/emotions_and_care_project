@@ -210,5 +210,37 @@ namespace Business.Implementations
             if (idPatient < 1 || themeId < 1) { return false; }
             return _service.actualizarThemeId(idPatient, themeId);
         }
+
+        public bool addAchievementToPatient(int idPatient, int idAchievement)
+        {
+            if (idPatient < 1 || idAchievement < 1) { return false; }
+            return _service.addAchievementToPatient(idPatient, idAchievement);
+        }
+        public AchievementCollection? getAllAchievements(int idPatient)
+        {
+            if (idPatient < 1) { return null; }
+            return _service.getAllAchievements(idPatient);
+        }
+
+        public bool createAchievementCollection(int idPatient)
+        {
+            if (idPatient < 1) { return false; }
+            return _service.createAchievementCollection(idPatient);
+        }
+
+        public bool AddAllAchievementsToPatient(int idPatient)
+        {
+            if (idPatient < 1) { return false; }
+            return _service.AddAllAchievementsToPatient(idPatient);
+
+        }
+
+        public List<progressBool> CheckAchievements(int idPatient)
+        {
+            if (idPatient < 1) { return null; }
+            return _service.CheckAchievements(idPatient);
+        }
+
+
     }
 }

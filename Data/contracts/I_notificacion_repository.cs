@@ -19,6 +19,8 @@ namespace Data.Contracts
 
         List<NotificationModel>? GetNotificationesByPaciente(int idPaciente);
 
+        bool postponeNotification(int notificationId);
+
         bool vincularNotificationConPaciente(int idNotification, int idPaciente);
 
         bool updateDateEmision(int idNotification);

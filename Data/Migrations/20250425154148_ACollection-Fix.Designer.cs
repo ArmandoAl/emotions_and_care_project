@@ -4,6 +4,7 @@ using Data.Implementations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(DBContext))]
-    partial class DBContextModelSnapshot : ModelSnapshot
+    [Migration("20250425154148_ACollection-Fix")]
+    partial class ACollectionFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,6 +75,9 @@ namespace Data.Migrations
 
                     b.Property<DateTime>("dateModified")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("userId")
+                        .HasColumnType("int");
 
                     b.HasKey("achievementCollectionId");
 
@@ -762,13 +767,6 @@ namespace Data.Migrations
 
                     b.Property<DateTime>("bornDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("codeHelper")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("confirmed")
-                        .HasColumnType("bit");
 
                     b.Property<DateTime>("dateCreated")
                         .HasColumnType("datetime2");

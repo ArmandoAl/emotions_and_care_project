@@ -77,6 +77,17 @@ namespace Data.Implementations
 
             public DbSet<InAppText> inAppTexts { get; set; } = null!;
 
+            public DbSet<Badge> badges { get; set; } = null!;
+
+            public DbSet<DummyUser> dummyUsers { get; set; } = null!;
+
+            public DbSet<BadgeCollection> badgeCollections { get; set; } = null!;
+
+            public DbSet<UserBadge> userBadges { get; set; } = null!;
+
+            public DbSet<Achievement> achievements { get; set; } = null!;
+            public DbSet<UserAchievement> userAchievements { get; set; } = null!;
+            public DbSet<AchievementCollection> achievementCollections { get; set; } = null!;
 
             public DBContext(DbContextOptions<DBContext> options) : base(options) { }
 
