@@ -763,13 +763,6 @@ namespace Data.Migrations
                     b.Property<DateTime>("bornDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("codeHelper")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("confirmed")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime>("dateCreated")
                         .HasColumnType("datetime2");
 

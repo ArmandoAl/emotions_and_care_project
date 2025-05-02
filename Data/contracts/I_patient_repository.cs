@@ -15,7 +15,7 @@ namespace Data.Contracts
 
         bool Delete(int id);
 
-        int Update(Patient paciente);
+        bool Update(Patient paciente);
         bool VincularEspecialista(int id, string tokenEspecialista);
 
         string? GetByToken(int idPaciente);
@@ -31,8 +31,6 @@ namespace Data.Contracts
 
 
         int putStickeriInInterface(int idPatient, int idUserSticker, int position);
-
-        bool removeStickerInInterface(int idPatient, int position);
 
         int putFlowerInInterface(int idPatient, int idUserFlower, int position);
 
@@ -51,23 +49,6 @@ namespace Data.Contracts
 
          bool actualizarThemeId(int id, int themeId);
 
-<<<<<<< HEAD
-         bool actualizarBackgroundId(int id, int backgroundId);
-
-         bool SoftDelete(int id);
-
-         bool ConfirmarUsuario(int id);
-
-
-        Patient? GetByEmail(string email);
-
-        string GetForgotPassword(int idPatient);
-
-        bool ValidarCodigo(int idPatient, string code);
-
-        bool ModificarContraseña(int idPatient, string password);
-
-=======
          bool addAchievementToPatient(int idPatient, int idAchievement);
 
          AchievementCollection? getAllAchievements(int idPatient);
@@ -79,6 +60,5 @@ namespace Data.Contracts
          List<progressBool> CheckAchievements(int idPatient);
 
 
->>>>>>> martin-1
     }
 }
