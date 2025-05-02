@@ -133,6 +133,7 @@ namespace Data.Implementations
     // Retrieves a patient by their user ID from the database, including related data such as goals, user interface, and specialist.
     public Patient? Get(int id)
     {
+        Console.WriteLine("GET ID: " + id);
         if (id <= 0) return null;
 
         var connectionOptions = new DbContextOptionsBuilder<DBContext>()
@@ -147,6 +148,9 @@ namespace Data.Implementations
             // Return the patient with all their related information
             return db.patients.Where(x => x.userId == id)
                 .Include(x => x.specialist)
+                .Include(x => x.achievementCollection)
+                    .ThenInclude(ac => ac.userAchievements)
+                        .ThenInclude(ua => ua.achievement)
                 .Include(x => x.goals)
                 .Include(x => x.userInterface)
                 .Include(x => x.userInterface.userFlowers)
@@ -165,6 +169,32 @@ namespace Data.Implementations
                     sex = x.sex,
                     token = x.token,
                     relationalToken = x.relationalToken,
+                    achievementCollection = x.achievementCollection == null ? null : new AchievementCollection
+                    {
+                        achievementCollectionId = x.achievementCollection.achievementCollectionId,
+                        dateCreated = x.achievementCollection.dateCreated,
+                        dateModified = x.achievementCollection.dateModified,
+                        userAchievements = x.achievementCollection.userAchievements.Select(ua => new UserAchievement
+                        {
+                            userAchievementId = ua.userAchievementId,
+                            achievementId = ua.achievementId,
+                            progress = ua.progress,
+                            dateEarned = ua.dateEarned,
+                            dateCreated = ua.dateCreated,
+                            dateModified = ua.dateModified,
+                            achievement = new Achievement
+                            {
+                                achievementId = ua.achievement.achievementId,
+                                name = ua.achievement.name,
+                                description = ua.achievement.description,
+                                category = ua.achievement.category,
+                                imageUrl = ua.achievement.imageUrl,
+                                progressMap = ua.achievement.progressMap,
+                                dateCreated = ua.achievement.dateCreated,
+                                dateModified = ua.achievement.dateModified
+                            }
+                        }).ToList()
+                    },
                     goals = x.goals.Select(y => new Goal
                     {
                         goalId = y.goalId,
