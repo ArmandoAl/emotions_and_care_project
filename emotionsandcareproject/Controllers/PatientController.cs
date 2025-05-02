@@ -1,31 +1,26 @@
 ﻿using Business.Contracts;
-using Business.Implementations;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Net.Mail;
 using System.Threading.Tasks;
 
 namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
     public class PacienteController : Controller
     {
         private readonly IPatientService _service;
         private readonly ISpecialistService _specialistService;
         private readonly PushNotificationService _pushNotificationService;
-
-        private readonly IEmailService _emailService;
-        public PacienteController(IPatientService service, IEmailService emailService, PushNotificationService pushNotificationService, ISpecialistService specialistService)
+        public PacienteController(IPatientService service, PushNotificationService pushNotificationService, ISpecialistService specialistService)
         {
             _service = service;
-            _emailService = emailService;
             _pushNotificationService = pushNotificationService;
             _specialistService = specialistService;
         }
-
 
         [HttpPost]
         public Task<ActionResult> Add(AddPatient paciente)
@@ -33,112 +28,6 @@ namespace API.Controllers
             if (paciente == null) return Task.FromResult<ActionResult>(BadRequest());
             var result = _service.Add(paciente);
             if (result == 0) return Task.FromResult<ActionResult>(BadRequest());
-
-            var patient = _service.Get(result);
-
-            if (patient == null) return Task.FromResult<ActionResult>(BadRequest());
-
-
-            string confirmationLink = $"https://emotionsandcare-erffhse3f7aecnb0.eastus-01.azurewebsites.net/Api/Paciente/confirmarUsuario/{patient.userId}";
-            string subject = "Confirma tu registro";
-            string body = $"<p>Hola {patient!.name},</p><p>Por favor <a href='{confirmationLink}'>confirma tu cuenta aquí</a>.</p>";
-            
-            try {
-                var res = _emailService.sendMail(result, new EmailClass
-                {
-                    To = paciente.mail,
-                    Subject = subject,
-                    Body = body
-                });
-
-                if (!res)
-                {
-                    Console.WriteLine("Error al enviar el correo electrónico.");
-                }
-            } catch (Exception e) {
-                Console.WriteLine(e.Message);
-            }
-            
-
-            return Task.FromResult<ActionResult>(Ok(result));
-        }
-
-        //confirmar usuario put
-        [HttpPut("confirmarUsuario/{id}")]
-        public Task<ActionResult> ConfirmarUsuario(int id)
-        {
-            if (id < 1) return Task.FromResult<ActionResult>(BadRequest());
-            var result = _service.ConfirmarUsuario(id);
-            if (!result) return Task.FromResult<ActionResult>(BadRequest());
-            return Task.FromResult<ActionResult>(Ok(result));
-        }
-
-        //olvidar contraseña
-        [HttpPut("olvidarContraseña/{email}")]
-        public Task<ActionResult> OlvidarContraseña(string email)
-        {
-            if (email == null) return Task.FromResult<ActionResult>(BadRequest());
-            var patient = _service.GetByEmail(email);
-            Console.WriteLine("patient: " + patient);
-
-
-            if (patient == null) return Task.FromResult<ActionResult>(BadRequest());
-
-            var code = _service.GetForgotPassword(patient.userId);
-            Console.WriteLine(code);
-
-            if (code == "") return Task.FromResult<ActionResult>(BadRequest());
-
-            string codeText = code.ToString();
-
-            string subject = "Recupera tu contraseña";
-            //muestra el código en el correo, el usuario lo pondra en la misma app
-            string body = $"<p>Hola,</p><p>Tu código de recuperación es: {codeText}</p>";
-            try {
-                var res = _emailService.sendMail(patient.userId, new EmailClass
-                {
-                    To = email,
-                    Subject = subject,
-                    Body = body
-                });
-
-                if (!res)
-                {
-                    Console.WriteLine("Error al enviar el correo electrónico.");
-                }
-            } catch (Exception e) {
-                Console.WriteLine(e.Message);
-            }
-
-            return Task.FromResult<ActionResult>(Ok());
-        }
-
-        //validar codigo
-        [HttpPut("validarCodigo/{gmail}/{codigo}")]
-        public Task<ActionResult> ValidarCodigo(string gmail, string codigo)
-        {
-            if (gmail == "" || codigo == null) return Task.FromResult<ActionResult>(BadRequest());
-
-            var patient = _service.GetByEmail(gmail);
-
-            if(patient == null) return Task.FromResult<ActionResult>(BadRequest());
-
-            var result = _service.ValidarCodigo(patient.userId, codigo);
-            if (!result) return Task.FromResult<ActionResult>(BadRequest());
-            return Task.FromResult<ActionResult>(Ok(result));
-        }
-
-        //modificar contraseña
-        [HttpPut("modificarContraseña/{gmail}/{nuevaContraseña}")]
-        public Task<ActionResult> ModificarContraseña(string gmail, string nuevaContraseña)
-        {
-            if (gmail == "" || nuevaContraseña == null) return Task.FromResult<ActionResult>(BadRequest());
-            var patient = _service.GetByEmail(gmail);
-            if (patient == null) return Task.FromResult<ActionResult>(BadRequest());
-
-            
-            var result = _service.ModificarContraseña(patient.userId, nuevaContraseña);
-            if (!result) return Task.FromResult<ActionResult>(BadRequest());
             return Task.FromResult<ActionResult>(Ok(result));
         }
 
@@ -165,6 +54,7 @@ namespace API.Controllers
         {
             if (paciente == null) return Task.FromResult<ActionResult>(BadRequest());
             var result = _service.Update(paciente);
+            if (!result) return Task.FromResult<ActionResult>(BadRequest());
             return Task.FromResult<ActionResult>(Ok(result));
         }
 
@@ -251,17 +141,6 @@ namespace API.Controllers
             return Task.FromResult<ActionResult>(Ok(result));
         }
 
-        //removeStickerInInterface
-        [HttpPut("{id}/removeStickerInInterface/{position}")]
-        public Task<ActionResult> removeStickerInInterface(int id, int position)
-        {
-            if (id < 1) return Task.FromResult<ActionResult>(BadRequest());
-            var result = _service.removeStickerInInterface(id, position);
-
-            if (result == false) return Task.FromResult<ActionResult>(BadRequest());
-            return Task.FromResult<ActionResult>(Ok(result));
-        }
-
         //putFlowerInInterface
         [HttpPut("{id}/putFlowerInInterface/{idFlower}/{position}")]
         public Task<ActionResult> putFlowerInInterface(int id, int idFlower, int position)
@@ -314,51 +193,12 @@ namespace API.Controllers
 
 
 
-        //bool actualizarThemeId(intactualizarThemeId idPatient, int themeId)
+        //bool actualizarThemeId(int idPatient, int themeId)
         [HttpPut("{id}/actualizarThemeId/{themeId}")]
         public Task<ActionResult> actualizarThemeId(int id, int themeId)
         {
             if (id < 1) return Task.FromResult<ActionResult>(BadRequest());
             var result = _service.actualizarThemeId(id, themeId);
-            Console.WriteLine(result);
-
-            if (!result) return Task.FromResult<ActionResult>(BadRequest());
-            return Task.FromResult<ActionResult>(Ok(result));
-        }
-
-        //actualizar backgroundUrl
-        [HttpPut("{id}/actualizarBackgroundUrl/{backgroundId}")]
-        public Task<ActionResult> actualizarBackgroundUrl(int id, int backgroundId)
-        {
-            if (id < 1) return Task.FromResult<ActionResult>(BadRequest());
-            var result = _service.actualizarBackgroundId(id, backgroundId);
-            if (!result) return Task.FromResult<ActionResult>(BadRequest());
-            return Task.FromResult<ActionResult>(Ok(result));
-        }
-
-        //newDeletePatient
-        [HttpDelete("{id}/delete")]
-        public Task<ActionResult> DeletePatient(int id)
-        {
-            if (id < 1) return Task.FromResult<ActionResult>(BadRequest());
-            var result = _service.SoftDelete(id);
-            if (!result) return Task.FromResult<ActionResult>(BadRequest());
-            return Task.FromResult<ActionResult>(Ok(result));
-        }
-
-
-        //mandar correo 
-        [HttpPost("{id}/sendEmail/{email}/{subject}/{body}")]
-        public Task<ActionResult> SendEmail(int id, string email, string subject, string body)
-        {
-            if (id < 1 || email == null || subject == null || body == null) return Task.FromResult<ActionResult>(BadRequest());
-            var result = _emailService.sendMail(id, new EmailClass
-            {
-                To = email,
-                Subject = subject,
-                Body = body
-            });
-
             if (!result) return Task.FromResult<ActionResult>(BadRequest());
             return Task.FromResult<ActionResult>(Ok(result));
         }

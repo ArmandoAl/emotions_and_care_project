@@ -50,6 +50,7 @@ namespace API.Controllers
         {
             if (especialista == null) return Task.FromResult<ActionResult>(BadRequest());
             var result = _service.Update(especialista);
+            if (!result) return Task.FromResult<ActionResult>(BadRequest());
             return Task.FromResult<ActionResult>(Ok(result));
         }
 

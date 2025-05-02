@@ -50,10 +50,8 @@ builder.Services.AddScoped<IStagesRepository, StageRepository>();
 builder.Services.AddSingleton<PushNotificationService>();
 builder.Services.AddScoped<IOppsService, OppsService>();
 builder.Services.AddScoped<IOppsRepository, OppsRepository>();
-builder.Services.AddScoped<ITextService, TextService>();
-builder.Services.AddScoped<ITextRepository, TextRepository>();
+
 builder.Services.AddScoped<IDBRepository, DBReporitory>();
-builder.Services.AddScoped<IEmailService, EmailService>();
 
 
 var app = builder.Build();

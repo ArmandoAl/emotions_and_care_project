@@ -376,32 +376,6 @@ namespace Data.Migrations
                     b.ToTable("ImageModel");
                 });
 
-            modelBuilder.Entity("Domain.InAppText", b =>
-                {
-                    b.Property<int>("textId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("textId"), 1L, 1);
-
-                    b.Property<DateTime>("dateCreated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("modifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("text")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("textType")
-                        .HasColumnType("int");
-
-                    b.HasKey("textId");
-
-                    b.ToTable("inAppTexts");
-                });
-
             modelBuilder.Entity("Domain.Note", b =>
                 {
                     b.Property<int>("noteId")
@@ -462,9 +436,6 @@ namespace Data.Migrations
 
                     b.Property<int?>("PatientuserId")
                         .HasColumnType("int");
-
-                    b.Property<DateTime?>("PostponeUntil")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("Titulo")
                         .IsRequired()
@@ -569,13 +540,6 @@ namespace Data.Migrations
 
                     b.Property<DateTime>("bornDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("codeHelper")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("confirmed")
-                        .HasColumnType("bit");
 
                     b.Property<DateTime>("dateCreated")
                         .HasColumnType("datetime2");

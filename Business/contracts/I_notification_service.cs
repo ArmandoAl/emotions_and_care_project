@@ -23,8 +23,6 @@ namespace Business.Contracts
 
         bool updateDateEmision(int idNotificacion);
 
-        bool postponeNotification(int idNotificacion);
-
         List<NotificationModel> init(int idPaciente); 
     }
 }

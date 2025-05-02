@@ -55,6 +55,8 @@ namespace API.Controllers
         public IActionResult recomendationCompleted(int recommendationId, int userId)
         {
             if (recommendationId <= 0 || userId <= 0) return BadRequest();
+            Console.WriteLine("idRecomendation: " + recommendationId);
+            Console.WriteLine("idUsuario: " + userId);
             return Ok(_recomendacionService.recomendationCompleted(recommendationId, userId));
         }
     }

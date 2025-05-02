@@ -176,10 +176,13 @@ namespace Data.Implementations
                 cartas = db.carts.Where(c => c.state == CartState.sent).
                     ToList();
 
+                Console.WriteLine("cartas: " + cartas.Count);
+
                 foreach (var carta in cartas)
                 {
                     if (hasMoreThanSevenDays(carta))
                     {
+                        Console.WriteLine("carta: " + carta.cartId);
                         carta.state = CartState.expired;
                         db.carts.Update(carta);
                     }

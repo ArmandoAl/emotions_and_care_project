@@ -34,11 +34,6 @@ namespace Business.Implementations
             var notiList = _notificacionRepository.GetNotificationesByPaciente(idPaciente);
             if (notiList != null)
             {
-
-                var now = DateTime.Now;
-                var filteredList = notiList
-                    .Where(n => n.PostponeUntil == null || n.PostponeUntil <= now)
-                    .ToList();
                 foreach (var noti in notiList)
                 {
                     if (noti.Titulo == "Agenda" && noti.Descripcion.StartsWith("Tu cita es"))
@@ -66,102 +61,35 @@ namespace Business.Implementations
 
 
 
-
             List<Recomendation>? recomandaciones = _recomendacionRepository.GetRecomentaciones();
 
             if (recomandaciones != null)
             {
-                var now = DateTime.Now;
-
-                // Filter out recommendations that have a PostponeUntil date in the future
-                var validRecommendationNotifications = notiList?
-                    .Where(n => n.notificationType == NotificationType.RecommendationNotification &&
-                                (n.PostponeUntil == null || n.PostponeUntil <= now))
-                    .ToList();
-
-                if (validRecommendationNotifications != null && validRecommendationNotifications.Count > 0)
+               //agrega una recomendacion ramdom como notificacion
+               Random rnd = new Random();
+                int index = rnd.Next(recomandaciones.Count);
+                var notificacion = new NotificationModel
                 {
-                    foreach (var notification in validRecommendationNotifications)
-                    {
-                        var recomendationId = notification.recomendationId;
-                        var recomendation = recomendationId.HasValue 
-                            ? _recomendacionRepository.Get(recomendationId.Value) 
-                            : null;
+                    notificationType = NotificationType.RecommendationNotification,
+                    Titulo = "Recomendación",
+                    Descripcion = recomandaciones[index].content,
+                    recomendationId = recomandaciones[index].recomendationId,
+                    recomendationType = recomandaciones[index].type,
+                    reference = recomandaciones[index].reference,
+                   // Url = recomandaciones[index].Url
+                };
 
-                        if (recomendation != null)
-                        {
-                            var notificacion = new NotificationModel
-                            {
-                                notificationType = NotificationType.RecommendationNotification,
-                                Titulo = "Recomendación",
-                                Descripcion = recomendation.content,
-                                recomendationId = recomendation.recomendationId,
-                                recomendationType = recomendation.type,
-                                reference = recomendation.reference,
-                                // Url = recomendation.Url
-                            };
+                var idNotificacion = _notificacionRepository.AddNotification(notificacion);
 
-                            var idNotification = _notificacionRepository.AddNotification(notificacion);
-
-                            if (idNotification > 0)
-                            {
-                                var vinculacion = _notificacionRepository.vincularNotificationConPaciente(idNotification, idPaciente);
-                                if (!vinculacion)
-                                {
-                                    _notificacionRepository.DeleteNotification(idNotification);
-                                }
-                            }
-                        }
-                    }
-                }
-                else
+                if (idNotificacion > 0)
                 {
-                    // No valid scheduled recommendations were found, so we can optionally show a random one instead
-                    // (Uncomment this section if fallback is desired)
-
-                    
-                    Random rnd = new Random();
-                    int index = rnd.Next(recomandaciones.Count);
-                    var randomRecomendation = recomandaciones[index];
-
-                    var notificacion = new NotificationModel
+                    var vinculacion = _notificacionRepository.vincularNotificationConPaciente(idNotificacion, idPaciente);
+                    if (!vinculacion)
                     {
-                        notificationType = NotificationType.RecommendationNotification,
-                        Titulo = "Recomendación",
-                        Descripcion = randomRecomendation.content,
-                        recomendationId = randomRecomendation.recomendationId,
-                        recomendationType = randomRecomendation.type,
-                        reference = randomRecomendation.reference,
-                        // Url = randomRecomendation.Url
-                    };
-
-                    var idNotificacion = _notificacionRepository.AddNotification(notificacion);
-
-                    if (idNotificacion > 0)
-                    {
-                        var vinculacion = _notificacionRepository.vincularNotificationConPaciente(idNotificacion, idPaciente);
-                        if (!vinculacion)
-                        {
-                            _notificacionRepository.DeleteNotification(idNotificacion);
-                        }
+                        _notificacionRepository.DeleteNotification(idNotificacion);
                     }
-                }
-
-
-                        //agrega una recomendacion ramdom como notificacion
-                            //Random rnd = new Random();
-                            //int index = rnd.Next(recomandaciones.Count);
-                            //var notificacion = new NotificationModel
-                            //{
-                            //    notificationType = NotificationType.RecommendationNotification,
-                            //    Titulo = "Recomendación",
-                            //    Descripcion = recomandaciones[index].content,
-                            //    recomendationId = recomandaciones[index].recomendationId,
-                            //    recomendationType = recomandaciones[index].type,
-                            //    reference = recomandaciones[index].reference,
-                            //   // Url = recomandaciones[index].Url
-                            //};
-                        }
+                }   
+            }
 
 
             bool thereCartsForOpen = _cartaRepository.thereCartsForOpen(idPaciente);
@@ -250,10 +178,7 @@ namespace Business.Implementations
             }
 
             //TODO: Agregar notificaciones de buzon de notas
-            return _notificacionRepository.GetNotificationesByPaciente(idPaciente)?
-                .Where(n => n.PostponeUntil == null || n.PostponeUntil <= DateTime.Now)
-                .ToList() ?? new List<NotificationModel>();
-
+            return _notificacionRepository.GetNotificationesByPaciente(idPaciente)!;
 
         }
 
@@ -284,12 +209,6 @@ namespace Business.Implementations
             return 0;
         }
 
-        public bool PostponeNotificacion(int idNotificacion)
-        {
-            if (idNotificacion <= 0) return false;
-            return _notificacionRepository.postponeNotification(idNotificacion);
-        }
-
         public bool DeleteNotificacion(int idNotificacion)
         {
             if (idNotificacion <= 0) return false;
@@ -312,12 +231,6 @@ namespace Business.Implementations
         public bool updateDateEmision(int idNotificacion)
         {
             return _notificacionRepository.updateDateEmision(idNotificacion);
-        }
-
-        public bool postponeNotification(int idNotificacion)
-        {
-            if (idNotificacion <= 0) return false;
-            return _notificacionRepository.postponeNotification(idNotificacion);
         }
 
         public bool UpdateNotificacion(NotificationModel notificacion)
