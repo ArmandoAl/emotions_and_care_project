@@ -9,7 +9,7 @@ namespace Business.Contracts
 {
     public interface ICartService
     {
-        GoalWithCart? Add(Cart carta, int idUsuario, bool isPatient);
+        AchievementWithCart? Add(Cart carta, int idUsuario, bool isPatient);
 
         Cart? Get(int idCarta);
 
@@ -19,7 +19,7 @@ namespace Business.Contracts
 
         bool Delete(int idCarta);
 
-        GoalWithCartAnswer? AddRespuesta(CartAnswer respuesta, int idCarta);
+        AchievementWithCartAnswer? AddRespuesta(CartAnswer respuesta, int idCarta);
 
         List<Cart>? initCarts(int idUsuario);
 

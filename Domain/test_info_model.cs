@@ -43,5 +43,16 @@ namespace Domain
         // It is nullable (Goal?), meaning it might not always be assigned.
         public Goal? Logro { get; set; }
     }
+
+    public class AchievementWithTestInfoModel
+    {
+        // The unique identifier for the achievement.
+        public int? achievementId { get; set; }
+
+        // The unique identifier for the test information model.
+        public TestInfoModel TestInfoModel { get; set; } = new TestInfoModel();
+    }
+
+
 }
 

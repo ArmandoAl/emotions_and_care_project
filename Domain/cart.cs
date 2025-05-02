@@ -58,4 +58,13 @@ namespace Domain
         // The unique identifier of the cart associated with the goal
         public int cartId { get; set; }
     }
+
+    public class AchievementWithCart
+    {
+        // The unique identifier of the cart associated with the achievement
+        public int cartId { get; set; }
+
+        // The unique identifier of the achievement associated with the cart
+        public int? achievementId { get; set; }
+    }
 }

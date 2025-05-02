@@ -64,4 +64,14 @@ namespace Domain
         // The unique identifier for the associated date
         public int dateId { get; set; }
     }
+
+
+    public class AchievementWithDate
+    {
+        // The unique identifier for the achievement (can be null)
+        public int? achievementId { get; set; }
+
+        // The unique identifier for the date associated with the achievement
+        public int dateId { get; set; }
+    }
 }

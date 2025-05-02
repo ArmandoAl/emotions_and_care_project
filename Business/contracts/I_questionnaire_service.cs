@@ -19,7 +19,7 @@ namespace Business.Contracts
 
         Questionnaire? GetCuestionario(int idCuestionario);
 
-        GoalWithTestInfoModel? completarCuestionario(int idCuestionario, int idPaciente,
+        AchievementWithTestInfoModel? completarCuestionario(int idCuestionario, int idPaciente,
                 List<TestQuestionForComplete> respuestas, bool isFirstTime);
             
 

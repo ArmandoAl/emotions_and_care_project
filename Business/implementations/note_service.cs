@@ -17,14 +17,20 @@ namespace Business.Implementations
 
       private readonly IItemsRepository _itemsRepository;
 
-      public NotaService(INoteRepository notaRepository, IGoalRepository logroRepository, IItemsRepository itemsRepository)
+        private readonly IPatientRepository _patientRepository;
+
+        // Constructor
+
+      public NotaService(INoteRepository notaRepository, IGoalRepository logroRepository, IItemsRepository itemsRepository, 
+            IPatientRepository patientRepository)
         {
             _notaRepository = notaRepository;
             _logroRepository = logroRepository;
             _itemsRepository = itemsRepository;
+            _patientRepository = patientRepository;
         }
        
-        public GoalWithNote? AddNota(Note nota, int idPaciente, bool isFirtTime)
+        public AchievementWithNote? AddNota(Note nota, int idPaciente, bool isFirtTime)
         {
             if (nota == null) return null;
     
@@ -32,38 +38,21 @@ namespace Business.Implementations
 
             if (idNota > 0)
             {
-                if (isFirtTime)
+                var idLogro = _patientRepository.checkAchievement_Community(idPaciente);
+
+                if (idLogro > 0)
                 {
-                    var idLogro = _logroRepository.AddGoalPatient(idPaciente, 3);
-                    if (idLogro <= 0)
+                    return new AchievementWithNote
                     {
-                        
-                        _notaRepository.DeleteNote(idNota, idPaciente);
-                        return null;
-                    }
-
-
-                    bool addStickerResult = _itemsRepository.addStickerToPatient(3, idPaciente);
-
-                    if (!addStickerResult)
-                    {
-                        _notaRepository.DeleteNote(idNota, idPaciente);
-
-                        return null;
-
-                    }
-
-
-                    return new GoalWithNote 
-                    {
-                        goal = _logroRepository.GetGoal(idLogro),
+                        achievementId = idLogro,
                         noteId = idNota
                     };
-
-                } else {
-                    return new GoalWithNote
+                }
+                else
+                {
+                    return new AchievementWithNote
                     {
-                        goal = null,
+                        achievementId = 0,
                         noteId = idNota
                     };
                 }

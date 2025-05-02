@@ -133,6 +133,7 @@ namespace Data.Implementations
     // Retrieves a patient by their user ID from the database, including related data such as goals, user interface, and specialist.
     public Patient? Get(int id)
     {
+        Console.WriteLine("GET ID: " + id);
         if (id <= 0) return null;
 
         var connectionOptions = new DbContextOptionsBuilder<DBContext>()
@@ -147,6 +148,9 @@ namespace Data.Implementations
             // Return the patient with all their related information
             return db.patients.Where(x => x.userId == id)
                 .Include(x => x.specialist)
+                .Include(x => x.achievementCollection)
+                    .ThenInclude(ac => ac.userAchievements)
+                        .ThenInclude(ua => ua.achievement)
                 .Include(x => x.goals)
                 .Include(x => x.userInterface)
                 .Include(x => x.userInterface.userFlowers)
@@ -165,6 +169,32 @@ namespace Data.Implementations
                     sex = x.sex,
                     token = x.token,
                     relationalToken = x.relationalToken,
+                    achievementCollection = x.achievementCollection == null ? null : new AchievementCollection
+                    {
+                        achievementCollectionId = x.achievementCollection.achievementCollectionId,
+                        dateCreated = x.achievementCollection.dateCreated,
+                        dateModified = x.achievementCollection.dateModified,
+                        userAchievements = x.achievementCollection.userAchievements.Select(ua => new UserAchievement
+                        {
+                            userAchievementId = ua.userAchievementId,
+                            achievementId = ua.achievementId,
+                            progress = ua.progress,
+                            dateEarned = ua.dateEarned,
+                            dateCreated = ua.dateCreated,
+                            dateModified = ua.dateModified,
+                            achievement = new Achievement
+                            {
+                                achievementId = ua.achievement.achievementId,
+                                name = ua.achievement.name,
+                                description = ua.achievement.description,
+                                category = ua.achievement.category,
+                                imageUrl = ua.achievement.imageUrl,
+                                progressMap = ua.achievement.progressMap,
+                                dateCreated = ua.achievement.dateCreated,
+                                dateModified = ua.achievement.dateModified
+                            }
+                        }).ToList()
+                    },
                     goals = x.goals.Select(y => new Goal
                     {
                         goalId = y.goalId,
@@ -1575,6 +1605,10 @@ db.diaries.RemoveRange(diariesToDelete);
             }
         }
 
+
+
+
+
         //Dictionary
         private readonly Dictionary<string, Func<int, int, bool>> _achievementFunctions = new()
         {
@@ -1583,9 +1617,9 @@ db.diaries.RemoveRange(diariesToDelete);
             { "BuenCamino", CheckBadge_BuenCamino },
             { "ElCaminoALaMejora", CheckBadge_ElCaminoALaMejora},
             { "validateFirstSpecialist", CheckBadge_ValidateFirstSpecialist },
-            { "validateThirdAppointment", CheckBadge_ValidateFirstAppointment },
-            { "validateFirstDate", CheckBadge_ValidateFirstDate },
-            { "validateThreeDates", CheckBadge_ValidateThreeDates },
+            { "validateHoraVerdadt", CheckBadge_ValidateFirstAppointment },
+            { "validateFirstAppointment", CheckBadge_ValidateFirstDate },
+            { "validateThirdAppointment", CheckBadge_ValidateThreeDates },
             { "validateFirstCardCreated", CheckBadge_ValidateFirstLetter },
             { "validateFirstCardResponse", CheckBadge_ValidateFirstLetterAnswer },
             { "validateThirdCardCreated", CheckBadge_ValidateThreeLetters },
@@ -1694,7 +1728,7 @@ db.diaries.RemoveRange(diariesToDelete);
 
                 if (isBadgeEarned)
                 {
-                    //userAchievement.dateEarned = DateTime.Now;
+                    userAchievement.dateEarned = DateTime.Now;
                 }
                 Console.WriteLine("Esa es la Cuestion - Badge: " + isBadgeEarned);
                 //db.SaveChanges();
@@ -1734,7 +1768,7 @@ db.diaries.RemoveRange(diariesToDelete);
                 bool isBadgeEarned = userAchievement.progress >= 2;
                 if (isBadgeEarned)
                 {
-                    //userAchievement.dateEarned = DateTime.Now;
+                    userAchievement.dateEarned = DateTime.Now;
                 }
                 Console.WriteLine("Deja Vu - Badge: " + isBadgeEarned);
                 //db.SaveChanges();
@@ -1813,7 +1847,7 @@ db.diaries.RemoveRange(diariesToDelete);
                 bool isBadgeEarned = userAchievement.progress >= 3;
                 if (isBadgeEarned)
                 {
-                    //userAchievement.dateEarned = DateTime.Now;
+                    userAchievement.dateEarned = DateTime.Now;
                 }
                 Console.WriteLine("El Camino a la Mejora - Badge: " + isBadgeEarned);
                 //db.SaveChanges();
@@ -2121,6 +2155,213 @@ db.diaries.RemoveRange(diariesToDelete);
         }
         
 
+        public int? giveAchievementToPatient(int idPatient, int achievementId)
+        {
+            if (idPatient <= 0 || achievementId <= 0) return null;
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var thisPaciente = db.patients
+                    .Include(u => u.achievementCollection)
+                        .ThenInclude(bc => bc.userAchievements)
+                    .FirstOrDefault(u => u.userId == idPatient);
+
+                Console.WriteLine("thisPaciente: " + thisPaciente.name);
+                Console.WriteLine("AchievementCollection:" + thisPaciente.achievementCollection.dateModified);
+
+                if (thisPaciente == null)
+                    return null;
+
+                var userAchievement = thisPaciente.achievementCollection.userAchievements
+                    .FirstOrDefault(ua => ua.achievementId == achievementId);
+
+                if (userAchievement == null)
+                    return null;
+
+                userAchievement.dateEarned = DateTime.Now;
+                userAchievement.progress = 1; // Assuming the achievement is earned immediately
+                db.SaveChanges();
+                return achievementId;
+            }
+        }
+
+        public int? checkAchievement_Questionnaires(int idUsuario)
+        {
+            if (idUsuario <= 0) return null;
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var thisPaciente = db.patients
+                    .Include(u => u.achievementCollection)
+                        .ThenInclude(ac => ac.userAchievements)
+                            .ThenInclude(ua => ua.achievement)
+                    .FirstOrDefault(u => u.userId == idUsuario);
+
+                if (thisPaciente == null)
+                    return null;
+
+                var userAchievements = thisPaciente.achievementCollection.userAchievements;
+
+                // Define which functions are related to questionnaires
+                var questionnaireAchievementFunctions = new List<string>
+                {
+                    "EsaFueLaCuestion",
+                    "DejaVu",
+                    "BuenCamino",
+                    "ElCaminoALaMejora"
+                };
+
+                foreach (var funcName in questionnaireAchievementFunctions)
+                {
+                    if (_achievementFunctions.TryGetValue(funcName, out var func))
+                    {
+                        var ua = userAchievements.FirstOrDefault(ua =>
+                            ua.achievement != null &&
+                            ua.achievement.progressMap == funcName &&
+                            ua.dateEarned == null);
+
+                        if (ua != null)
+                        {
+                            Console.WriteLine($"Checking achievement {ua.achievementId} - {ua.achievement.name}");
+                            bool isCompleted = func(idUsuario, ua.achievementId);
+                            if (isCompleted)
+                            {
+                                return ua.achievementId;
+                            }
+                        }
+                    }
+                }
+
+                return null;
+            }
+        }
+
+        public int? checkAchievement_Community(int idUsuario)
+        {
+            if (idUsuario <= 0) return null;
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var thisPaciente = db.patients
+                    .Include(u => u.achievementCollection)
+                        .ThenInclude(ac => ac.userAchievements)
+                            .ThenInclude(ua => ua.achievement)
+                    .FirstOrDefault(u => u.userId == idUsuario);
+
+                if (thisPaciente == null)
+                    return null;
+
+                var userAchievements = thisPaciente.achievementCollection.userAchievements;
+
+                // Define which functions are related to community
+                var communityAchievementFunctions = new List<string>
+                {
+                    "validateFirstCardCreated",
+                    "validateFirstCardResponse",
+                    "validateThirdCardCreated"
+                };
+
+                foreach (var funcName in communityAchievementFunctions)
+                {
+                    if (_achievementFunctions.TryGetValue(funcName, out var func))
+                    {
+                        var ua = userAchievements.FirstOrDefault(ua =>
+                            ua.achievement != null &&
+                            ua.achievement.progressMap == funcName &&
+                            ua.dateEarned == null);
+
+                        if (ua != null)
+                        {
+                            Console.WriteLine($"Checking achievement {ua.achievementId} - {ua.achievement.name}");
+                            bool isCompleted = func(idUsuario, ua.achievementId);
+                            if (isCompleted)
+                            {
+                                return ua.achievementId;
+                            }
+                        }
+                    }
+                }
+                return null;
+
+            }
+
+        }
+
+        public int? checkAchievement_Diary(int idUsuario)
+        {
+            if (idUsuario <= 0) return null;
+            return null;
+        }
+
+        public int? checkAchievement_Agenda(int idUsuario)
+        {
+            if (idUsuario <= 0) return null;
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var thisPaciente = db.patients
+                    .Include(u => u.achievementCollection)
+                        .ThenInclude(ac => ac.userAchievements)
+                            .ThenInclude(ua => ua.achievement)
+                    .FirstOrDefault(u => u.userId == idUsuario);
+
+                if (thisPaciente == null)
+                    return null;
+
+                var userAchievements = thisPaciente.achievementCollection.userAchievements;
+
+                // Define which functions are related to agenda
+                var agendaAchievementFunctions = new List<string>
+                {
+                    "validateFirstSpecialist",
+                    "validateFirstAppointment",
+                    "validateThirdAppointment",
+                    "validateHoraVerdadt"
+
+                };
+
+                foreach (var funcName in agendaAchievementFunctions)
+                {
+                    if (_achievementFunctions.TryGetValue(funcName, out var func))
+                    {
+                        var ua = userAchievements.FirstOrDefault(ua =>
+                            ua.achievement != null &&
+                            ua.achievement.progressMap == funcName &&
+                            ua.dateEarned == null);
+
+                        if (ua != null)
+                        {
+                            Console.WriteLine($"Checking achievement {ua.achievementId} - {ua.achievement.name}");
+                            bool isCompleted = func(idUsuario, ua.achievementId);
+                            if (isCompleted)
+                            {
+                                return ua.achievementId;
+                            }
+                        }
+                    }
+                }
+                return null;
+            }
+        }
+
+        
+
 
 
 
@@ -2174,15 +2415,10 @@ db.diaries.RemoveRange(diariesToDelete);
         */
 
         
-
-
-
-
-
-        
-    }
-   
 }
+}
+
+
 
 
 //crea un mapa que retorne funciones, me explico, si el name es firstDiary, lo que retornas es la funcion validateFirstDiary, y asi con todos los nombres de los stageRequest

@@ -9,7 +9,7 @@ namespace Business.Contracts
 {
     public interface INoteService
     {
-        GoalWithNote? AddNota(Note nota, int idPaciente, bool isFirtTime);
+        AchievementWithNote? AddNota(Note nota, int idPaciente, bool isFirtTime);
 
         bool UpdateNota(Note nota, int idPaciente);
 

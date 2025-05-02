@@ -44,13 +44,14 @@ namespace Business.Implementations
             return 0;
         }
 
-        public GoalWithTestInfoModel? completarCuestionario(int idCuestionario, int idPaciente, List<TestQuestionForComplete> respuestas, bool isFirstTime)
+        public AchievementWithTestInfoModel? completarCuestionario(int idCuestionario, int idPaciente, List<TestQuestionForComplete> respuestas, bool isFirstTime)
         {
 
            if (idCuestionario <= 0 || idPaciente <= 0) return null;
 
             var result = _cuestionarioService.completarQuestionnaire(idCuestionario, idPaciente);
 
+            Console.WriteLine("result: " + result);
             if (result)
             {
               
@@ -58,44 +59,38 @@ namespace Business.Implementations
 
                 if (idHistoralCuestionario >= 0)
                 {
-                 
-                
                     if(isFirstTime) {
-                        var idLogro = _logroService.AddGoalPatient(idPaciente, 5);
-
-                        bool addStickerResult = _itemsRepository.addStickerToPatient(5, idPaciente);
-
                         _patientRepository.registerSet(idPaciente, "firstTestCompleted");
+                    }
+                    var idLogro = _patientRepository.checkAchievement_Questionnaires(idPaciente);
 
-
-                        if (addStickerResult == false) return null;
-
-                        if (idLogro <= 0) return null;
-
-                        return new GoalWithTestInfoModel
-                        {
-                        TestInfoModel = _cuestionarioService.GetTestInfoModel(
-                            idPaciente,
-                            idCuestionario,
-                            idHistoralCuestionario)!,
-
-                        Logro = _logroService.GetGoal(idLogro)
-                        };
-                    } else {
-
-                        return new GoalWithTestInfoModel
+                    if (idLogro > 0)
+                    {
+                        return new AchievementWithTestInfoModel
                         {
                             TestInfoModel = _cuestionarioService.GetTestInfoModel(
                                 idPaciente,
                                 idCuestionario,
-                                idHistoralCuestionario
-                                )!,
+                                idHistoralCuestionario)!,
 
-                            Logro = null
+                            achievementId = idLogro
                         };
+                    } 
+                    else {
+                        return new AchievementWithTestInfoModel
+                        {
+                            TestInfoModel = _cuestionarioService.GetTestInfoModel(
+                                idPaciente,
+                                idCuestionario,
+                                idHistoralCuestionario)!,
 
-                    }   
-                }
+                            achievementId = null
+                        };
+                    }
+
+                 
+                   
+            }
             }
 
             return null;

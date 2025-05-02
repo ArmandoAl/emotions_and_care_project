@@ -44,5 +44,14 @@ namespace Domain
         // The unique identifier for the associated note.
         public int noteId { get; set; }
     }
+
+    public class AchievementWithNote
+    {
+        // A reference to a 'Note' associated with this achievement. Defaults to a new 'Note' instance.
+        public int noteId { get; set; }
+
+        // The unique identifier for the associated achievement.
+        public int? achievementId { get; set; }
+    }
 }
 
