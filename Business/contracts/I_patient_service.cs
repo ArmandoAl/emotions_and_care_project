@@ -50,7 +50,25 @@ namespace Business.Contracts
 
         bool AddAllAchievementsToPatient(int idPatient);
 
-        List<progressBool> CheckAchievements(int idPatient);
+        List<progressBool>? CheckAchievements(int idPatient);
+
+        bool removeStickerInInterface(int idPatient, int position);
+
+
+        bool actualizarBackgroundId(int idPatient, int backgroundId);
+
+        bool SoftDelete(int idPatient);
+
+        bool ConfirmarUsuario(int id);
+
+        Patient? GetByEmail(string email);
+
+        string GetForgotPassword(int idPatient);
+
+
+        bool ValidarCodigo(int idPatient, string code);
+
+        bool ModificarContraseña(int idPatient, string password);
 
     }
 }

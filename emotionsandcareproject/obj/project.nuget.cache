@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "l/pUJZgv7DQcd+t2nDcqAZYGMXOf2exQ639LWC4jrxYKkoH6cQ5BOIqXHPOgj2w/BuJOSGh/KVCvRnVzGPmTAQ==",
+  "dgSpecHash": "cqwyNnHPJymMzi6gtZSWkUoz0argGzne8WeGWGU1/OgDCaUN664Ds0syXVdbGLjeBH8EpuVKqSgGTCFlVmMb9w==",
   "success": true,
   "projectFilePath": "/Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/Projects/emotions_and_care_project/emotionsandcareproject/emotionsandcareproject.csproj",
   "expectedPackageFiles": [
@@ -12,7 +12,7 @@
     "/Users/armandoalvarado/.nuget/packages/google.apis.auth/1.67.0/google.apis.auth.1.67.0.nupkg.sha512",
     "/Users/armandoalvarado/.nuget/packages/google.apis.core/1.67.0/google.apis.core.1.67.0.nupkg.sha512",
     "/Users/armandoalvarado/.nuget/packages/humanizer.core/2.8.26/humanizer.core.2.8.26.nupkg.sha512",
-    "/Users/armandoalvarado/.nuget/packages/mailkit/4.11.0/mailkit.4.11.0.nupkg.sha512",
+    "/Users/armandoalvarado/.nuget/packages/mailkit/4.12.0/mailkit.4.12.0.nupkg.sha512",
     "/Users/armandoalvarado/.nuget/packages/microsoft.bcl.asyncinterfaces/6.0.0/microsoft.bcl.asyncinterfaces.6.0.0.nupkg.sha512",
     "/Users/armandoalvarado/.nuget/packages/microsoft.csharp/4.5.0/microsoft.csharp.4.5.0.nupkg.sha512",
     "/Users/armandoalvarado/.nuget/packages/microsoft.data.sqlclient/2.1.4/microsoft.data.sqlclient.2.1.4.nupkg.sha512",
@@ -41,7 +41,7 @@
     "/Users/armandoalvarado/.nuget/packages/microsoft.netcore.platforms/3.1.0/microsoft.netcore.platforms.3.1.0.nupkg.sha512",
     "/Users/armandoalvarado/.nuget/packages/microsoft.win32.registry/4.7.0/microsoft.win32.registry.4.7.0.nupkg.sha512",
     "/Users/armandoalvarado/.nuget/packages/microsoft.win32.systemevents/4.7.0/microsoft.win32.systemevents.4.7.0.nupkg.sha512",
-    "/Users/armandoalvarado/.nuget/packages/mimekit/4.11.0/mimekit.4.11.0.nupkg.sha512",
+    "/Users/armandoalvarado/.nuget/packages/mimekit/4.12.0/mimekit.4.12.0.nupkg.sha512",
     "/Users/armandoalvarado/.nuget/packages/newtonsoft.json/13.0.3/newtonsoft.json.13.0.3.nupkg.sha512",
     "/Users/armandoalvarado/.nuget/packages/system.codedom/7.0.0/system.codedom.7.0.0.nupkg.sha512",
     "/Users/armandoalvarado/.nuget/packages/system.collections.immutable/8.0.0/system.collections.immutable.8.0.0.nupkg.sha512",
@@ -62,12 +62,5 @@
     "/Users/armandoalvarado/.nuget/packages/system.text.encoding.codepages/8.0.0/system.text.encoding.codepages.8.0.0.nupkg.sha512",
     "/Users/armandoalvarado/.nuget/packages/system.windows.extensions/4.7.0/system.windows.extensions.4.7.0.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "Undefined",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Problem reading the cache file /Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/Projects/emotions_and_care_project/emotionsandcareproject/obj/project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
-    }
-  ]
+  "logs": []
 }

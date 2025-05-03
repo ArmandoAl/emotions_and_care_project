@@ -70,6 +70,10 @@ namespace Domain
         /// </summary>
         public string registerState { get; set; } = "register";
 
+        public bool confirmed { get; set; } = false;
+
+        public string codeHelper { get; set; } = "";
+
         /// <summary>
         /// Represents the patient's progress in their care or treatment.
         /// </summary>

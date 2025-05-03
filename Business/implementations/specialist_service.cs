@@ -134,7 +134,12 @@ namespace Business.Implementations
         {
             if(id < 1 || idCita < 1) { return false; }
 
-            bool res = _citaRepository.eliminarSolicitudCita(idCita);
+             DateRequest? solicitudCita = _citaRepository.GetSolicitudCita(idCita);
+
+            if (solicitudCita == null) { 
+                return false; }
+
+            bool res = _citaRepository.eliminarSolicitudCita(solicitudCita.dateRequestId);
 
             if(res)
             {

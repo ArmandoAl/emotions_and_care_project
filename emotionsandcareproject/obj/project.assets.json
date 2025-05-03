@@ -131,10 +131,10 @@
           }
         }
       },
-      "MailKit/4.11.0": {
+      "MailKit/4.12.0": {
         "type": "package",
         "dependencies": {
-          "MimeKit": "4.11.0",
+          "MimeKit": "4.12.0",
           "System.Formats.Asn1": "8.0.1"
         },
         "compile": {
@@ -639,7 +639,7 @@
           }
         }
       },
-      "MimeKit/4.11.0": {
+      "MimeKit/4.12.0": {
         "type": "package",
         "dependencies": {
           "BouncyCastle.Cryptography": "2.5.1",
@@ -1040,6 +1040,7 @@
           "Data": "1.0.0",
           "Domain": "1.0.0",
           "FirebaseAdmin": "3.0.0",
+          "MailKit": "4.12.0",
           "Microsoft.EntityFrameworkCore": "6.0.25",
           "Microsoft.EntityFrameworkCore.SqlServer": "6.0.25"
         },
@@ -1071,6 +1072,7 @@
         "framework": ".NETCoreApp,Version=v6.0",
         "dependencies": {
           "FirebaseAdmin": "3.0.0",
+          "MailKit": "4.12.0",
           "Microsoft.EntityFrameworkCore": "6.0.25",
           "Microsoft.EntityFrameworkCore.SqlServer": "6.0.25"
         },
@@ -1242,10 +1244,10 @@
         "logo.png"
       ]
     },
-    "MailKit/4.11.0": {
-      "sha512": "JVoRxJ+QRqFMRtEM4veStj3pMLBPRulQGV+iZm6Tq1pnr66Dy6dFYOW9Uw02nxAVzdZAN8G+y3BsUPtgZcKXhA==",
+    "MailKit/4.12.0": {
+      "sha512": "DShr4dH9IZeUUQI7D5+zhxBKaiBrE/4+3APO2nSzCJwILv3lnViZew7yuoBJUWxAnwxzneJIFokxc8nvAQVZqg==",
       "type": "package",
-      "path": "mailkit/4.11.0",
+      "path": "mailkit/4.12.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1278,7 +1280,7 @@
         "lib/netstandard2.1/MailKit.dll.config",
         "lib/netstandard2.1/MailKit.pdb",
         "lib/netstandard2.1/MailKit.xml",
-        "mailkit.4.11.0.nupkg.sha512",
+        "mailkit.4.12.0.nupkg.sha512",
         "mailkit.nuspec"
       ]
     },
@@ -1996,10 +1998,10 @@
         "version.txt"
       ]
     },
-    "MimeKit/4.11.0": {
-      "sha512": "6p0RC1qwBGBHxf7hvzuR1GngzigF+Q6HQUTbD2RbmDrnS2m1qO2rgqOhYtn8n8JH7WGZ+7RthS8lfMuMzeg8AA==",
+    "MimeKit/4.12.0": {
+      "sha512": "PFUHfs6BZxKYM/QPJksAwXphbJf0SEfdSfsoQ6p6yvFRaJPofFJMBiotWhFRrdSUzfp6C6K49EjBIqIwZ2TJqA==",
       "type": "package",
-      "path": "mimekit/4.11.0",
+      "path": "mimekit/4.12.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -2027,7 +2029,7 @@
         "lib/netstandard2.1/MimeKit.dll.config",
         "lib/netstandard2.1/MimeKit.pdb",
         "lib/netstandard2.1/MimeKit.xml",
-        "mimekit.4.11.0.nupkg.sha512",
+        "mimekit.4.12.0.nupkg.sha512",
         "mimekit.nuspec"
       ]
     },
@@ -2697,7 +2699,7 @@
       "Data >= 1.0.0",
       "Domain >= 1.0.0",
       "FirebaseAdmin >= 3.0.0",
-      "MailKit >= 4.11.0",
+      "MailKit >= 4.12.0",
       "Microsoft.EntityFrameworkCore >= 6.0.25",
       "Microsoft.EntityFrameworkCore.Design >= 6.0.25",
       "Microsoft.EntityFrameworkCore.SqlServer >= 6.0.25"
@@ -2756,7 +2758,7 @@
           },
           "MailKit": {
             "target": "Package",
-            "version": "[4.11.0, )"
+            "version": "[4.12.0, )"
           },
           "Microsoft.EntityFrameworkCore": {
             "target": "Package",
@@ -2795,13 +2797,5 @@
         "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.428/RuntimeIdentifierGraph.json"
       }
     }
-  },
-  "logs": [
-    {
-      "code": "Undefined",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Problem reading the cache file /Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/Projects/emotions_and_care_project/emotionsandcareproject/obj/project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
-    }
-  ]
+  }
 }

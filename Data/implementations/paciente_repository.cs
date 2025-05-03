@@ -1,4 +1,4 @@
-﻿using Data.Contracts;
+using Data.Contracts;
 using Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -148,18 +148,15 @@ namespace Data.Implementations
             // Return the patient with all their related information
             return db.patients.Where(x => x.userId == id)
                 .Include(x => x.specialist)
-             
                 .Include(x => x.goals)
                 .Include(x => x.userInterface)
                 .Include(x => x.userInterface.userFlowers)
                 .Include(x => x.userInterface.userStickers)
                 .Include(x => x.settings)
                 .Include(x => x.termsAndConditions)
-                .Include(x => x.achievementCollection)
-                .Include(x => x.achievementCollection!.userAchievements)
-                .Include(x => x.achievementCollection!.userAchievements!.Select(y => y.achievement))
-
-                    
+                .Include(x => x.achievementCollection!)
+                .ThenInclude(ac => ac.userAchievements!)
+                    .ThenInclude(ua => ua.achievement)
                 .Select(x => new Patient
                 {
                     userId = x.userId,
@@ -312,14 +309,11 @@ public bool Delete(int id)
         using (var db = new DBContext(options: connectionOptions))
         {
             var diariesToDelete = db.diaries
-    .Where(d => !allowedIds.Contains(d.diaryId))
-    .ToList();
+            .Where(d => !allowedIds.Contains(d.diaryId))
+            .ToList();
 
-db.diaries.RemoveRange(diariesToDelete);
+            db.diaries.RemoveRange(diariesToDelete);
 
-
-
-            Console.WriteLine("Notas encontradas:" + diariesToDelete.Count);
 
              return true;
         }
@@ -883,6 +877,51 @@ db.diaries.RemoveRange(diariesToDelete);
                 return userSticker.userStickerId;
             }
         }
+
+        public bool removeStickerInInterface(int idPatient, int position)
+        {
+            // Validate the patient ID and user sticker ID to ensure they are greater than 0
+            if (idPatient <= 0 || position <= 0) return false;
+
+            // Set up the connection to the database using the DbContext
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
+            // Open the database context and perform the update inside a 'using' block to ensure resources are properly disposed of
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                // Find the patient and their user interface, including the list of stickers
+                var thisPaciente = db.patients
+                    .Where(x => x.userId == idPatient)
+                    .Include(x => x.userInterface)
+                    .ThenInclude(x => x.userStickers)
+                    .ThenInclude(x => x.sticker)
+                    .FirstOrDefault();
+
+                // If the patient is not found, return false indicating failure
+                if (thisPaciente == null) return false;
+
+                    // Check if any other sticker already occupies the specified position
+                    var stickerWithSamePosition = thisPaciente.userInterface.userStickers
+                        .FirstOrDefault(x => x.position == position);
+
+                    // If a sticker occupies the position, reset its position to null
+                    if (stickerWithSamePosition != null)
+                    {
+                        stickerWithSamePosition.position = null;
+                    }
+
+                // Save the changes to the database
+                db.SaveChanges();
+
+                // Return true indicating success
+                return true;
+            }
+        }
+
+
+
 
         public int putFlowerInInterface(int idPatient, int idFlower, int position)
         {
@@ -2331,12 +2370,176 @@ db.diaries.RemoveRange(diariesToDelete);
             }
         }
 
-        
+        public bool actualizarBackgroundId(int id, int backgroundId)
+        {
+            if (id <= 0 || backgroundId <= 0) return false;
 
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
 
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var thisPaciente = db.patients
+                    .Include(u => u.userInterface)
+                    .FirstOrDefault(u => u.userId == id);
 
+                if (thisPaciente == null)
+                    return false;
 
-        
+                thisPaciente.userInterface.backgroundUrl = backgroundId;
+                db.SaveChanges();
+                return true;
+            }
+        }
+
+        public bool SoftDelete(int id)
+        {
+            if (id <= 0) return false;
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var thisPaciente = db.patients
+                    .Where(u => u.userId == id)
+                    .FirstOrDefault();
+
+                if (thisPaciente == null)
+                    return false;
+
+                thisPaciente.mail = "";
+                db.SaveChanges();
+                return true;
+            }
+        }
+
+        public bool ConfirmarUsuario(int id)
+        {
+            if (id <= 0) return false;
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var thisPaciente = db.patients
+                    .Include(u => u.userInterface)
+                    .FirstOrDefault(u => u.userId == id);
+
+                if (thisPaciente == null)
+                    return false;
+
+                thisPaciente.confirmed = true;
+                db.SaveChanges();
+                return true;
+            }
+        }
+
+        public Patient? GetByEmail(string email)
+        {
+            if (string.IsNullOrEmpty(email)) return null;
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var thisPaciente = db.patients
+                    .Include(u => u.userInterface)
+                    .FirstOrDefault(u => u.mail == email);
+
+                if (thisPaciente == null)
+                    return null;
+
+                return thisPaciente;
+            }
+        }
+
+        public string GetForgotPassword(int id)
+        {
+            if (id <= 0) return "";
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var thisPaciente = db.patients
+                    .Where(u => u.userId == id)
+                    .FirstOrDefault();
+
+                if (thisPaciente == null) {
+                    return "";
+                }
+
+                string code = getRandomCode();
+
+                thisPaciente.codeHelper = code;
+
+                return code;
+            }
+        }
+
+        private string getRandomCode()
+        {
+            Random random = new Random();
+            int length = 6;
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
+        public bool ValidarCodigo(int id, string codigo)
+        {
+            if (id <= 0 || string.IsNullOrEmpty(codigo)) return false;
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var thisPaciente = db.patients
+                    .Where(u => u.userId == id)
+                    .FirstOrDefault();
+
+                if (thisPaciente == null) {
+                    return false;
+                }
+
+                return thisPaciente.codeHelper == codigo;
+            }
+        }
+
+        public bool ModificarContraseña(int id, string password)
+        {
+            if (id <= 0 || string.IsNullOrEmpty(password)) return false;
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var thisPaciente = db.patients
+                    .Where(u => u.userId == id)
+                 
+                    .FirstOrDefault();
+
+                if (thisPaciente == null)
+                    return false;
+
+                thisPaciente.password = password;
+                db.SaveChanges();
+                return true;
+            }
+        }
 
 
         /*
@@ -2385,8 +2588,8 @@ db.diaries.RemoveRange(diariesToDelete);
 
         */
 
-        
-}
+
+    }
 }
 
 

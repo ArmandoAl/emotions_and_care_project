@@ -235,10 +235,59 @@ namespace Business.Implementations
 
         }
 
-        public List<progressBool> CheckAchievements(int idPatient)
+        public List<progressBool>? CheckAchievements(int idPatient)
         {
             if (idPatient < 1) { return null; }
             return _service.CheckAchievements(idPatient);
+        }
+
+
+         public bool removeStickerInInterface(int idPatient, int position) {
+            if (idPatient < 1 || position < 1) { return false; }
+            return _service.removeStickerInInterface(idPatient, position);
+        }
+      
+
+        public bool actualizarBackgroundId(int idPatient, int backgroundId)
+        {
+            if (idPatient < 1 || backgroundId < 0) { return false; }
+            return _service.actualizarBackgroundId(idPatient, backgroundId);
+        }
+
+        public bool SoftDelete(int id)
+        {
+            if (id < 1) { return false; }
+            return _service.SoftDelete(id);
+        }
+
+        public bool ConfirmarUsuario(int id)
+        {
+            if (id < 1) { return false; }
+            return _service.ConfirmarUsuario(id);
+        }
+
+        public Patient? GetByEmail(string email)
+        {
+            if (string.IsNullOrEmpty(email)) { return null; }
+            return _service.GetByEmail(email);
+        }
+
+        public string GetForgotPassword(int idPatient)
+        {
+            if (idPatient < 1) { return ""; }
+            return _service.GetForgotPassword(idPatient);
+        }
+
+        public bool ValidarCodigo(int idPatient, string code)
+        {
+            if (idPatient < 1 || string.IsNullOrEmpty(code)) { return false; }
+            return _service.ValidarCodigo(idPatient, code);
+        }   
+
+        public bool ModificarContraseña(int idPatient, string password)
+        {
+            if (idPatient < 1 || string.IsNullOrEmpty(password)) { return false; }
+            return _service.ModificarContraseña(idPatient, password);
         }
 
 

@@ -51,7 +51,6 @@ namespace Business.Implementations
 
             var result = _cuestionarioService.completarQuestionnaire(idCuestionario, idPaciente);
 
-            Console.WriteLine("result: " + result);
             if (result)
             {
               
@@ -59,9 +58,17 @@ namespace Business.Implementations
 
                 if (idHistoralCuestionario >= 0)
                 {
-                    if(isFirstTime) {
-                        _patientRepository.registerSet(idPaciente, "firstTestCompleted");
-                    }
+
+                    var patient = _patientRepository.Get(idPaciente);
+
+                    if (patient == null) return null;
+
+                        if(patient.registerState != "registerSuccess") {
+                                        
+                            _patientRepository.registerSet(idPaciente, "firstTestCompleted");
+                        }
+
+                  
                     var idLogro = _patientRepository.checkAchievement_Questionnaires(idPaciente);
 
                     if (idLogro > 0)

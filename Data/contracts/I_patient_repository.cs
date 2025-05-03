@@ -69,6 +69,22 @@ namespace Data.Contracts
 
         int? checkAchievement_Agenda(int idUsuario);
 
+        bool removeStickerInInterface(int idPatient, int position);
+
+        bool actualizarBackgroundId(int id, int backgroundId);
+
+
+        bool SoftDelete(int id);
+
+        bool ConfirmarUsuario(int id);
+
+        Patient? GetByEmail(string email);
+
+        string GetForgotPassword(int id);
+
+        bool ValidarCodigo(int id, string codigo);
+
+        bool ModificarContraseña(int id, string password);
 
     }
 }
