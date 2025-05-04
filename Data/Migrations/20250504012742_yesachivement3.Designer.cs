@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20250425034657_achivement")]
-    partial class achivement
+    [Migration("20250504012742_yesachivement3")]
+    partial class yesachivement3
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -75,9 +75,6 @@ namespace Data.Migrations
 
                     b.Property<DateTime>("dateModified")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("userId")
-                        .HasColumnType("int");
 
                     b.HasKey("achievementCollectionId");
 
@@ -665,6 +662,9 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("achivementId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("emitDate")
                         .HasColumnType("datetime2");
 
@@ -767,6 +767,13 @@ namespace Data.Migrations
 
                     b.Property<DateTime>("bornDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("codeHelper")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("confirmed")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("dateCreated")
                         .HasColumnType("datetime2");

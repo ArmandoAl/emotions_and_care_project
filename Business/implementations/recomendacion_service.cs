@@ -25,6 +25,12 @@ namespace Business.Implementations
 
         public bool recomendationCompleted(int idRecomendation, int idUsuario){
             if (idRecomendation <= 0 || idUsuario <= 0) return false;
+
+
+            // Verificar 
+
+
+
             return _recomendacionRepository.recomendationCompleted(idRecomendation, idUsuario);
         }
 

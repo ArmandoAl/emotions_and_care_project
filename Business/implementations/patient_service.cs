@@ -52,6 +52,24 @@ namespace Business.Implementations
                 }
             }
 
+            var success = _service.AddAllAchievementsToPatient(id);
+            if (!success)
+            {
+                return 0;
+            }
+
+            for (int i = 0; i < 2; i++)
+            {
+                bool result = _itemsService.addStickerToPatient(i + 1, id);
+
+                if (!result)
+                {
+                    return 0;
+                }
+            }
+
+            
+
             return id;
         }
 
@@ -187,7 +205,7 @@ namespace Business.Implementations
                     var notiId = _notificationRepository.AddNotification(new NotificationModel
                     {
                        notificationType = NotificationType.goal,
-                        Titulo = "¡Nuevo logro!",
+                        Titulo = "¡Nuevo sticker!",
                         Descripcion = "Has logrado vincularte con un especialista, ¡sigue así!, te has ganado un nuevo sticker",
                         url = _itemsRepository.GetSticker(4).url,
                         stickerId = 4,
