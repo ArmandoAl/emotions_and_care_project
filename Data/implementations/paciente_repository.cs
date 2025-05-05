@@ -1,4 +1,4 @@
-using Data.Contracts;
+﻿using Data.Contracts;
 using Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -1754,7 +1754,7 @@ public bool Delete(int id)
                 {
                     userAchievement.dateEarned = DateTime.Now;
                 }
-                //db.SaveChanges();
+                db.SaveChanges();
                 return isBadgeEarned;
 
             }
@@ -1792,7 +1792,7 @@ public bool Delete(int id)
                 {
                     userAchievement.dateEarned = DateTime.Now;
                 }
-                //db.SaveChanges();
+                db.SaveChanges();
                 return isBadgeEarned;
             }
             
@@ -1825,9 +1825,9 @@ public bool Delete(int id)
                 bool isBadgeEarned = userAchievement.progress >= 3;
                 if (isBadgeEarned)
                 {
-                    //userAchievement.dateEarned = DateTime.Now;
+                    userAchievement.dateEarned = DateTime.Now;
                 }
-                //db.SaveChanges();
+                db.SaveChanges();
                 return isBadgeEarned;
             }
         }
@@ -1865,7 +1865,7 @@ public bool Delete(int id)
                 {
                     userAchievement.dateEarned = DateTime.Now;
                 }
-                //db.SaveChanges();
+                db.SaveChanges();
                 return isBadgeEarned;
             }
         }
@@ -1896,9 +1896,9 @@ public bool Delete(int id)
 
                 if (isBadgeEarned)
                 {
-                    //userAchievement.dateEarned = DateTime.Now;
+                    userAchievement.dateEarned = DateTime.Now;
                 }
-                //db.SaveChanges();
+                db.SaveChanges();
                 return isBadgeEarned;
             }
         }
@@ -1926,9 +1926,9 @@ public bool Delete(int id)
 
                 if (isConfirmedAppointment)
                 {
-                    //userAchievement.progress = 1;
-                    //userAchievement.dateEarned = DateTime.Now;
-                    //db.SaveChanges();
+                    userAchievement.progress = 1;
+                    userAchievement.dateEarned = DateTime.Now;
+                    db.SaveChanges();
                     return true;
                 }
                 return false;
@@ -1958,9 +1958,9 @@ public bool Delete(int id)
 
                 if (hasAttendedAppointment)
                 {
-                    //userAchievement.progress = 1;
-                    //userAchievement.dateEarned = DateTime.Now;
-                    //db.SaveChanges();
+                    userAchievement.progress = 1;
+                    userAchievement.dateEarned = DateTime.Now;
+                    db.SaveChanges();
                     return true;
                 }
                 return false;
@@ -1991,9 +1991,9 @@ public bool Delete(int id)
 
                 if (hasAttended3Appointments)
                 {
-                    //userAchievement.progress = 1;
-                    //userAchievement.dateEarned = DateTime.Now;
-                    //db.SaveChanges();
+                    userAchievement.progress = 1;
+                    userAchievement.dateEarned = DateTime.Now;
+                    db.SaveChanges();
                     return true;
                 }
                 return false;
@@ -2057,9 +2057,9 @@ public bool Delete(int id)
 
                 if (hasAnsweredLetter)
                 {
-                    //userAchievement.progress = 1;
-                    //userAchievement.dateEarned = DateTime.Now;
-                    //db.SaveChanges();
+                    userAchievement.progress = 1;
+                    userAchievement.dateEarned = DateTime.Now;
+                    db.SaveChanges();
                     return true;
                 }
                 return false;
@@ -2090,9 +2090,9 @@ public bool Delete(int id)
 
                 if (hasWritten3Letters)
                 {
-                    //userAchievement.progress = 1;
-                    //userAchievement.dateEarned = DateTime.Now;
-                    //db.SaveChanges();
+                    userAchievement.progress = 1;
+                    userAchievement.dateEarned = DateTime.Now;
+                    db.SaveChanges();
                     return true;
                 }
                 return false;
@@ -2124,9 +2124,9 @@ public bool Delete(int id)
 
                 if (hasFlowerGrowth)
                 {
-                    //userAchievement.progress = 1;
-                    //userAchievement.dateEarned = DateTime.Now;
-                    //db.SaveChanges();
+                    userAchievement.progress = 1;
+                    userAchievement.dateEarned = DateTime.Now;
+                    db.SaveChanges();
                     return true;
                 }
                 return false;
@@ -2158,9 +2158,9 @@ public bool Delete(int id)
 
                 if (hasFullFlower)
                 {
-                    //userAchievement.progress = 1;
-                    //userAchievement.dateEarned = DateTime.Now;
-                    //db.SaveChanges();
+                    userAchievement.progress = 1;
+                    userAchievement.dateEarned = DateTime.Now;
+                    db.SaveChanges();
                     return true;
                 }
                 return false;
