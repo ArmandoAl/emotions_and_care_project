@@ -1,4 +1,5 @@
 ﻿using Business.Contracts;
+using Data.contracts;
 using Data.Contracts;
 using Domain;
 using System;
@@ -12,10 +13,15 @@ namespace Business.Implementations
     public class RecomendacionService : IRecomendationService
     {
         private readonly IRecomendationRepository _recomendacionRepository;
+        private readonly IItemsRepository _itemsService;
 
-        public RecomendacionService(IRecomendationRepository recomendacionRepository)
+        private readonly INotificationRepository _notificationRepository;
+
+        public RecomendacionService(IRecomendationRepository recomendacionRepository, IItemsRepository itemsService, INotificationRepository notificationRepository)
         {
             _recomendacionRepository = recomendacionRepository;
+            _itemsService = itemsService;
+            _notificationRepository = notificationRepository;
         }
         public int Add(Recomendation recomendacion)
         {
@@ -27,9 +33,61 @@ namespace Business.Implementations
             if (idRecomendation <= 0 || idUsuario <= 0) return false;
 
 
-            // Verificar 
+            // Verificar
+            //get recomendacion
+            var recomendacion = _recomendacionRepository.Get(idRecomendation);
+            if (recomendacion == null) return false;
 
+            // do a switch case, from the recomendation type
 
+            var stickerId = 0;
+            switch (recomendacion.type)
+            {
+                case RecomendationType.Sleep:
+                    stickerId = 1; // ID del sticker para Sleep
+                    break;
+                case RecomendationType.Food:
+                    // Do something for Food
+                    stickerId = 2;
+                    break;
+                case RecomendationType.RelaxationTechniques:
+                    // Do something for Relaxation Techniques
+                    stickerId = 3;
+                    break;
+                case RecomendationType.PhysicalActivity:
+                    // Do something for Physical Activity
+                    stickerId = 4;
+                    break;
+                case RecomendationType.SocialLife:
+                    // Do something for Social Life
+                    stickerId = 5;
+                    break;
+                default:
+                    return false; // Invalid recommendation type
+            }
+
+            //does patient has the sticker?
+            var hasSticker = _itemsService.HasSticker(stickerId, idUsuario);
+
+            if (hasSticker == null)
+            {
+                _itemsService.addStickerToPatient(stickerId, idUsuario);
+                return true;
+            }
+
+            //if the sticker is not null, then we have to send a notification
+
+            // tiene que ser de tipo sticker o goal
+            var notiId = _notificationRepository.AddNotification(new NotificationModel
+                {
+                       notificationType = NotificationType.goal,
+                        Titulo = "¡Nuevo sticker!",
+                        Descripcion = "¡Felicidades, has desbloqueado un nuevo sticker!",
+                        url = _itemsService.GetSticker(stickerId).url,
+                        stickerId = stickerId                    
+                    });
+
+            _notificationRepository.vincularNotificationConPaciente(notiId, idUsuario);
 
             return _recomendacionRepository.recomendationCompleted(idRecomendation, idUsuario);
         }

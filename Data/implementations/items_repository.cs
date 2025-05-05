@@ -410,6 +410,34 @@ namespace Data.Implementations
             }
         }   
 
+        //check if a user already has a sticker in userStickers
+        public Sticker? HasSticker(int stickerId, int idUsuario)
+        {
+            if (stickerId <= 0 || idUsuario <= 0) return null;
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                        .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                        .Options;
+
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var sticker = db.stickers.FirstOrDefault(x => x.stickerId == stickerId);
+
+                if (sticker == null) return null;
+
+                var userSticker = db.patients
+                    .Where(x => x.userId == idUsuario)
+                    .Include(x => x.userInterface)
+                    .ThenInclude(ui => ui.userStickers)
+                    .FirstOrDefault()?
+                    .userInterface
+                    .userStickers
+                    .FirstOrDefault(us => us.sticker.stickerId == stickerId);
+
+                return userSticker?.sticker;
+            }
+        }
+
 
 
 

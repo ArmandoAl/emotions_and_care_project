@@ -85,5 +85,10 @@ namespace Business.implementations
         {
             return _itemsRepository.UpdateSticker(sticker);
         }
+
+        public Sticker? HasSticker(int stickerId, int idUsuario)
+        {
+            return _itemsRepository.HasSticker(stickerId, idUsuario);
+        }
     }
 }

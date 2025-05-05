@@ -28,5 +28,7 @@ namespace Business
 
         bool UpdateSticker(Sticker sticker);
 
+        Sticker? HasSticker(int stickerId, int idUsuario);
+
     }
 }
