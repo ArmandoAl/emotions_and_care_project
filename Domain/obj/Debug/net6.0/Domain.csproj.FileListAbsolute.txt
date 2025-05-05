@@ -14,3 +14,19 @@
 /Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/Projects/emotions_and_care_project/Domain/obj/Debug/net6.0/Domain.pdb
 /Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/Projects/emotions_and_care_project/Domain/obj/Debug/net6.0/Domain.genruntimeconfig.cache
 /Users/armandoalvarado/Library/Mobile Documents/com~apple~CloudDocs/Documents/Projects/emotions_and_care_project/Domain/obj/Debug/net6.0/ref/Domain.dll
+/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Domain/bin/Debug/net6.0/Domain.deps.json
+/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Domain/bin/Debug/net6.0/Domain.runtimeconfig.json
+/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Domain/bin/Debug/net6.0/Domain.dll
+/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Domain/bin/Debug/net6.0/Domain.pdb
+/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Domain/bin/Debug/net6.0/Domain.xml
+/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Domain/obj/Debug/net6.0/Domain.csproj.AssemblyReference.cache
+/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Domain/obj/Debug/net6.0/Domain.GeneratedMSBuildEditorConfig.editorconfig
+/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Domain/obj/Debug/net6.0/Domain.AssemblyInfoInputs.cache
+/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Domain/obj/Debug/net6.0/Domain.AssemblyInfo.cs
+/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Domain/obj/Debug/net6.0/Domain.csproj.CoreCompileInputs.cache
+/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Domain/obj/Debug/net6.0/Domain.dll
+/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Domain/obj/Debug/net6.0/refint/Domain.dll
+/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Domain/obj/Debug/net6.0/Domain.xml
+/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Domain/obj/Debug/net6.0/Domain.pdb
+/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Domain/obj/Debug/net6.0/Domain.genruntimeconfig.cache
+/Users/martinortiz/Desktop/EandC/emotions_and_care_project/Domain/obj/Debug/net6.0/ref/Domain.dll

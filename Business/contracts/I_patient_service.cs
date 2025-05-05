@@ -70,5 +70,7 @@ namespace Business.Contracts
 
         bool ModificarContraseña(int idPatient, string password);
 
+        Sticker? AddStickerToPatient(int idPatient, int stickerId);
+
     }
 }

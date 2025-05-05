@@ -407,6 +407,15 @@ namespace API.Controllers
             if (result == null) return Task.FromResult<ActionResult>(NotFound());
             return Task.FromResult<ActionResult>(Ok(result));
         }
+
+        [HttpPost("{userId}/addStickerToPatient/{idSticker}")]
+        public Task<ActionResult> addStickerToPatient(int userId, int idSticker)
+        {
+            if (userId < 1 || idSticker < 1) return Task.FromResult<ActionResult>(BadRequest());
+            var result = _service.AddStickerToPatient(userId, idSticker);
+            if (result == null) return Task.FromResult<ActionResult>(NotFound());
+            return Task.FromResult<ActionResult>(Ok(result));
+        }
     }       
 }
 

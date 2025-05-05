@@ -308,6 +308,14 @@ namespace Business.Implementations
             return _service.ModificarContraseña(idPatient, password);
         }
 
-
+        public Sticker? AddStickerToPatient(int idPatient, int stickerId)
+        {
+            if (idPatient < 1 || stickerId < 1) { return null; }
+            var sticker = _itemsRepository.GetSticker(stickerId);
+            if (sticker == null) { return null; }
+            var result = _itemsRepository.addStickerToPatient(stickerId, idPatient);
+            if (!result) { return null; }
+            return sticker;
+        }
     }
 }
