@@ -312,6 +312,15 @@ namespace API.Controllers
             return Task.FromResult<ActionResult>(Ok(result));
         }
 
+        [HttpGet("{id}/getStageProgress")]
+        public Task<ActionResult> GetStageProgress(int id)
+        {
+            if (id < 1) return Task.FromResult<ActionResult>(BadRequest());
+            var result = _service.GetStageProgress(id);
+            if (result == null) return Task.FromResult<ActionResult>(NotFound());
+            return Task.FromResult<ActionResult>(Ok(result));
+        }
+
 
 
         //bool actualizarThemeId(intactualizarThemeId idPatient, int themeId)

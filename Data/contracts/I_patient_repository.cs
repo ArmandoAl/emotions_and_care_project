@@ -41,6 +41,8 @@ namespace Data.Contracts
 
         bool reviewCanCheck(int idPatient);
 
+        List<StageProgressInfo> GetStageProgress(int idPatient);
+
         bool updateLastProgressDate(int idPatient); 
 
         bool refreshToken(int id, string token);
@@ -85,6 +87,8 @@ namespace Data.Contracts
         bool ValidarCodigo(int id, string codigo);
 
         bool ModificarContraseña(int id, string password);
+
+        
 
     }
 }

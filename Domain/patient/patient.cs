@@ -134,6 +134,20 @@ namespace Domain
     }
 
     /// <summary>
+    /// This is a DTO class for the progress of a patient.
+    /// It contains information about the current stage, the last date of progress, and the target date.
+    /// </summary>
+    public class StageProgressInfo
+    {
+        public string Name { get; set; } = "";
+        public int CurrentValue { get; set; }
+        public int TargetValue { get; set; }
+        public string Description { get; set; } = "";
+        public bool IsCompleted => CurrentValue >= TargetValue;
+    }
+
+
+    /// <summary>
     /// Represents a patient's diary containing a list of notes.
     /// </summary>
     public class Diary

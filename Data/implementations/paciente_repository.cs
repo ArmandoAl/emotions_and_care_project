@@ -1477,6 +1477,108 @@ public bool Delete(int id)
             }
         }
 
+        private int GetCurrentValue(string name, int idPatient)
+        {
+            switch (name)
+            {
+                case "diary":
+                case "firstDiary":
+                    return 2;//GetDiaryCount(idPatient);
+                case "oneRecommendation":
+                    return 2;//GetRecommendationCount(idPatient);
+                case "firstTestComplete":
+                    return 2;//GetTestCount(idPatient);
+                case "relateSpecialist":
+                    return 2;//HasSpecialist(idPatient) ? 1 : 0;
+                case "patientRegister":
+                    return 2;//IsRegistered(idPatient) ? 1 : 0;
+                default:
+                    return 0;
+            }
+        }
+
+
+
+        /// <summary>
+        /// Retrieves a list of pending stage requests for a specific patient.
+        /// This method checks the patient's current progress stage and identifies which stage requests have not been completed.
+        /// It returns a list of readable descriptions of the pending stage requests.
+        /// </summary>
+        /// <param name="idPatient"></param>
+        /// <returns></returns>
+        public List<StageProgressInfo> GetStageProgress(int idPatient)
+        {
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var patient = db.patients
+                    .Where(x => x.userId == idPatient)
+                    .Include(x => x.progress)
+                    .FirstOrDefault();
+
+                if (patient == null) return new List<StageProgressInfo>();
+
+                var stages = db.stages.Include(x => x.stageRequests).ToList();
+                var stageRequests = stages[patient.progress.stage].stageRequests;
+
+                var progressList = new List<StageProgressInfo>();
+
+                foreach (var req in stageRequests)
+                {
+                    int currentValue = GetCurrentValue(req.name, idPatient);
+                    int targetValue = req.value ?? 1;
+
+                    var progressInfo = new StageProgressInfo
+                    {
+                        Name = req.name,
+                        CurrentValue = currentValue,
+                        TargetValue = targetValue,
+                        Description = GetReadableDescription(req, currentValue, targetValue)
+                    };
+
+                    progressList.Add(progressInfo);
+                }
+
+                return progressList;
+            }
+        }
+
+
+
+        private string GetReadableDescription(StageRequest req, int current, int target)
+        {
+            string timePart = req.dayRange.HasValue ? $"en {req.dayRange} días" : "";
+
+            switch (req.name)
+            {
+                case "firstDiary":
+                    return $"Haz {target} entradas de diario {timePart}".Trim();
+                case "tutorialCompleted":
+                    return $"Completa el tutorial";
+                case "diary":
+                    return $"Haz {target} entradas de diario {timePart}".Trim();
+                case "oneRecommendation":
+                    return $"Completa {target} recomendaciones {timePart}".Trim();
+                case "firstTestComplete":
+                    return $"Completa {target} test(s) {timePart}".Trim();
+                case "relateSpecialist":
+                    return $"Asóciate con un especialista";
+                case "patientRegister":
+                    return $"Completa el registro";
+                default:
+                    return $"{req.name}: {current}/{target}";
+            }
+        }
+
+
+
+
+
+
+
         public bool actualizarThemeId(int idPatient, int themeId)
         {
             if (idPatient <= 0) return false;
@@ -2587,6 +2689,9 @@ public bool Delete(int id)
         }
 
         */
+
+
+
 
 
     }

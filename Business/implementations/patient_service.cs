@@ -183,6 +183,12 @@ namespace Business.Implementations
 
         }
 
+        public List<StageProgressInfo>? GetStageProgress(int idPatient)
+        {
+            if (idPatient < 1) { return null; }
+            return _service.GetStageProgress(idPatient);
+        }
+
         public bool refreshToken(int id, string token)
         {
             if (id < 1 || string.IsNullOrEmpty(token)) { return false; }

@@ -35,6 +35,8 @@ namespace Business.Contracts
 
         bool growStage(int idPatient);
 
+        List<StageProgressInfo> GetStageProgress(int idPatient);
+
         bool refreshToken(int id, string token);
 
         bool VincularDirecto(int id, string tokenEspecialista);
