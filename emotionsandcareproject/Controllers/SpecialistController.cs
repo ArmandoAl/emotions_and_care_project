@@ -81,7 +81,9 @@ namespace API.Controllers
                 { "type", "specialistSync" },
             };
 
-            await _pushNotificationService.SendPushAsync("Nueva notificación", specialist.name +  " ha aceptado tu solicitud de vinculación. ¡Felicidades!", patient.token, data);
+             if(patient!.settings!.notificationsActive) {
+                await _pushNotificationService.SendPushAsync("Nueva notificación", specialist.name +  " ha aceptado tu solicitud de vinculación. ¡Felicidades!", patient.token, data);
+             }
            } catch (Exception e) {
                 Console.WriteLine(e.Message);
             }
@@ -118,7 +120,9 @@ namespace API.Controllers
             
             };
 
-            await _pushNotificationService.SendPushAsync("Nueva notificación", specialist.name + " ha rechazado tu solicitud de vinculación.", patient.token, data);
+             if(patient!.settings!.notificationsActive) {
+                await _pushNotificationService.SendPushAsync("Nueva notificación", specialist.name + " ha rechazado tu solicitud de vinculación.", patient.token, data);
+             }
             } catch (Exception e) {
                 Console.WriteLine(e.Message);
             }

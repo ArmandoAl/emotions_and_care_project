@@ -156,7 +156,7 @@ namespace Data.Implementations
                 var usuario = db.patients.Include(u => u.completeRecomendations).FirstOrDefault(u => u.userId == idUsuario);
                 if (usuario == null) return null;
                 var completedRecomendations = usuario.completeRecomendations.Select(cr => db.recomendation.FirstOrDefault(r => r.recomendationId == cr.recomendationId)).ToList();
-                return completedRecomendations;
+                return completedRecomendations!;
             }
         }
     }

@@ -84,7 +84,11 @@ namespace API.Controllers
                 Token = _especialistaService.Get(idEspecialista)!.token
             };
 
-            await FirebaseMessaging.DefaultInstance.SendAsync(message);
+            var paciente = _pacienteService.Get(idPaciente);
+
+             if(paciente!.settings!.notificationsActive) {
+                await FirebaseMessaging.DefaultInstance.SendAsync(message);
+             }
             }  
             catch (Exception e)
             {
@@ -248,11 +252,13 @@ namespace API.Controllers
                     { "event", "dateConfirmedBySpecialist"},
                 
                 },
-                Token = _especialistaService.Get(paciente!.userId
+                Token = _pacienteService.Get(paciente!.userId
                 )!.token
             };
 
-            await FirebaseMessaging.DefaultInstance.SendAsync(message);
+              if(paciente!.settings!.notificationsActive) {
+                await FirebaseMessaging.DefaultInstance.SendAsync(message);
+              }
             }  
             catch (Exception e)
             {
@@ -287,11 +293,14 @@ namespace API.Controllers
                     { "event", "dateCanceledBySpecialist"},
                     
                 },
-                Token = _especialistaService.Get(paciente!.userId
+                Token = _pacienteService.Get(paciente!.userId
                 )!.token
             };
 
-            await FirebaseMessaging.DefaultInstance.SendAsync(message);
+
+              if(paciente!.settings!.notificationsActive) {
+                await FirebaseMessaging.DefaultInstance.SendAsync(message);
+              }
             }  
             catch (Exception e)
             {
@@ -323,11 +332,14 @@ namespace API.Controllers
                 {  { "module", "schedule"},
                     { "event", "dateUpdated"},
                 },
-                Token = isFromSpecialist ? _pacienteService.Get(patientId)!.token : _especialistaService.Get(specialist!.userId)!.token
+                Token = isFromSpecialist == false ? _pacienteService.Get(patientId)!.token : _especialistaService.Get(specialist!.userId)!.token
             };
 
-            await FirebaseMessaging.DefaultInstance.SendAsync(message);
-            }  
+            var paciente = _pacienteService.Get(patientId);
+                if(paciente!.settings!.notificationsActive && isFromSpecialist == false) {
+                    await FirebaseMessaging.DefaultInstance.SendAsync(message);
+                }  
+              }
             catch (Exception e)
             {
                 Console.WriteLine(e);

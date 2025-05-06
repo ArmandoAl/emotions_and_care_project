@@ -79,8 +79,6 @@ namespace API.Controllers
         {
             if (email == null) return Task.FromResult<ActionResult>(BadRequest());
             var patient = _service.GetByEmail(email);
-            Console.WriteLine("patient: " + patient);
-
 
             if (patient == null) return Task.FromResult<ActionResult>(BadRequest());
 
@@ -185,8 +183,11 @@ namespace API.Controllers
                 var token = _specialistService.GetByToken(tokenEspecialista)?.token ?? "";
                 var title = "¡Nueva solicitud de vinculación!";
                 var body = patient!.name + " quiere vincularse contigo.";
+
                 await _pushNotificationService.SendPushAsync(title, body, token,
                  data);
+
+                
                } catch (Exception e) {
                    Console.WriteLine(e);
                }
@@ -211,6 +212,8 @@ namespace API.Controllers
             var patient = _service.Get(id);
             var token = _specialistService.GetByToken(tokenEspecialista)?.token ?? "";
             var specialist = _specialistService.GetByToken(tokenEspecialista);
+
+
 
             await _pushNotificationService.SendPushAsync("Nueva notificación", 
             patient!.name + " se ha vinculado contigo.", token, data);
@@ -294,7 +297,10 @@ namespace API.Controllers
                 var token = patient!.token;
                 var title = "¡Tu flor ha crecido!";
                 var body = "¡Tu flor ha crecido!";
-                await _pushNotificationService.SendPushAsync(title, body, token, data);
+
+                 if(patient!.settings!.notificationsActive) {
+                    await _pushNotificationService.SendPushAsync(title, body, token, data);
+                 }
                } catch (Exception e) {
                    Console.WriteLine(e);
                }

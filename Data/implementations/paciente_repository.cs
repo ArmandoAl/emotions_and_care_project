@@ -1571,7 +1571,7 @@ public bool Delete(int id)
                 if (patient == null) return new List<StageProgressInfo>();
 
                 var stages = db.stages.Include(x => x.stageRequests).ToList();
-                var stageRequests = stages[patient.progress.stage].stageRequests;
+                var stageRequests = stages[patient.progress!.stage].stageRequests;
 
                 var progressList = new List<StageProgressInfo>();
 
@@ -2077,7 +2077,7 @@ public bool Delete(int id)
 
                 if (isConfirmedAppointment)
                 {
-                    userAchievement.progress = 1;
+                    userAchievement!.progress = 1;
                     userAchievement.dateEarned = DateTime.Now;
                     db.SaveChanges();
                     return true;
@@ -2109,7 +2109,7 @@ public bool Delete(int id)
 
                 if (hasAttendedAppointment)
                 {
-                    userAchievement.progress = 1;
+                    userAchievement!.progress = 1;
                     userAchievement.dateEarned = DateTime.Now;
                     db.SaveChanges();
                     return true;
@@ -2142,7 +2142,7 @@ public bool Delete(int id)
 
                 if (hasAttended3Appointments)
                 {
-                    userAchievement.progress = 1;
+                    userAchievement!.progress = 1;
                     userAchievement.dateEarned = DateTime.Now;
                     db.SaveChanges();
                     return true;
@@ -2208,7 +2208,7 @@ public bool Delete(int id)
 
                 if (hasAnsweredLetter)
                 {
-                    userAchievement.progress = 1;
+                    userAchievement!.progress = 1;
                     userAchievement.dateEarned = DateTime.Now;
                     db.SaveChanges();
                     return true;
@@ -2241,7 +2241,7 @@ public bool Delete(int id)
 
                 if (hasWritten3Letters)
                 {
-                    userAchievement.progress = 1;
+                    userAchievement!.progress = 1;
                     userAchievement.dateEarned = DateTime.Now;
                     db.SaveChanges();
                     return true;
@@ -2275,7 +2275,7 @@ public bool Delete(int id)
 
                 if (hasFlowerGrowth)
                 {
-                    userAchievement.progress = 1;
+                    userAchievement!.progress = 1;
                     userAchievement.dateEarned = DateTime.Now;
                     db.SaveChanges();
                     return true;
@@ -2309,7 +2309,7 @@ public bool Delete(int id)
 
                 if (hasFullFlower)
                 {
-                    userAchievement.progress = 1;
+                    userAchievement!.progress = 1;
                     userAchievement.dateEarned = DateTime.Now;
                     db.SaveChanges();
                     return true;
