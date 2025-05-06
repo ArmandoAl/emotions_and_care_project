@@ -146,6 +146,13 @@ namespace Domain
         public bool IsCompleted => CurrentValue >= TargetValue;
     }
 
+    public class StageInfoResponse
+    {
+        public int StageNumber { get; set; }
+        public List<StageProgressInfo> ProgressInfos { get; set; } = new List<StageProgressInfo>();
+    }
+
+
 
     /// <summary>
     /// Represents a patient's diary containing a list of notes.

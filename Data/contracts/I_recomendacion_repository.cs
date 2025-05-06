@@ -20,6 +20,8 @@ namespace Data.Contracts
         bool Delete(int idRecomendation);
 
         bool recomendationCompleted(int idRecomendation, int idUsuario);
+        
+        List<Recomendation>? GetCompletedRecomendations(int idUsuario);
 
         // bool AddRecomendationCompletada(int idRecomendation, int idUsuario);
     }

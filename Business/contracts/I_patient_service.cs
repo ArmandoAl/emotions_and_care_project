@@ -37,6 +37,8 @@ namespace Business.Contracts
 
         List<StageProgressInfo> GetStageProgress(int idPatient);
 
+        List<StageInfoResponse> GetAllStagesProgress(int idPatient);
+
         bool refreshToken(int id, string token);
 
         bool VincularDirecto(int id, string tokenEspecialista);

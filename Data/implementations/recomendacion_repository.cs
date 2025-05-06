@@ -143,5 +143,21 @@ namespace Data.Implementations
                 return true;
             }
         }
+
+        public List<Recomendation>? GetCompletedRecomendations(int idUsuario)
+        {
+            if (idUsuario <= 0) return null;
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+          .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+          .Options;
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var usuario = db.patients.Include(u => u.completeRecomendations).FirstOrDefault(u => u.userId == idUsuario);
+                if (usuario == null) return null;
+                var completedRecomendations = usuario.completeRecomendations.Select(cr => db.recomendation.FirstOrDefault(r => r.recomendationId == cr.recomendationId)).ToList();
+                return completedRecomendations;
+            }
+        }
     }
 }

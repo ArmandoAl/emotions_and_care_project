@@ -43,6 +43,8 @@ namespace Data.Contracts
 
         List<StageProgressInfo> GetStageProgress(int idPatient);
 
+        List<StageInfoResponse> GetAllStagesProgress(int idPatient);
+
         bool updateLastProgressDate(int idPatient); 
 
         bool refreshToken(int id, string token);

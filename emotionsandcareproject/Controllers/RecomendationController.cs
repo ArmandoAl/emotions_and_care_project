@@ -57,6 +57,15 @@ namespace API.Controllers
             if (recommendationId <= 0 || userId <= 0) return BadRequest();
             return Ok(_recomendacionService.recomendationCompleted(recommendationId, userId));
         }
+
+        [HttpGet("GetCompletedRecomendations/{userId}")]
+        public IActionResult GetCompletedRecomendations(int userId)
+        {
+            if (userId <= 0) return BadRequest();
+            var recomendations = _recomendacionService.GetCompletedRecomendations(userId);
+            if (recomendations == null) return NotFound();
+            return Ok(recomendations);
+        }
     }
 
 }

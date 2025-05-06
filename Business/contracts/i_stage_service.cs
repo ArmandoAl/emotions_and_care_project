@@ -30,6 +30,10 @@ namespace Business.Contracts
 
         bool DeleteRequest(int idStageRequest);
 
+        //List<StageProgressInfo>? GetAllRequestsInfo(int idStage);
+
+
+
     }
 
 }

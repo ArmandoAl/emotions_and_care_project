@@ -21,6 +21,8 @@ namespace Business.Contracts
 
         bool recomendationCompleted(int idRecomendation, int idUsuario);
 
+        List<Recomendation>? GetCompletedRecomendations(int idUsuario);
+
         // bool AddRecomendacionCompletada(int idRecomendacion, int idUsuario);
     }
 }

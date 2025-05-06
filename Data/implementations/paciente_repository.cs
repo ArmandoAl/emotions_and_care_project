@@ -1448,6 +1448,55 @@ public bool Delete(int id)
             }
         }
 
+        public List<StageInfoResponse> GetAllStagesProgress(int idPatient)
+        {
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
+
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var patient = db.patients
+                    .Where(x => x.userId == idPatient)
+                    .Include(x => x.progress)
+                    .FirstOrDefault();
+
+                if (patient == null) return new List<StageInfoResponse>();
+
+                var stages = db.stages.Include(x => x.stageRequests).ToList();
+
+                var stageResponses = new List<StageInfoResponse>();
+
+                foreach (var stage in stages)
+                {
+                    var stageProgressInfos = new List<StageProgressInfo>();
+
+                    foreach (var req in stage.stageRequests)
+                    {
+                        int currentValue = GetCurrentValue(req.name, idPatient);
+                        int targetValue = req.value ?? 1;
+
+                        stageProgressInfos.Add(new StageProgressInfo
+                        {
+                            Name = req.name,
+                            CurrentValue = currentValue,
+                            TargetValue = targetValue,
+                            Description = GetReadableDescription(req, currentValue, targetValue)
+                        });
+                    }
+
+                    stageResponses.Add(new StageInfoResponse
+                    {
+                        StageNumber = stage.stageId,
+                        ProgressInfos = stageProgressInfos
+                    });
+                }
+
+                return stageResponses;
+            }
+        }
+
+
 
         /// <summary>
         /// Updates the last progress update date for a specific patient to the current date and time.
