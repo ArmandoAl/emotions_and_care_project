@@ -67,11 +67,11 @@ namespace Business.Implementations
             return _service.login(email, password);
         }
 
-        public bool aceptarSolicitud(int idSpecialist, int pacientId)
+        public bool aceptarSolicitud(int idSpecialist, int pacientId, int idRequest)
         {
             if (idSpecialist < 1 || pacientId < 1) { return false; }
 
-            var result = _service.aceptarSolicitud(idSpecialist, pacientId);
+            var result = _service.aceptarSolicitud(idSpecialist, pacientId, idRequest   );
 
             if (result)
             {
@@ -99,11 +99,11 @@ namespace Business.Implementations
         }
 
 
-        public bool rechazarSolicitud(int idSpecialist, int pacientId)
+        public bool rechazarSolicitud(int idSpecialist, int pacientId, int idRequest)
         {
             if (idSpecialist < 1 || pacientId < 1) { return false; }
 
-            return _service.rechazarSolicitud(idSpecialist, pacientId);
+            return _service.rechazarSolicitud(idSpecialist, pacientId, idRequest);
         }
         
         public bool aceptarCita(int idEspecialista, int idCita)

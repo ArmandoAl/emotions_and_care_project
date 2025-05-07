@@ -57,9 +57,9 @@ namespace Data.Implementations
 
             using (var db = new DBContext(options: connectionOptions))
             {
-                return db.dummyUsers
-                    .Include(u => u.badgeCollection)
-                    .ThenInclude(bc => bc.userBadges)
+                return db.dummyUsers!
+                    .Include(u => u.badgeCollection!)
+                    .ThenInclude(bc => bc.userBadges!)
                     .ThenInclude(ub => ub.badge)
                     .FirstOrDefault(u => u.BuserId == id);
             }
@@ -130,7 +130,7 @@ namespace Data.Implementations
                     return false;
 
                 // Check if the user already has this badge
-                if (dummyUser.badgeCollection.userBadges.Any(ub => ub.badgeId == badgeId))
+                if (dummyUser.badgeCollection.userBadges!.Any(ub => ub.badgeId == badgeId))
                     return true; // User already has this badge
 
                 var userBadge = new UserBadge
@@ -140,7 +140,7 @@ namespace Data.Implementations
                     dateEarned = DateTime.Now
                 };
 
-                dummyUser.badgeCollection.userBadges.Add(userBadge);
+                dummyUser.badgeCollection.userBadges!.Add(userBadge);
                 db.SaveChanges();
                 return true;
             }
@@ -170,7 +170,7 @@ namespace Data.Implementations
                     foreach (var badge in badges)
                     {
                         // Skip if user already has this badge
-                        if (dummyUser.badgeCollection.userBadges.Any(ub => ub.badgeId == badge.badgeId))
+                        if (dummyUser.badgeCollection.userBadges!.Any(ub => ub.badgeId == badge.badgeId))
                             continue;
 
                         var userBadge = new UserBadge
@@ -179,7 +179,7 @@ namespace Data.Implementations
                             progress = 0, // Assuming the badge is earned immediately
                         };
 
-                        dummyUser.badgeCollection.userBadges.Add(userBadge);
+                        dummyUser.badgeCollection.userBadges!.Add(userBadge);
                     }
                 }
 
@@ -190,7 +190,6 @@ namespace Data.Implementations
 
 public List<progressBool> CheckBadges(int userId)
 {
-    Console.WriteLine($"Checking badges for user {userId}");
     if (userId <= 0) return new List<progressBool>();
 
     var connectionOptions = new DbContextOptionsBuilder<DBContext>()
@@ -199,9 +198,9 @@ public List<progressBool> CheckBadges(int userId)
 
     using (var db = new DBContext(options: connectionOptions))
     {
-        var user = db.dummyUsers
-            .Include(u => u.badgeCollection)
-                .ThenInclude(bc => bc.userBadges)
+        var user = db.dummyUsers!
+            .Include(u => u.badgeCollection!)
+                .ThenInclude(bc => bc.userBadges)!
                     .ThenInclude(ub => ub.badge)
             .FirstOrDefault(u => u.BuserId == userId);
 
@@ -210,14 +209,11 @@ public List<progressBool> CheckBadges(int userId)
 
         List<progressBool> results = new();
 
-        foreach (var userBadge in user.badgeCollection.userBadges
-                     .Where(ub => ub.dateEarned == null)) // 👈 Only not-yet-earned badges
+        foreach (var userBadge in user.badgeCollection.userBadges!
+                     .Where(ub => ub.dateEarned == null)) 
         {
             if (_badgeFunctions.TryGetValue(userBadge.badge.progressMap, out var badgeFunction))
             {
-                Console.WriteLine($"Checking badge {userBadge.badgeId} - {userBadge.badge.name}");
-                Console.WriteLine($"Function: {userBadge.badge.progressMap}");
-
                 bool result = badgeFunction(userId, userBadge.badgeId);
 
                 if (result)
@@ -271,24 +267,24 @@ public List<progressBool> CheckBadges(int userId)
         int ProgressTarget = 1;
 
         // Get the user with badgeCollection and badges
-        var user = db.dummyUsers
-            .Include(u => u.badgeCollection)
-                .ThenInclude(bc => bc.userBadges)
+        var user = db.dummyUsers!
+            .Include(u => u.badgeCollection!)
+                .ThenInclude(bc => bc.userBadges!)
                     .ThenInclude(ub => ub.badge)
             .FirstOrDefault(u => u.BuserId == userId);
 
         if (user == null || user.badgeCollection == null)
         {
-            Console.WriteLine("User or badge collection not found.");
+     
             return false;
         }
 
-        var userBadge = user.badgeCollection.userBadges
+        var userBadge = user.badgeCollection.userBadges!
             .FirstOrDefault(ub => ub.badgeId == badgeId);
 
         if (userBadge == null)
         {
-            Console.WriteLine("Badge not found for user.");
+     
             return false;
         }
 
@@ -300,19 +296,13 @@ public List<progressBool> CheckBadges(int userId)
 
         if (patient == null || patient.test == null)
         {
-            Console.WriteLine("Test patient not found or has no test data.");
             return false;
         }
 
         var questionnaires = patient.test.completeQuestionnaires ?? new List<CompleteQuestionnaires>();
-
         userBadge.progress = questionnaires.Count;
 
-        Console.WriteLine($"Patient name: {patient.name} (Testing UserId: 63)");
-        Console.WriteLine($"User {user.BuserId} has completed {userBadge.progress} questionnaires.");
-
         bool isBadgeEarned = userBadge.progress >= ProgressTarget;
-        Console.WriteLine($"User {user.BuserId} has earned the badge: {isBadgeEarned}");
 
         if (isBadgeEarned)
         {
@@ -338,23 +328,21 @@ public List<progressBool> CheckBadges(int userId)
             {
                 // Get the user with badgeCollection and badges
                 var user = db.dummyUsers
-                    .Include(u => u.badgeCollection)
-                        .ThenInclude(bc => bc.userBadges)
+                    .Include(u => u.badgeCollection!)
+                        .ThenInclude(bc => bc.userBadges!)
                             .ThenInclude(ub => ub.badge)
                     .FirstOrDefault(u => u.BuserId == userId);
 
                 if (user == null || user.badgeCollection == null)
                 {
-                    Console.WriteLine("User or badge collection not found.");
                     return false;
                 }
 
-                var userBadge = user.badgeCollection.userBadges
+                var userBadge = user.badgeCollection.userBadges!
                     .FirstOrDefault(ub => ub.badgeId == badgeId);
 
                 if (userBadge == null)
                 {
-                    Console.WriteLine("Badge not found for user.");
                     return false;
                 }
 
@@ -366,7 +354,6 @@ public List<progressBool> CheckBadges(int userId)
 
                 if (patient == null || patient.test == null)
                 {
-                    Console.WriteLine("Test patient not found or has no test data.");
                     return false;
                 }
 
@@ -374,11 +361,7 @@ public List<progressBool> CheckBadges(int userId)
 
                 userBadge.progress = questionnaires.Count;
 
-                Console.WriteLine($"Patient name: {patient.name} (Testing UserId: 63)");
-                Console.WriteLine($"User {user.BuserId} has completed {userBadge.progress} questionnaires.");
-
-                bool isBadgeEarned = userBadge.progress >= 2; // Assuming the badge is earned after the second questionnaire
-                Console.WriteLine($"User {user.BuserId} has earned the badge: {isBadgeEarned}");
+                bool isBadgeEarned = userBadge.progress >= 2;
 
                 if (isBadgeEarned)
                 {
@@ -405,22 +388,20 @@ public List<progressBool> CheckBadges(int userId)
                 // Get the user with badgeCollection and badges
                 var user = db.dummyUsers
                     .Include(u => u.badgeCollection)
-                        .ThenInclude(bc => bc.userBadges)
+                        .ThenInclude(bc => bc.userBadges!)
                             .ThenInclude(ub => ub.badge)
                     .FirstOrDefault(u => u.BuserId == userId);
 
                 if (user == null || user.badgeCollection == null)
                 {
-                    Console.WriteLine("User or badge collection not found.");
                     return false;
                 }
 
-                var userBadge = user.badgeCollection.userBadges
+                var userBadge = user.badgeCollection.userBadges!
                     .FirstOrDefault(ub => ub.badgeId == badgeId);
 
                 if (userBadge == null)
                 {
-                    Console.WriteLine("Badge not found for user.");
                     return false;
                 }
 
@@ -432,7 +413,6 @@ public List<progressBool> CheckBadges(int userId)
 
                 if (patient == null || patient.test == null)
                 {
-                    Console.WriteLine("Test patient not found or has no test data.");
                     return false;
                 }
 
@@ -447,9 +427,6 @@ public List<progressBool> CheckBadges(int userId)
                 // Compare scores (assuming they have a Score property)
                 //bool isImproved = lastQuestionnaire. > previousQuestionnaire.Score;
                 bool isImproved = true; // Placeholder for actual score comparison logic
-
-                Console.WriteLine($"User {user.BuserId} has improved their score: {isImproved}");
-
                 if (isImproved)
                 {
                     userBadge.progress = 1; // Assuming full progress for improvement
@@ -477,22 +454,20 @@ public List<progressBool> CheckBadges(int userId)
                 // Get the user with badgeCollection and badges
                 var user = db.dummyUsers
                     .Include(u => u.badgeCollection)
-                        .ThenInclude(bc => bc.userBadges)
+                        .ThenInclude(bc => bc.userBadges!)
                             .ThenInclude(ub => ub.badge)
                     .FirstOrDefault(u => u.BuserId == userId);
 
                 if (user == null || user.badgeCollection == null)
                 {
-                    Console.WriteLine("User or badge collection not found.");
                     return false;
                 }
 
-                var userBadge = user.badgeCollection.userBadges
+                var userBadge = user.badgeCollection.userBadges!
                     .FirstOrDefault(ub => ub.badgeId == badgeId);
 
                 if (userBadge == null)
                 {
-                    Console.WriteLine("Badge not found for user.");
                     return false;
                 }
 
@@ -504,19 +479,13 @@ public List<progressBool> CheckBadges(int userId)
 
                 if (patient == null || patient.test == null)
                 {
-                    Console.WriteLine("Test patient not found or has no test data.");
                     return false;
                 }
 
                 var questionnaires = patient.test.completeQuestionnaires ?? new List<CompleteQuestionnaires>();
-
                 userBadge.progress = questionnaires.Count;
 
-                Console.WriteLine($"Patient name: {patient.name} (Testing UserId: 63)");
-                Console.WriteLine($"User {user.BuserId} has completed {userBadge.progress} questionnaires.");
-
-                bool isBadgeEarned = userBadge.progress >= 3; // Assuming the badge is earned after the third questionnaire
-                Console.WriteLine($"User {user.BuserId} has earned the badge: {isBadgeEarned}");
+                bool isBadgeEarned = userBadge.progress >= 3; 
 
                 if (isBadgeEarned)
                 {
@@ -543,22 +512,20 @@ public List<progressBool> CheckBadges(int userId)
                 // Get the user with badgeCollection and badges
                 var user = db.dummyUsers
                     .Include(u => u.badgeCollection)
-                        .ThenInclude(bc => bc.userBadges)
+                        .ThenInclude(bc => bc.userBadges!)
                             .ThenInclude(ub => ub.badge)
                     .FirstOrDefault(u => u.BuserId == userId);
 
                 if (user == null || user.badgeCollection == null)
                 {
-                    Console.WriteLine("User or badge collection not found.");
                     return false;
                 }
 
-                var userBadge = user.badgeCollection.userBadges
+                var userBadge = user.badgeCollection.userBadges!
                     .FirstOrDefault(ub => ub.badgeId == badgeId);
 
                 if (userBadge == null)
                 {
-                    Console.WriteLine("Badge not found for user.");
                     return false;
                 }
 
@@ -570,13 +537,10 @@ public List<progressBool> CheckBadges(int userId)
 
                 if (patient == null || patient.test == null)
                 {
-                    Console.WriteLine("Test patient not found or has no test data.");
                     return false;
                 }
 
-                 bool isLinkedWithSpecialist = patient.specialist != null;
-
-                Console.WriteLine($"User {user.BuserId} has linked their account with a specialist: {isLinkedWithSpecialist}");
+                bool isLinkedWithSpecialist = patient.specialist != null;
 
                 if (isLinkedWithSpecialist)
                 {
@@ -604,22 +568,20 @@ public List<progressBool> CheckBadges(int userId)
                 // Get the user with badgeCollection and badges
                 var user = db.dummyUsers
                     .Include(u => u.badgeCollection)
-                        .ThenInclude(bc => bc.userBadges)
+                        .ThenInclude(bc => bc.userBadges!)
                             .ThenInclude(ub => ub.badge)
                     .FirstOrDefault(u => u.BuserId == userId);
 
                 if (user == null || user.badgeCollection == null)
                 {
-                    Console.WriteLine("User or badge collection not found.");
                     return false;
                 }
 
-                var userBadge = user.badgeCollection.userBadges
+                var userBadge = user.badgeCollection.userBadges!
                     .FirstOrDefault(ub => ub.badgeId == badgeId);
 
                 if (userBadge == null)
                 {
-                    Console.WriteLine("Badge not found for user.");
                     return false;
                 }
 
@@ -631,13 +593,10 @@ public List<progressBool> CheckBadges(int userId)
 
                 if (patient == null || patient.test == null)
                 {
-                    Console.WriteLine("Test patient not found or has no test data.");
                     return false;
                 }
 
                 bool isConfirmedAppointment = patient.dates.Any(d => d.patientConfirm == true || d.specialistConfirm == true);
-
-                Console.WriteLine($"User {user.BuserId} has confirmed an appointment: {isConfirmedAppointment}");
 
                 if (isConfirmedAppointment)
                 {
@@ -665,22 +624,20 @@ public List<progressBool> CheckBadges(int userId)
                 // Get the user with badgeCollection and badges
                 var user = db.dummyUsers
                     .Include(u => u.badgeCollection)
-                        .ThenInclude(bc => bc.userBadges)
+                        .ThenInclude(bc => bc.userBadges!)
                             .ThenInclude(ub => ub.badge)
                     .FirstOrDefault(u => u.BuserId == userId);
 
                 if (user == null || user.badgeCollection == null)
                 {
-                    Console.WriteLine("User or badge collection not found.");
                     return false;
                 }
 
-                var userBadge = user.badgeCollection.userBadges
+                var userBadge = user.badgeCollection.userBadges!
                     .FirstOrDefault(ub => ub.badgeId == badgeId);
 
                 if (userBadge == null)
                 {
-                    Console.WriteLine("Badge not found for user.");
                     return false;
                 }
 
@@ -692,13 +649,11 @@ public List<progressBool> CheckBadges(int userId)
 
                 if (patient == null || patient.test == null)
                 {
-                    Console.WriteLine("Test patient not found or has no test data.");
                     return false;
                 }
 
                 bool isAttendedAppointment = patient.dates.Any(d => d.done == true);
 
-                Console.WriteLine($"User {user.BuserId} has attended an appointment: {isAttendedAppointment}");
 
                 if (isAttendedAppointment)
                 {
@@ -727,22 +682,20 @@ public List<progressBool> CheckBadges(int userId)
                 // Get the user with badgeCollection and badges
                 var user = db.dummyUsers
                     .Include(u => u.badgeCollection)
-                        .ThenInclude(bc => bc.userBadges)
+                        .ThenInclude(bc => bc.userBadges)!
                             .ThenInclude(ub => ub.badge)
                     .FirstOrDefault(u => u.BuserId == userId);
 
                 if (user == null || user.badgeCollection == null)
                 {
-                    Console.WriteLine("User or badge collection not found.");
                     return false;
                 }
 
-                var userBadge = user.badgeCollection.userBadges
+                var userBadge = user.badgeCollection.userBadges!
                     .FirstOrDefault(ub => ub.badgeId == badgeId);
 
                 if (userBadge == null)
                 {
-                    Console.WriteLine("Badge not found for user.");
                     return false;
                 }
 
@@ -754,13 +707,10 @@ public List<progressBool> CheckBadges(int userId)
 
                 if (patient == null || patient.test == null)
                 {
-                    Console.WriteLine("Test patient not found or has no test data.");
                     return false;
                 }
 
                 int attendedCount = patient.dates.Count(d => d.done == true);
-
-                Console.WriteLine($"User {user.BuserId} has attended {attendedCount} appointments.");
 
                 if (attendedCount >= 3)
                 {
@@ -788,22 +738,20 @@ public List<progressBool> CheckBadges(int userId)
                 // Get the user with badgeCollection and badges
                 var user = db.dummyUsers
                     .Include(u => u.badgeCollection)
-                        .ThenInclude(bc => bc.userBadges)
+                        .ThenInclude(bc => bc.userBadges!)
                             .ThenInclude(ub => ub.badge)
                     .FirstOrDefault(u => u.BuserId == userId);
 
                 if (user == null || user.badgeCollection == null)
                 {
-                    Console.WriteLine("User or badge collection not found.");
                     return false;
                 }
 
-                var userBadge = user.badgeCollection.userBadges
+                var userBadge = user.badgeCollection.userBadges!
                     .FirstOrDefault(ub => ub.badgeId == badgeId);
 
                 if (userBadge == null)
                 {
-                    Console.WriteLine("Badge not found for user.");
                     return false;
                 }
 
@@ -815,14 +763,11 @@ public List<progressBool> CheckBadges(int userId)
 
                 if (patient == null || patient.test == null)
                 {
-                    Console.WriteLine("Test patient not found or has no test data.");
                     return false;
                 }
 
                 //letters are called carts
                 bool hasCreatedLetter = patient.carts.Any(c => c.transmitterId == 63);
-
-                Console.WriteLine($"User {user.BuserId} has created a letter: {hasCreatedLetter}");
 
                 if (hasCreatedLetter)
                 {
@@ -851,22 +796,20 @@ public List<progressBool> CheckBadges(int userId)
                 // Get the user with badgeCollection and badges
                 var user = db.dummyUsers
                     .Include(u => u.badgeCollection)
-                        .ThenInclude(bc => bc.userBadges)
+                        .ThenInclude(bc => bc.userBadges!)
                             .ThenInclude(ub => ub.badge)
                     .FirstOrDefault(u => u.BuserId == userId);
 
                 if (user == null || user.badgeCollection == null)
                 {
-                    Console.WriteLine("User or badge collection not found.");
                     return false;
                 }
 
-                var userBadge = user.badgeCollection.userBadges
+                var userBadge = user.badgeCollection.userBadges!
                     .FirstOrDefault(ub => ub.badgeId == badgeId);
 
                 if (userBadge == null)
                 {
-                    Console.WriteLine("Badge not found for user.");
                     return false;
                 }
 
@@ -878,14 +821,11 @@ public List<progressBool> CheckBadges(int userId)
 
                 if (patient == null || patient.test == null)
                 {
-                    Console.WriteLine("Test patient not found or has no test data.");
                     return false;
                 }
 
                 //letters are called carts
                 bool hasAnsweredLetter = true;
-
-                Console.WriteLine($"User {user.BuserId} has answered a letter: {hasAnsweredLetter}");
 
                 if (hasAnsweredLetter)
                 {
@@ -914,22 +854,20 @@ public List<progressBool> CheckBadges(int userId)
                 // Get the user with badgeCollection and badges
                 var user = db.dummyUsers
                     .Include(u => u.badgeCollection)
-                        .ThenInclude(bc => bc.userBadges)
+                        .ThenInclude(bc => bc.userBadges!)
                             .ThenInclude(ub => ub.badge)
                     .FirstOrDefault(u => u.BuserId == userId);
 
                 if (user == null || user.badgeCollection == null)
                 {
-                    Console.WriteLine("User or badge collection not found.");
                     return false;
                 }
 
-                var userBadge = user.badgeCollection.userBadges
+                var userBadge = user.badgeCollection.userBadges!
                     .FirstOrDefault(ub => ub.badgeId == badgeId);
 
                 if (userBadge == null)
                 {
-                    Console.WriteLine("Badge not found for user.");
                     return false;
                 }
 
@@ -941,13 +879,11 @@ public List<progressBool> CheckBadges(int userId)
 
                 if (patient == null || patient.test == null)
                 {
-                    Console.WriteLine("Test patient not found or has no test data.");
                     return false;
                 }
 
                 //letters are called carts
                 int letterCount = patient.carts.Count(c => c.transmitterId == 63);
-                Console.WriteLine($"User {user.BuserId} has created {letterCount} letters.");
                 if (letterCount >= 3)
                 {
                     userBadge.progress = 1; // Assuming full progress for creating a letter
@@ -972,22 +908,20 @@ public List<progressBool> CheckBadges(int userId)
                 // Get the user with badgeCollection and badges
                 var user = db.dummyUsers
                     .Include(u => u.badgeCollection)
-                        .ThenInclude(bc => bc.userBadges)
+                        .ThenInclude(bc => bc.userBadges!)
                             .ThenInclude(ub => ub.badge)
                     .FirstOrDefault(u => u.BuserId == userId);
 
                 if (user == null || user.badgeCollection == null)
                 {
-                    Console.WriteLine("User or badge collection not found.");
                     return false;
                 }
 
-                var userBadge = user.badgeCollection.userBadges
+                var userBadge = user.badgeCollection.userBadges!
                     .FirstOrDefault(ub => ub.badgeId == badgeId);
 
                 if (userBadge == null)
                 {
-                    Console.WriteLine("Badge not found for user.");
                     return false;
                 }
 
@@ -999,14 +933,11 @@ public List<progressBool> CheckBadges(int userId)
 
                 if (patient == null || patient.test == null)
                 {
-                    Console.WriteLine("Test patient not found or has no test data.");
                     return false;
                 }
 
                 // Assuming the progress stage is the one that indicates growth
-                bool hasAdvancedStage = patient.progress.stage > 0;
-
-                Console.WriteLine($"User {user.BuserId} has advanced a stage: {hasAdvancedStage}");
+                bool hasAdvancedStage = patient.progress!.stage > 0;
 
                 if (hasAdvancedStage)
                 {
@@ -1034,22 +965,20 @@ public List<progressBool> CheckBadges(int userId)
                 // Get the user with badgeCollection and badges
                 var user = db.dummyUsers
                     .Include(u => u.badgeCollection)
-                        .ThenInclude(bc => bc.userBadges)
+                        .ThenInclude(bc => bc.userBadges!)
                             .ThenInclude(ub => ub.badge)
                     .FirstOrDefault(u => u.BuserId == userId);
 
                 if (user == null || user.badgeCollection == null)
                 {
-                    Console.WriteLine("User or badge collection not found.");
                     return false;
                 }
 
-                var userBadge = user.badgeCollection.userBadges
+                var userBadge = user.badgeCollection.userBadges!
                     .FirstOrDefault(ub => ub.badgeId == badgeId);
 
                 if (userBadge == null)
                 {
-                    Console.WriteLine("Badge not found for user.");
                     return false;
                 }
 
@@ -1061,14 +990,11 @@ public List<progressBool> CheckBadges(int userId)
 
                 if (patient == null || patient.test == null)
                 {
-                    Console.WriteLine("Test patient not found or has no test data.");
                     return false;
                 }
 
                 // Assuming the progress stage is the one that indicates growth
-                bool hasGrownCompletely = patient.progress.stage >= 6;
-
-                Console.WriteLine($"User {user.BuserId} has grown completely: {hasGrownCompletely}");
+                bool hasGrownCompletely = patient.progress!.stage >= 6;
 
                 if (hasGrownCompletely)
                 {

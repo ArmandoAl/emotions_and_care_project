@@ -31,17 +31,9 @@ namespace Business.Implementations
 
         public bool recomendationCompleted(int idRecomendation, int idUsuario){
             if (idRecomendation <= 0 || idUsuario <= 0) return false;
-            Console.WriteLine("- RECOMENDACION  FUNCTION -");
-            Console.WriteLine("idRecomendation: " + idRecomendation);
-            Console.WriteLine("idUsuario: " + idUsuario);
 
-
-            // Verificar
-            //get recomendacion
             var recomendacion = _recomendacionRepository.Get(idRecomendation);
             if (recomendacion == null) return false;
-
-            Console.WriteLine("recomendacion: " + recomendacion.ToString());
 
             // do a switch case, from the recomendation type
 
@@ -73,10 +65,6 @@ namespace Business.Implementations
 
             //does patient has the sticker?
             var hasSticker = _itemsService.HasSticker(stickerId, idUsuario);
-
-            Console.WriteLine("stickerId: " + stickerId);
-
-            Console.WriteLine("hasSticker: " + hasSticker.ToString());
 
             if (hasSticker == null)
             {

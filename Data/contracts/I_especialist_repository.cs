@@ -21,9 +21,9 @@ namespace Data.Contracts
 
         int login(string email, string password);
 
-        bool aceptarSolicitud(int idSpecialist, int pacientId);
+        bool aceptarSolicitud(int idSpecialist, int pacientId, int idRequest);
 
-        bool rechazarSolicitud(int idSpecialist, int pacientId);
+        bool rechazarSolicitud(int idSpecialist, int pacientId, int idRequest);
         List<Patient>? GetPacientes(int id);
         List<Specialist> ListarEspecialistas(int offset, int limit);
 

@@ -139,6 +139,7 @@ namespace Data.Implementations
                 citaToUpdate.description = cita.description;
                 citaToUpdate.sentBySpecialist = cita.sentBySpecialist;
                 citaToUpdate.status = Status.PendingToMatch;
+                citaToUpdate.specialistNotes = cita.specialistNotes;
 
                 db.SaveChanges();
 
@@ -180,7 +181,7 @@ namespace Data.Implementations
                 var cita = db.dates.FirstOrDefault(x => x.dateId == idCita);
                 if (cita == null) return false;
 
-                var paciente = db.patients.FirstOrDefault(x => x.userId == idPaciente);
+                var paciente = db.patients.Where(x => x.userId == idPaciente).Include(x => x.dates).FirstOrDefault();
                 if (paciente == null) return false;
 
                 paciente.dates.Add(cita);
@@ -202,11 +203,8 @@ namespace Data.Implementations
             using (var db = new DBContext(options: connectionOptions))
             {
 
-                var cita = db.dates.FirstOrDefault(x => x.dateId == idCita);
+                var cita = db.dates.Where(x => x.dateId == idCita).Include(x => x.patient).FirstOrDefault();
                 if (cita == null) return false;
-
-                var paciente = db.patients.FirstOrDefault(x => x.userId == idPaciente);
-                if (paciente == null) return false;
 
                 cita.patientConfirm = true;
                 cita.status = Status.Confirmed;
@@ -230,12 +228,14 @@ namespace Data.Implementations
                 var paciente = db.patients.FirstOrDefault(x => x.userId == idPaciente);
                 if (paciente == null) return false;
 
-                cita.patientConfirm = false;
-                cita.status = Status.NotCompleted;
-                if(cita.specialistConfirm == false)
+                //revisar si hay una dateRequest con el id de la cita
+                var dateRequest = db.dateRequests.Where(x => x.Cita!.dateId == idCita).FirstOrDefault();
+                if (dateRequest != null)
                 {
-                    db.dates.Remove(cita);
+                    db.dateRequests.Remove(dateRequest);
                 }
+                
+                db.dates.Remove(cita);
                 db.SaveChanges();
                 return true;
             }
@@ -251,7 +251,7 @@ namespace Data.Implementations
             using (var db = new DBContext(options: connectionOptions))
             {
 
-                var cita = db.dates.FirstOrDefault(x => x.dateId == idCita);
+                var cita = db.dates.Where(x => x.dateId == idCita).Include(x => x.patient).FirstOrDefault();
                 if (cita == null) return false;
 
                 var especialista = db.specialists.FirstOrDefault(x => x.userId == idEspecialista);
@@ -281,12 +281,14 @@ namespace Data.Implementations
                 var especialista = db.specialists.FirstOrDefault(x => x.userId == idEspecialista);
                 if (especialista == null) return false;
 
-               
-                cita.specialistConfirm = false;
-                if (cita.patientConfirm == false)
+                var dateRequest = db.dateRequests.FirstOrDefault(x => x.Cita!.dateId == idCita);
+
+                if (dateRequest != null)
                 {
-                    db.dates.Remove(cita);
+                    db.dateRequests.Remove(dateRequest);
                 }
+                
+                db.dates.Remove(cita);   
                 db.SaveChanges();
                 return true;
             }
@@ -302,12 +304,14 @@ namespace Data.Implementations
 
             using (var db = new DBContext(options: connectionOptions))
             {
-                var especialista = db.specialists.FirstOrDefault(x => x.userId == i);
+                var especialista = db.specialists.Where(x => x.userId == i).Include(x => x.dateRequests).FirstOrDefault();
                 if (especialista == null) return 0;
 
-                DateRequest solicitudCita = new DateRequest();
+                DateRequest solicitudCita = new DateRequest{
+                    Cita = cita,
+                };
 
-                solicitudCita.Cita = cita;
+                
 
                 especialista.dateRequests.Add(solicitudCita);
                 db.SaveChanges();
@@ -362,7 +366,7 @@ namespace Data.Implementations
 
             using (var db = new DBContext(options: connectionOptions))
             {
-                var especialista = db.specialists.FirstOrDefault(x => x.userId == idEspecialista);
+                var especialista = db.specialists.Where(x => x.userId == idEspecialista).Include(x => x.dates).FirstOrDefault();
                 if (especialista == null) return false;
 
 
@@ -375,9 +379,9 @@ namespace Data.Implementations
             }
         }
 
-        public bool eliminarSolicitudCita(int idCita)
+        public bool eliminarSolicitudCita(int idRequest)
         {
-            if(idCita <= 0) return false;
+            if(idRequest <= 0) return false;
 
             var connectionOptions = new DbContextOptionsBuilder<DBContext>()
              .UseSqlServer(Data.Helpers.Constants.ConnectionString)
@@ -386,7 +390,7 @@ namespace Data.Implementations
             using (var db = new DBContext(options: connectionOptions))
 
             {
-                var solicitudCita = db.dateRequests.FirstOrDefault(x => x.dateRequestId == idCita);
+                var solicitudCita = db.dateRequests.FirstOrDefault(x => x.dateRequestId == idRequest);
                 if (solicitudCita == null) return false;
 
                 db.dateRequests.Remove(solicitudCita);
@@ -506,6 +510,14 @@ namespace Data.Implementations
                 {
                     return false;
                 } else {
+                    //revisar si el paciente tiene solicitudes de citas
+                    var solicitudesCitas = db.dateRequests.Where(x => x.Cita!.patient!.userId == idPaciente).ToList();
+                    if (solicitudesCitas.Count > 0)
+                    {
+                        return false;
+                    }
+
+
                     return true;
                 }
             }

@@ -25,19 +25,13 @@ namespace Data.Implementations
             {
                 note.emotion = db.emotions!.FirstOrDefault(x => x.emotionId! == note.emotion.emotionId)!;
 
-                Console.WriteLine(note.emotion.emotionId);
-
                 var patient = db.patients.Where(x => x.userId == idPatient).Include(x => x.diary).FirstOrDefault();
 
                 if (patient == null) return 0;
 
-                Console.WriteLine("Paciente encontrado");
-
                 var dairy = patient.diary;
 
                 if (dairy == null) return 0;
-
-                Console.WriteLine("Diario encontrado:" + dairy.diaryId);
 
                 dairy.notes.Add(note);
                 db.SaveChanges();

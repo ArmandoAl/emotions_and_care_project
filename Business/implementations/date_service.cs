@@ -52,7 +52,8 @@ namespace Business.Implementations
 
                     if(idSolicitudDate == 0)
                     {
-                        _DateRepository.DeleteCita(idDate);
+                       
+                        _DateRepository.cancelarCitaPorEspecialista(idDate, idEspecialista);
                         return null;
                     }
 

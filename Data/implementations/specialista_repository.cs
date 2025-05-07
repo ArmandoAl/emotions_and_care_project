@@ -227,7 +227,7 @@ namespace Data.Implementations
             }
         }
 
-        public bool aceptarSolicitud(int idSpecialist, int pacientId)
+        public bool aceptarSolicitud(int idSpecialist, int pacientId, int idRequest)
         {
             if(idSpecialist <= 0 || pacientId <= 0) return false;
 
@@ -236,22 +236,23 @@ namespace Data.Implementations
               .Options;
             using (var db = new DBContext(options: connectionOptions))
             {
-                var especialista = db.specialists.FirstOrDefault(x => x.userId == idSpecialist);
+                var especialista = db.specialists.Where(x => x.userId == idSpecialist).Include(x => x.patientsRequests).ThenInclude(x => x.patient).FirstOrDefault();
                 if(especialista == null) return false;
 
-                var paciente = db.patients.FirstOrDefault(x => x.userId == pacientId);
+                var paciente = db.patients.Where(x => x.userId == pacientId).Include(x => x.specialist).FirstOrDefault();
                 if(paciente == null) return false;
 
                
 
                 //encontrar el patientRequest que tenga el usuario y eliminalo
-                PatientRequest? patientRequest = db.patientRequest.FirstOrDefault(x => x.patient.userId == pacientId);
+                PatientRequest? patientRequest = db.patientRequest.Where(x =>  x.patientRequestId == idRequest).FirstOrDefault();
 
                 if (patientRequest != null)
                 {
+                    especialista.patientsRequests.Remove(patientRequest!);
                     db.patientRequest.Remove(patientRequest);
                 }
-                especialista.patientsRequests = db.patientRequest.Where(x => x.patient.userId != pacientId).ToList();
+                
                 paciente.specialist = especialista;
                 especialista.patients.Add(paciente);
 
@@ -262,7 +263,7 @@ namespace Data.Implementations
             }
         }
 
-        public bool rechazarSolicitud(int idSpecialist, int pacientId)
+        public bool rechazarSolicitud(int idSpecialist, int pacientId, int idRequest)
         {
             if (idSpecialist <= 0 || pacientId <= 0) return false;
 
@@ -278,13 +279,14 @@ namespace Data.Implementations
                 if (paciente == null) return false;
 
                 //encontrar el patientRequest que tenga el usuario y eliminalo
-                PatientRequest? patientRequest = db.patientRequest.FirstOrDefault(x => x.patient.userId == pacientId);
+                PatientRequest? patientRequest = db.patientRequest.Where(x => x.patientRequestId == idRequest).FirstOrDefault();
 
                 if (patientRequest != null)
                 {
                     db.patientRequest.Remove(patientRequest);
+                    especialista.patientsRequests.Remove(patientRequest!);
                 }
-                especialista.patientsRequests = db.patientRequest.Where(x => x.patient.userId != pacientId).ToList();
+                
                 db.specialists.Update(especialista);
                 db.SaveChanges();
                 return true;

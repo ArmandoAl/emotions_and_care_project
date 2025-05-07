@@ -133,7 +133,6 @@ namespace Data.Implementations
     // Retrieves a patient by their user ID from the database, including related data such as goals, user interface, and specialist.
     public Patient? Get(int id)
     {
-        Console.WriteLine("GET ID: " + id);
         if (id <= 0) return null;
 
         var connectionOptions = new DbContextOptionsBuilder<DBContext>()

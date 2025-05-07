@@ -83,7 +83,7 @@ namespace API.Controllers
             if (patient == null) return Task.FromResult<ActionResult>(BadRequest());
 
             var code = _service.GetForgotPassword(patient.userId);
-            Console.WriteLine(code);
+       
 
             if (code == "") return Task.FromResult<ActionResult>(BadRequest());
 
@@ -344,7 +344,6 @@ namespace API.Controllers
         {
             if (id < 1) return Task.FromResult<ActionResult>(BadRequest());
             var result = _service.actualizarThemeId(id, themeId);
-            Console.WriteLine(result);
 
             if (!result) return Task.FromResult<ActionResult>(BadRequest());
             return Task.FromResult<ActionResult>(Ok(result));
@@ -390,8 +389,6 @@ namespace API.Controllers
         [HttpPost("{id}/addAchievementToPatient/{idAchievement}")]
         public Task<ActionResult> addAchievementToPatient(int id, int idAchievement)
         {
-            Console.WriteLine("id: " + id);
-            Console.WriteLine("idAchievement: " + idAchievement);
             if (id < 1 || idAchievement < 1) return Task.FromResult<ActionResult>(BadRequest());
             var result = _service.addAchievementToPatient(id, idAchievement);
             if (!result) return Task.FromResult<ActionResult>(BadRequest());

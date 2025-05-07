@@ -90,13 +90,9 @@ namespace Data.Implementations
 
                 if (opps == null) return 0;
 
-                Console.WriteLine("Paciente encontrado");
-
                 var dairy = opps.bukayoSakaDiary;
 
                 if (dairy == null) return 0;
-
-                Console.WriteLine("Diario encontrado:" + dairy.Id);
 
                 dairy.SakaNotes.Add(note);
                 db.SaveChanges();

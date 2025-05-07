@@ -22,9 +22,9 @@ namespace Business.Contracts
 
         int login(string email, string password);
 
-        bool aceptarSolicitud(int idSpecialist, int pacientId);
+        bool aceptarSolicitud(int idSpecialist, int pacientId, int idRequest);
 
-        bool rechazarSolicitud(int idSpecialist, int pacientId);
+        bool rechazarSolicitud(int idSpecialist, int pacientId, int idRequest);
 
         bool aceptarCita(int idEspecialist, int idCita);
         bool rechazarCita(int id, int idCita);

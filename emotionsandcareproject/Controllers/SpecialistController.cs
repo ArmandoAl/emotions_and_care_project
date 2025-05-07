@@ -53,13 +53,13 @@ namespace API.Controllers
             return Task.FromResult<ActionResult>(Ok(result));
         }
 
-      [HttpPost("{id}/aceptarSolicitud/{pacientId}")]
-        public async Task<ActionResult> VincularPaciente([FromRoute] int id, [FromRoute] int pacientId)
+      [HttpPost("{id}/aceptarSolicitud/{pacientId}/{idRequest}")]
+        public async Task<ActionResult> VincularPaciente([FromRoute] int id, [FromRoute] int pacientId, [FromRoute] int idRequest)
         {
             if (id < 1 || pacientId < 1) return BadRequest();        
 
             // Intentar vincular al paciente
-            var result = _service.aceptarSolicitud(id, pacientId);
+            var result = _service.aceptarSolicitud(id, pacientId, idRequest);
             if (!result)
                 return BadRequest("No se pudo vincular el paciente.");
 
@@ -92,13 +92,13 @@ namespace API.Controllers
         }
 
         //rechazar solicitud
-        [HttpPost("{id}/rechazarSolicitud/{pacientId}")]
-        public async Task<ActionResult> RechazarPaciente([FromRoute] int id, [FromRoute] int pacientId)
+        [HttpPost("{id}/rechazarSolicitud/{pacientId}/{idRequest}")]
+        public async Task<ActionResult> RechazarPaciente([FromRoute] int id, [FromRoute] int pacientId, [FromRoute] int idRequest)
         {
             if (id < 1 || pacientId < 1) return BadRequest();
 
             // Intentar vincular al paciente
-            var result = _service.rechazarSolicitud(id, pacientId);
+            var result = _service.rechazarSolicitud(id, pacientId, idRequest);
             if (!result)
                 return BadRequest("No se pudo vincular el paciente.");
 

@@ -276,8 +276,6 @@ namespace Data.Implementations
 
         public bool putFlowerInInterface(int id, int flowerId) {
 
-            Console.WriteLine("Id: " + id);
-            Console.WriteLine("FlowerId: " + flowerId);
 
             if(flowerId <= 0 || id <= 0) return false;
 
@@ -288,18 +286,11 @@ namespace Data.Implementations
             using (var db = new DBContext(options: connectionOptions))
             {
 
-                Console.WriteLine("Id: " + id);
-
                 var patient = db.patients.Where(x => x.userId == id).Include(x => x.userInterface).ThenInclude(x => x.userFlowers).FirstOrDefault();
-
-
-                Console.WriteLine("Patient: " + patient);
 
                 if(patient == null) return false;
 
                 var flower = db.flowers.FirstOrDefault(x => x.flowerId == flowerId);
-
-                Console.WriteLine("Flower: " + flower);
 
                 if(flower == null) return false;
 
