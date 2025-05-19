@@ -14,7 +14,7 @@ namespace Business.Contracts
 
         Patient? Get(int id);
 
-        bool Delete(int id);
+        Task<bool> Delete(int id);
 
         bool Update(Patient paciente);
 
@@ -35,7 +35,7 @@ namespace Business.Contracts
 
         bool growStage(int idPatient);
 
-        List<StageProgressInfo> GetStageProgress(int idPatient);
+        List<StageProgressInfo>? GetStageProgress(int idPatient);
 
         List<StageInfoResponse> GetAllStagesProgress(int idPatient);
 

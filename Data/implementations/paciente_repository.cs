@@ -266,61 +266,9 @@ namespace Data.Implementations
                 .FirstOrDefault();
         }
     }
-
-/*
-
-public bool Delete(int id)
-        {
-            if(id <= 0) return false;
-
-            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
-            .UseSqlServer(Data.Helpers.Constants.ConnectionString)
-            .Options;
-            using (var db = new DBContext(options: connectionOptions))
-            {
-                var opps = db.opps
-                    .Include(o => o.bukayoSakaDiary)   // Include the related Bukayo
-                    .ThenInclude(b => b.SakaNotes)     // Include related SakaNotes
-                    .FirstOrDefault(o => o.BuserId == id);
-
-                
-                if(opps == null) return false;
-
-                // Delete related SakaNotes
-                db.sakaNotes.RemoveRange(opps.bukayoSakaDiary.SakaNotes);
-                db.bukayos.Remove(opps.bukayoSakaDiary);
-                
-
-                db.opps.Remove(opps);
-                db.SaveChanges();
-                return true;
-            }
-        }
-
-*/
-    public bool Delete(int id)
-    {
-        var allowedIds = new List<int> { 29, 49, 60, 61, 62, 63, 64, 67, 76, 77, 78, 79, 80, 83, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95 };
-        var connectionOptions = new DbContextOptionsBuilder<DBContext>()
-        .UseSqlServer(Data.Helpers.Constants.ConnectionString)
-        .Options;
-
-        using (var db = new DBContext(options: connectionOptions))
-        {
-            var diariesToDelete = db.diaries
-            .Where(d => !allowedIds.Contains(d.diaryId))
-            .ToList();
-
-            db.diaries.RemoveRange(diariesToDelete);
-
-
-             return true;
-        }
-    }
-    // Deletes a patient from the database based on their user ID
-    /*
-        public bool Delete(int id)
-        {
+    
+        
+        public async Task<bool> Delete(int id) {
             if (id <= 0) return false;
 
             var connectionOptions = new DbContextOptionsBuilder<DBContext>()
@@ -331,9 +279,10 @@ public bool Delete(int id)
                 var patient = db.patients
                     .Include(o => o.specialist)
                     .Include(o => o.goals)
+                    .Include(o => o.dates)
+                    .Include(o => o.notifications)  
                     .Include(o => o.carts).ThenInclude(o => o.cartAnswers)
                     .Include(o => o.userInterface)
-                    .Include(o => o.notifications)
                     .Include(o => o.userInterface.userFlowers)
                     .Include(o => o.userInterface.userStickers)
                     .Include(o => o.settings)
@@ -348,23 +297,20 @@ public bool Delete(int id)
                 Console.WriteLine("Paciente encontrado:" + patient.userId + " - " + patient.name);
 
                  //DELETE DIARY
+
+                patient.diary.notes.RemoveAll(x => x != null);
                 db.notes.RemoveRange(patient.diary.notes);
                 db.diaries.Remove(patient.diary);
 
                 //DELETE CARTS AND ANSWERS
+
+                patient.carts.RemoveAll(x => x != null);
                 db.cartAnswers.RemoveRange(patient.carts.SelectMany(x => x.cartAnswers));
                 db.carts.RemoveRange(patient.carts);
 
-
-
-
-
                 
                 //DELETE NOTIFICATIONS
-                db.notifications.RemoveRange(patient.notifications);
 
-                //DELETE CARTS
-                db.carts.RemoveRange(patient.carts);
 
                 if (patient.specialist != null)
                 {
@@ -377,31 +323,93 @@ public bool Delete(int id)
                     patient.specialist.patients.Remove(patient);
                 }
 
-                //GOALS
-                db.goals.RemoveRange(patient.goals);
-                Console.WriteLine("Metas eliminadas");
+                patient.completeRecomendations.RemoveAll(x => x != null);
+                db.recomendationComplete.RemoveRange(patient.completeRecomendations);
+                //primero revisamos si tiene especialista, despues revisamos si tiene tanto solicitudes de citas como citas, si es asi las elimina
+
+                if(patient.specialist != null)
+                {
+                    var specialist = db.specialists
+                        .Include(s => s.dates)
+                        .FirstOrDefault(x => x.userId == patient.specialist.userId);
+
+                    if (specialist != null)
+                    {
+                        var requests = db.dateRequests.Where(x => x.Cita!.patient!.userId == id).ToList();
+                        if (requests != null)
+                        {
+                            db.dateRequests.RemoveRange(requests);
+                        }
+
+                        var dates = specialist.dates
+                                .Where(x => x.patient?.userId == id)
+                                .ToList();
+                            
+                        if (dates != null)
+                        {
+                           db.dates.RemoveRange(dates);
+                        }   
+
+                        specialist.patients.Remove(patient);
+                    }
+                }
+
+
+                db.dates.RemoveRange(patient.dates);
+                 await db.SaveChangesAsync();
+
+
+
+                Console.WriteLine("Fechas eliminadas");
+
+                
+                
+                
+             Console.WriteLine("Metas eliminadas");
 
                 db.userInterfaces.Remove(patient.userInterface);
+                 await db.SaveChangesAsync();
                 Console.WriteLine("Interfaz eliminada");
 
                 db.settings.Remove(patient.settings);
+                 await db.SaveChangesAsync();
                 Console.WriteLine("Configuraciones eliminadas");
 
                 db.terms.Remove(patient.termsAndConditions);
+                 await db.SaveChangesAsync();
                 Console.WriteLine("Terminos eliminados");
 
-                db.progresses.Remove(patient.progress);
+                db.progresses.Remove(patient.progress!);
+                 await db.SaveChangesAsync();
+
+                 db.goals.RemoveRange(patient.goals);
+                await db.SaveChangesAsync();
+                //borrar progreso
                 Console.WriteLine("Progreso eliminado");
 
 
+                if (patient.notifications != null && patient.notifications.Any())
+                {
+                    var notifications = patient.notifications.ToList(); // guarda antes de limpiar
+
+                    Console.WriteLine("Notificaciones eliminadas");
+                    db.notifications.RemoveRange(notifications); // elimina de la BD
+                    await db.SaveChangesAsync(); // guarda cambios
+                }
 
 
-                db.SaveChanges();
+
+
+
+                //borrar usuario de la tabla de usuarios
+                db.patients.Remove(patient);
+                
+                await db.SaveChangesAsync();
                 return true;
             }
         }
 
-        */
+        
 
 
 
@@ -1357,7 +1365,7 @@ public bool Delete(int id)
                 if (thisPaciente == null) return false;
 
 
-                if(thisPaciente.progress!.stage > 5) {
+                if(thisPaciente.progress!.stage < 5) {
                     thisPaciente.progress!.stage = thisPaciente.progress!.stage! + 1;
                 } else {
                     thisPaciente.progress!.stage = 0;
@@ -1370,7 +1378,6 @@ public bool Delete(int id)
                         userFlower.state = userFlower.state + 1;
                     } 
                 }
-                
 
                 db.SaveChanges();
 
@@ -1404,45 +1411,39 @@ public bool Delete(int id)
                 if (thisPaciente == null) return false;
 
                 var currentDate = DateTime.Now;
-
                 var lastDate = thisPaciente.progress!.lastDate;
-
                 var begginDate = thisPaciente.progress!.begginDate;
 
-                if (lastDate == null) return true;
-
-                if (begginDate == null) return true;
-
-                // Si begginDate es igual a lastDate, entonces no se ha actualizado el progreso, por lo tanto se retorna true.
-                if (begginDate == lastDate) return true;
+                if (begginDate!.Value == DateTime.MinValue) {
+                    return false;
+                }
 
                 var days = (currentDate - lastDate!.Value).TotalDays;
+                var userFlower = thisPaciente.userInterface.userFlowers.Where(x => x.position == 2).FirstOrDefault();
 
-                //valida que la diferencia de días sea mayor o igual a 7 y que la cuenta no tenga mas de 7 días de haberse creado
+                if(userFlower != null) {
+                   if(userFlower.state == 0) {
+                        return true;
+                   }
+                } 
 
-                if (days < 7) {
+                if (days >= 7 && thisPaciente.dateCreated.AddDays(7) >= currentDate) {
+
                     if(thisPaciente.dateCreated.AddDays(7) >= currentDate 
                     ) {
-                        //encuentra la flor que esta en la posición 2 y revisa que este en el estado 0
-
-                        var userFlower = thisPaciente.userInterface.userFlowers.Where(x => x.position == 2).FirstOrDefault();
 
                         if (userFlower != null) {
-                            if(userFlower.state == 0) {
-                                return true;
-                            }
+                           return true;
                         } else {
-
-                        return false;
+                            return false;
                         }
 
-                    return false;
+                   
                     }
 
                     return false;
                 } else {
-
-                return true;
+                    return false;
                 }
             }
         }
@@ -1517,6 +1518,8 @@ public bool Delete(int id)
 
                 if (thisPaciente == null) return false;
 
+
+
                 thisPaciente.progress!.lastDate = DateTime.Now;
 
                 db.SaveChanges();
@@ -1540,10 +1543,16 @@ public bool Delete(int id)
                     return 2;//HasSpecialist(idPatient) ? 1 : 0;
                 case "patientRegister":
                     return 2;//IsRegistered(idPatient) ? 1 : 0;
+                case "tutorialCompleted": 
+                    return 2;//IsTutorialCompleted(idPatient) ? 1 : 0;
                 default:
                     return 0;
             }
         }
+
+
+        
+
 
 
 
@@ -2043,8 +2052,9 @@ public bool Delete(int id)
                     return false;
 
                 bool isBadgeEarned = thisPaciente.specialist != null;
+                bool theresDates =  thisPaciente.dates.Count > 0;
 
-                if (isBadgeEarned)
+                if (isBadgeEarned && theresDates == false)
                 {
                     userAchievement.dateEarned = DateTime.Now;
                 }
@@ -2175,9 +2185,9 @@ public bool Delete(int id)
 
                 if (hasCreatedLetter)
                 {
-                    //userAchievement.progress = 1;
-                    //userAchievement.dateEarned = DateTime.Now;
-                    //db.SaveChanges();
+                    userAchievement!.progress = 1;
+                    userAchievement.dateEarned = DateTime.Now;
+                    db.SaveChanges();
                     return true;
                 }
                 return false;
@@ -2507,7 +2517,7 @@ public bool Delete(int id)
 
                         if (ua != null)
                         {
-                            Console.WriteLine($"Checking achievement {ua.achievementId} - {ua.achievement.name}");
+                    
                             bool isCompleted = func(idUsuario, ua.achievementId);
                             if (isCompleted)
                             {

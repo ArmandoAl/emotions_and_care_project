@@ -330,5 +330,11 @@ namespace Business.Implementations
         {
             return _notificacionRepository.vincularNotificationConPaciente(idNotificacion, idPaciente);
         }
+
+        public bool DeleteAllUserNotification(int idPaciente)
+        {
+            if (idPaciente <= 0) return false;
+            return _notificacionRepository.DeleteAllUserNotification(idPaciente);   
+        }
     }
 }

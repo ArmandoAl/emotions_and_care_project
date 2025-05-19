@@ -26,5 +26,7 @@ namespace Business.Contracts
         bool postponeNotification(int idNotificacion);
 
         List<NotificationModel> init(int idPaciente); 
+
+        bool DeleteAllUserNotification(int idPaciente);
     }
 }

@@ -73,10 +73,10 @@ namespace Business.Implementations
             return id;
         }
 
-        public bool Delete(int id)
+        public async Task<bool> Delete(int id)
         {
            if(id < 1) { return false; }
-           return _service.Delete(id);
+           return await _service.Delete(id);
         }
 
         public Patient? Get(int id)
@@ -144,7 +144,9 @@ namespace Business.Implementations
 
             bool canReview = _service.reviewCanCheck(idPatient);
 
-            if (!canReview) { return false; }
+            if (canReview == false) {
+                 return false;
+            }
 
             
             bool can = _service.canGrowFlower(idPatient);
@@ -153,7 +155,7 @@ namespace Business.Implementations
             {  
                _service.updateLastProgressDate(idPatient);
 
-               var notiExist = _notificationRepository.checkExistGrowNotification(idPatient);
+               bool notiExist = _notificationRepository.checkExistGrowNotification(idPatient);
 
                if (notiExist)
                {
@@ -191,7 +193,7 @@ namespace Business.Implementations
 
         public List<StageInfoResponse> GetAllStagesProgress(int idPatient)
         {
-            if (idPatient < 1) { return null; }
+            if (idPatient < 1) { return new List<StageInfoResponse>(); }
             return _service.GetAllStagesProgress(idPatient);
         }
 
@@ -208,24 +210,24 @@ namespace Business.Implementations
 
             if (result)
             {
-               var idLogro = _logroRepository.AddGoalPatient(id, 6);
+            //    var idLogro = _logroRepository.AddGoalPatient(id, 6);
 
-                if (idLogro > 0)
-                {
-                    _itemsRepository.addStickerToPatient(4, id);
+            //     if (idLogro > 0)
+            //     {
+            //         _itemsRepository.addStickerToPatient(4, id);
 
-                    var notiId = _notificationRepository.AddNotification(new NotificationModel
-                    {
-                       notificationType = NotificationType.goal,
-                        Titulo = "¡Nuevo sticker!",
-                        Descripcion = "Has logrado vincularte con un especialista, ¡sigue así!, te has ganado un nuevo sticker",
-                        url = _itemsRepository.GetSticker(4).url,
-                        stickerId = 4,
-                        reference = "patientSync"                    
-                    });
+            //         var notiId = _notificationRepository.AddNotification(new NotificationModel
+            //         {
+            //            notificationType = NotificationType.goal,
+            //             Titulo = "¡Nuevo sticker!",
+            //             Descripcion = "Has logrado vincularte con un especialista, ¡sigue así!, te has ganado un nuevo sticker",
+            //             url = _itemsRepository.GetSticker(4).url,
+            //             stickerId = 4,
+            //             reference = "patientSync"                    
+            //         });
 
-                    _notificationRepository.vincularNotificationConPaciente(notiId, id);
-                }
+            //         _notificationRepository.vincularNotificationConPaciente(notiId, id);
+            //     }
 
             }
 

@@ -19,4 +19,6 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<DBContext>
     {
         return ToString() ?? base.ToString() ?? GetType().ToString();
     }
+
+    
 }

@@ -103,6 +103,7 @@ namespace Data.Implementations
           .UseSqlServer(Data.Helpers.Constants.ConnectionString)
           .Options;
             using (var db = new DBContext(options: connectionOptions))
+
             {
                 var recomendation = db.recomendation.Find(idRecomendation);
                 if (recomendation == null) return false;

@@ -23,11 +23,8 @@ namespace Data.Implementations
             {
                 
                 db.dates.Add(cita);
-
                 db.SaveChanges();
-
                 return cita.dateId;
-
             }
 
         }
@@ -93,14 +90,10 @@ namespace Data.Implementations
                var paciente = db.patients.Where(x => x.userId == idPaciente).Include(x => x.dates).FirstOrDefault();
 
                 if (paciente == null) return null;
-
-                
-
                 citas = paciente.dates.ToList();
 
                 //ordenar citas por fecha de mas reciente a mas antigua
                 citas = citas.OrderByDescending(x => x.date).ToList();
-
                 return citas.Select(x => new Date
                 {
                     dateId = x.dateId,
@@ -113,6 +106,20 @@ namespace Data.Implementations
                     status = x.status,
                     specialistNotes = x.specialistNotes,
                     sentBySpecialist = x.sentBySpecialist,
+                    patient = new Patient
+                    {
+                        userId = x.patient!.userId,
+                        name = x.patient.name,
+                        mail = x.patient.mail,
+                        phone = x.patient.phone,
+                        specialist = x.patient.specialist != null ? new Specialist
+                        {
+                            userId = x.patient.specialist.userId,
+                            name = x.patient.specialist.name,
+                            mail = x.patient.specialist.mail,
+                            phone = x.patient.specialist.phone,
+                        } : null,   
+                    }
 
                 }).ToList();
             }
@@ -140,7 +147,9 @@ namespace Data.Implementations
                 citaToUpdate.sentBySpecialist = cita.sentBySpecialist;
                 citaToUpdate.status = Status.PendingToMatch;
                 citaToUpdate.specialistNotes = cita.specialistNotes;
-
+                citaToUpdate.patientConfirm = cita.patientConfirm;
+                citaToUpdate.specialistConfirm = cita.specialistConfirm;
+                
                 db.SaveChanges();
 
                 return true;
@@ -160,6 +169,8 @@ namespace Data.Implementations
                 if (citaToUpdate == null) return false;
 
                 citaToUpdate.status = cita.status;
+                citaToUpdate.patientConfirm = cita.patientConfirm;
+                citaToUpdate.specialistConfirm = cita.specialistConfirm;
                 citaToUpdate.specialistNotes = cita.specialistNotes;
 
                 db.SaveChanges();

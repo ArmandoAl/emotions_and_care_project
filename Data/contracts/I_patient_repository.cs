@@ -13,7 +13,7 @@ namespace Data.Contracts
 
         Patient? Get(int id);
 
-        bool Delete(int id);
+        Task<bool> Delete(int id);
 
         bool Update(Patient paciente);
         bool VincularEspecialista(int id, string tokenEspecialista);

@@ -87,8 +87,8 @@ namespace Data.Implementations
 
                 // Orden personalizado:
                 return notifications
-                    .OrderByDescending(n => n.PostponeUntil != null && n.PostponeUntil <= DateTime.Now) // Primero los pospuestos listos
-                    .ThenByDescending(n => n.emitDate) // Luego por fecha normal
+                    .OrderByDescending(n => n.PostponeUntil != null && n.PostponeUntil <= DateTime.Now) 
+                    .ThenByDescending(n => n.emitDate)
                     .ToList();
             }
         }
@@ -151,25 +151,29 @@ namespace Data.Implementations
             }
         }
 
-        public bool vincularNotificationConPaciente(int idNotification, int idPaciente)
+       public bool vincularNotificationConPaciente(int idNotification, int idPaciente)
         {
-            if(idNotification <= 0 || idPaciente <= 0) return false;
+            if (idNotification <= 0 || idPaciente <= 0) return false;
 
             var connectionOptions = new DbContextOptionsBuilder<DBContext>()
-            .UseSqlServer(Data.Helpers.Constants.ConnectionString)
-            .Options;
+                .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+                .Options;
             using (var db = new DBContext(options: connectionOptions))
             {
-                var notification = db.notifications.FirstOrDefault(x => x.notificationId == idNotification);
-                var paciente = db.patients.FirstOrDefault(x => x.userId == idPaciente);
+                var paciente = db.patients.Include(p => p.notifications).FirstOrDefault(x => x.userId == idPaciente);
+                if (paciente == null) return false;
 
-                if(notification == null || paciente == null) return false;
-                
-                paciente.notifications.Add(notification);
+                // Crear solo un "stub" de la notificación con el ID, sin cargarla completa
+                var stubNotification = new NotificationModel { notificationId = idNotification };
+                db.notifications.Attach(stubNotification); // Decimos "esto ya existe"
+
+                paciente.notifications.Add(stubNotification);
+
                 db.SaveChanges();
                 return true;
             }
         }
+
 
         public bool checkExistGrowNotification(int idPaciente)
         {
@@ -186,6 +190,24 @@ namespace Data.Implementations
                 return paciente.notifications.Any(x => x.notificationType == NotificationType.growNotifications);
             }
 
+        }
+
+        public bool DeleteAllUserNotification(int idPaciente)
+        {
+            if(idPaciente <= 0) return false;
+
+            var connectionOptions = new DbContextOptionsBuilder<DBContext>()
+            .UseSqlServer(Data.Helpers.Constants.ConnectionString)
+            .Options;
+            using (var db = new DBContext(options: connectionOptions))
+            {
+                var paciente = db.patients.Where(x => x.userId == idPaciente).Include(x => x.notifications).FirstOrDefault();
+                if(paciente == null) return false;
+
+                db.notifications.RemoveRange(paciente.notifications);
+                db.SaveChanges();
+                return true;
+            }
         }
     }
 }

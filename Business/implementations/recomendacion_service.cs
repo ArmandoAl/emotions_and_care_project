@@ -37,7 +37,7 @@ namespace Business.Implementations
 
             // do a switch case, from the recomendation type
 
-            var stickerId = 0;
+            int stickerId;
             switch (recomendacion.type)
             {
                 case RecomendationType.Sleep:
@@ -60,36 +60,55 @@ namespace Business.Implementations
                     stickerId = 5;
                     break;
                 default:
-                    return false; // Invalid recommendation type
+                    stickerId = 0; 
+                    break; // Default case
+                
             }
 
             //does patient has the sticker?
-            var hasSticker = _itemsService.HasSticker(stickerId, idUsuario);
+           
 
-            if (hasSticker == null)
-            {
-                _itemsService.addStickerToPatient(stickerId, idUsuario);
-                return _recomendacionRepository.recomendationCompleted(idRecomendation, idUsuario);
-            }
+           
+                //genera una funcion que de de maera aleatoria un sticker, pero que tenga probabilidad, cada que un usuario complete una recomendacion, tiene un 20% de probabilidad de obtener un sticker
+
+                //numero ramdom del 1 y el 6
+
+                if(stickerId < 1){ 
+                    return _recomendacionRepository.recomendationCompleted(idRecomendation, idUsuario);
+                }
+
+                Random random = new Random();   
+                var probability = random.Next(1, 100);                       
+
+                if (probability <= 20)
+                {
+                     var hasSticker = _itemsService.HasSticker(stickerId, idUsuario);
+                     if (hasSticker == null)
+                     {
+                        _itemsService.addStickerToPatient(stickerId, idUsuario);
+
+                          var notiId = _notificationRepository.AddNotification(new NotificationModel
+                            {
+                            notificationType = NotificationType.sticker,
+                            Titulo = "¡Nuevo sticker!",
+                            Descripcion = "¡Felicidades, has desbloqueado un nuevo sticker!",
+                            url = _itemsService.GetSticker(stickerId).url,
+                            stickerId = stickerId                    
+                            });
+
+                        _notificationRepository.vincularNotificationConPaciente(notiId, idUsuario);
+
+                        return _recomendacionRepository.recomendationCompleted(idRecomendation, idUsuario);
+                    }
+                }
 
             //if the sticker is not null, then we have to send a notification
-
             // tiene que ser de tipo sticker o goal
-
-            
-            var notiId = _notificationRepository.AddNotification(new NotificationModel
-                {
-                       notificationType = NotificationType.goal,
-                        Titulo = "¡Nuevo sticker!",
-                        Descripcion = "¡Felicidades, has desbloqueado un nuevo sticker!",
-                        url = _itemsService.GetSticker(stickerId).url,
-                        stickerId = stickerId                    
-                    });
-
-            _notificationRepository.vincularNotificationConPaciente(notiId, idUsuario);
 
             return _recomendacionRepository.recomendationCompleted(idRecomendation, idUsuario);
         }
+    
+        
 
         // public bool AddRecomendacionCompletada(int idRecomendacion, int idUsuario)
         // {

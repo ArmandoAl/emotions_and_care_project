@@ -21,7 +21,9 @@ namespace Domain
 
         goal,
 
-        growNotifications
+        growNotifications, 
+
+        sticker
     }
 
     // Represents a notification model with various properties related to the notification details
@@ -53,8 +55,6 @@ namespace Domain
         public string? url { get; set; }
 
         public int? stickerId { get; set; } = 0;
-
-        public int? achivementId { get; set; } = 0;
 
         // Date and time when the notification was emitted (nullable, default is current date and time)
         public DateTime? emitDate { get; set; } = DateTime.Now;

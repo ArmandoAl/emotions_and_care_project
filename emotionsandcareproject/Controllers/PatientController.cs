@@ -150,12 +150,12 @@ namespace API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public Task<ActionResult> Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            if (id < 1) return Task.FromResult<ActionResult>(BadRequest());
-            var result = _service.Delete(id);
-            if (!result) return Task.FromResult<ActionResult>(BadRequest());
-            return Task.FromResult<ActionResult>(Ok(result));
+            if (id < 1) return BadRequest();
+            var result = await _service.Delete(id);
+            if (!result) return BadRequest();
+            return Ok(result);
         }
 
         [HttpPut]

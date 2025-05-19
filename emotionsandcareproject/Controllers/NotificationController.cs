@@ -105,5 +105,15 @@ namespace API.Controllers
             if (!result) return Task.FromResult<ActionResult>(BadRequest());
             return Task.FromResult<ActionResult>(Ok(result));
         }
+
+        //deleteallusernOTIFICATION
+        [HttpDelete("{idPaciente}/deleteAllUserNotification")]
+        public Task<ActionResult> DeleteAllUserNotification([FromRoute] int idPaciente)
+        {
+            if (idPaciente < 1) return Task.FromResult<ActionResult>(BadRequest());
+            var result = _service.DeleteAllUserNotification(idPaciente);
+            if (!result) return Task.FromResult<ActionResult>(BadRequest());
+            return Task.FromResult<ActionResult>(Ok(result));
+        }
     }
 }

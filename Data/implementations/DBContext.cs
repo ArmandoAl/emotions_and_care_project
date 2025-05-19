@@ -58,6 +58,7 @@ namespace Data.Implementations
             public DbSet<Note> notes { get; set; } = null!;
 
             public DbSet<Progress> progresses { get; set; } = null!;
+        
 
             public DbSet<Test> tests { get; set; } = null!;
 
@@ -92,4 +93,6 @@ namespace Data.Implementations
             public DBContext(DbContextOptions<DBContext> options) : base(options) { }
 
     }
+
+    
 }

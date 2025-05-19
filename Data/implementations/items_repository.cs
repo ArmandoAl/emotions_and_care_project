@@ -140,7 +140,7 @@ namespace Data.Implementations
                 var patient = db.patients
                     .Where(x => x.userId == patientId)
                     .Include(x => x.userInterface)
-                    .ThenInclude(ui => ui.userStickers)
+                    .ThenInclude(ui => ui.userStickers).ThenInclude(us => us.sticker)
                     .FirstOrDefault();
 
                 if (patient == null) return false;
@@ -169,7 +169,7 @@ namespace Data.Implementations
                 {
                     sticker = sticker,
                     position = null,
-                    timesEarned = 1 // Set to 1 when the sticker is given for the first time
+                    timesEarned = 1 
                 });
 
                 db.SaveChanges();
@@ -419,7 +419,7 @@ namespace Data.Implementations
                 var userSticker = db.patients
                     .Where(x => x.userId == idUsuario)
                     .Include(x => x.userInterface)
-                    .ThenInclude(ui => ui.userStickers)
+                    .ThenInclude(ui => ui.userStickers).ThenInclude(us => us.sticker)
                     .FirstOrDefault()?
                     .userInterface
                     .userStickers

@@ -26,5 +26,7 @@ namespace Data.Contracts
         bool updateDateEmision(int idNotification);
 
         bool checkExistGrowNotification(int idPaciente);
+
+        bool DeleteAllUserNotification(int idPaciente);
     }
 }

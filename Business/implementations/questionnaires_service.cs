@@ -94,9 +94,6 @@ namespace Business.Implementations
                             achievementId = null
                         };
                     }
-
-                 
-                   
             }
             }
 
